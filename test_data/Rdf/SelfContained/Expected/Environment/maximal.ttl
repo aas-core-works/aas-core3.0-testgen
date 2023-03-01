@@ -1,0 +1,22 @@
+@prefix aas: <https://admin-shell.io/aas/3/0/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs: <http://www.w3.org/2001/XMLSchema#> .
+
+<something_0edbd82e> rdf:type aas:AssetAdministrationShell ;
+    <https://admin-shell.io/aas/3/0/Identifiable/id> "something_0edbd82e"^^xs:string ;
+    <https://admin-shell.io/aas/3/0/AssetAdministrationShell/assetInformation> [
+        rdf:type aas:AssetInformation ;
+        <https://admin-shell.io/aas/3/0/AssetInformation/assetKind> <https://admin-shell.io/aas/3/0/AssetKind/NotApplicable> ;
+        <https://admin-shell.io/aas/3/0/AssetInformation/globalAssetID> "something_eea66fa1"^^xs:string ;
+    ] ;
+.
+
+<something_1e53dcdd> rdf:type aas:Submodel ;
+    <https://admin-shell.io/aas/3/0/Identifiable/id> "something_1e53dcdd"^^xs:string ;
+.
+
+<something_ab025d0d> rdf:type aas:ConceptDescription ;
+    <https://admin-shell.io/aas/3/0/Identifiable/id> "something_ab025d0d"^^xs:string ;
+.
