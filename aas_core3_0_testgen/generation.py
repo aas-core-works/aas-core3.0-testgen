@@ -12,20 +12,19 @@ from typing import (
     Sequence,
     Any,
     MutableMapping,
-    get_args,
     Optional,
     Callable,
     Tuple,
     Iterable,
     Iterator,
     Set,
-    Mapping,
+    Mapping, get_args,
 )
 
 import aas_core_codegen.common
-import aas_core_meta.v3rc2
+import aas_core_meta.v3
 from aas_core_codegen import intermediate, infer_for_schema
-from aas_core_codegen.common import Identifier
+from aas_core_codegen.common import Identifier, assert_never
 from icontract import require, ensure, DBC
 
 from aas_core3_0_testgen import ontology
@@ -33,6 +32,7 @@ from aas_core3_0_testgen.frozen_examples import (
     pattern as frozen_examples_pattern,
     xs_value as frozen_examples_xs_value,
 )
+
 
 PrimitiveValueUnion = Union[bool, int, float, str, bytearray]
 
@@ -94,7 +94,7 @@ def _to_jsonable(value: ValueUnion) -> Any:
     elif isinstance(value, ListOfInstances):
         return [_to_jsonable(item) for item in value.values]
     else:
-        aas_core_codegen.common.assert_never(value)
+        assert_never(value)
 
 
 def dump(value: ValueUnion) -> str:
@@ -269,9 +269,11 @@ def _generate_time_of_day(path_segments: List[Union[int, str]]) -> str:
 
 
 def _extend_lang_string_set_to_have_an_entry_at_least_in_English(
-    lang_string_set: ListOfInstances, path_segments: List[Union[int, str]]
+    lang_string_set: ListOfInstances,
+        path_segments: List[Union[int, str]],
+        lang_string_cls: intermediate.Class
 ) -> None:
-    """Extend the LangStringSet to contain at least one entry in English."""
+    """Extend the Lang String Set to contain at least one entry in English."""
     hsh = _hash_path(path_segments=path_segments)
 
     has_english = False
@@ -291,7 +293,7 @@ def _extend_lang_string_set_to_have_an_entry_at_least_in_English(
                         ("text", f"Something random in English {hsh}"),
                     ]
                 ),
-                model_type=aas_core_codegen.common.Identifier("Lang_string"),
+                model_type=Identifier(lang_string_cls.name),
             )
         )
 
@@ -332,11 +334,29 @@ def _generate_primitive_value(
 
         # region Handle the special case of a single pattern constraint first
 
+        # NOTE (mristin, 2023-03-01):
+        # We drop the constraint for XML serializable strings since it permeates
+        # all the specification. However, once we drop it, all the types have a single
+        # constraint.
         if pattern_constraints is not None:
-            if len(pattern_constraints) > 1:
+            pattern_constraints_without_xml_strings = [
+                pattern_constraint
+                for pattern_constraint in pattern_constraints
+                if pattern_constraint.pattern
+                   !=
+                   '^[\\x09\\x0A\\x0D\\x20-\\uD7FF\\uE000-\\uFFFD\\U00010000-\\U0010FFFF]*$'
+            ]
+        else:
+            pattern_constraints_without_xml_strings = None
+
+        if (
+                pattern_constraints_without_xml_strings is not None
+                and len(pattern_constraints_without_xml_strings) >= 1
+        ):
+            if len(pattern_constraints_without_xml_strings) > 1:
                 patterns = [
                     pattern_constraint.pattern
-                    for pattern_constraint in pattern_constraints
+                    for pattern_constraint in pattern_constraints_without_xml_strings
                 ]
                 raise NotImplementedError(
                     "We did not implement the generation of a value based on two or "
@@ -353,9 +373,11 @@ def _generate_primitive_value(
 
             assert primitive_type is intermediate.PrimitiveType.STR
 
-            assert len(pattern_constraints) > 0, "Unexpected empty pattern constraints"
+            assert len(pattern_constraints_without_xml_strings) > 0, (
+                "Unexpected empty pattern constraints"
+            )
 
-            pattern = pattern_constraints[0].pattern
+            pattern = pattern_constraints_without_xml_strings[0].pattern
             pattern_examples = frozen_examples_pattern.BY_PATTERN.get(pattern, None)
             if pattern_examples is None:
                 raise NotImplementedError(
@@ -394,7 +416,7 @@ def _generate_primitive_value(
             return float(hsh_as_int) / 100
 
         elif primitive_type is intermediate.PrimitiveType.STR:
-            return f"something_random_{hsh}"
+            return f"something_{hsh}"
 
         elif primitive_type is intermediate.PrimitiveType.BYTEARRAY:
             return bytearray.fromhex(hsh)
@@ -454,17 +476,17 @@ def _extend_in_place(
 
 
 def _generate_model_reference(
-    expected_type: aas_core_meta.v3rc2.Key_types,
+    expected_type: aas_core_meta.v3.Key_types,
     path_segments: List[Union[str, int]],
 ) -> Instance:
     """Generate a model Reference pointing to an instance of ``expected_type``."""
     props = collections.OrderedDict()  # type: OrderedDict[str, Any]
-    props["type"] = aas_core_meta.v3rc2.Reference_types.Model_reference.value
+    props["type"] = aas_core_meta.v3.Reference_types.Model_reference.value
 
     if expected_type in (
-        aas_core_meta.v3rc2.Key_types.Asset_administration_shell,
-        aas_core_meta.v3rc2.Key_types.Concept_description,
-        aas_core_meta.v3rc2.Key_types.Submodel,
+        aas_core_meta.v3.Key_types.Asset_administration_shell,
+        aas_core_meta.v3.Key_types.Concept_description,
+        aas_core_meta.v3.Key_types.Submodel,
     ):
         with _extend_in_place(path_segments, ["keys", 0, "value"]):
             props["keys"] = ListOfInstances(
@@ -481,12 +503,12 @@ def _generate_model_reference(
                 ]
             )
 
-    elif expected_type is aas_core_meta.v3rc2.Key_types.Referable:
+    elif expected_type is aas_core_meta.v3.Key_types.Referable:
         with _extend_in_place(path_segments, ["keys", 0, "value"]):
             key0 = Instance(
                 properties=collections.OrderedDict(
                     [
-                        ("type", aas_core_meta.v3rc2.Key_types.Submodel.value),
+                        ("type", aas_core_meta.v3.Key_types.Submodel.value),
                         ("value", f"something_random_{_hash_path(path_segments)}"),
                     ]
                 ),
@@ -499,7 +521,7 @@ def _generate_model_reference(
                     [
                         # NOTE (mristin, 2022-07-10):
                         # Blob is an instance of a referable.
-                        ("type", aas_core_meta.v3rc2.Key_types.Blob.value),
+                        ("type", aas_core_meta.v3.Key_types.Blob.value),
                         ("value", f"something_random_{_hash_path(path_segments)}"),
                     ]
                 ),
@@ -523,13 +545,13 @@ def _generate_global_reference(
     """Generate an instance of a global Reference."""
 
     props = collections.OrderedDict()  # type: OrderedDict[str, ValueUnion]
-    props["type"] = aas_core_meta.v3rc2.Reference_types.Global_reference.value
+    props["type"] = aas_core_meta.v3.Reference_types.External_reference.value
 
     with _extend_in_place(path_segments, ["keys", 0, "value"]):
         key = Instance(
             properties=collections.OrderedDict(
                 [
-                    ("type", "GlobalReference"),
+                    ("type", aas_core_meta.v3.Key_types.Global_reference.value),
                     ("value", f"something_random_{_hash_path(path_segments)}"),
                 ]
             ),
@@ -710,7 +732,7 @@ def _generate_concrete_minimal_instance(
 
     props = collections.OrderedDict()  # type: OrderedDict[str, ValueUnion]
 
-    def generate_instance(
+    def generate_a_minimal_instance(
         a_cls: intermediate.ClassUnion, a_path_segments: List[Union[str, int]]
     ) -> Instance:
         """Generate an instance passing over the parameters from the closure."""
@@ -750,7 +772,7 @@ def _generate_concrete_minimal_instance(
                         prop, None
                     )
                 ),
-                generate_instance=generate_instance,
+                generate_instance=generate_a_minimal_instance,
             )
             # fmt: on
 
@@ -934,7 +956,7 @@ class Handyman:
         if "observed" in instance.properties:
             with _extend_in_place(path_segments, ["observed"]):
                 instance.properties["observed"] = _generate_model_reference(
-                    expected_type=aas_core_meta.v3rc2.Key_types.Referable,
+                    expected_type=aas_core_meta.v3.Key_types.Referable,
                     path_segments=path_segments,
                 )
 
@@ -953,7 +975,7 @@ class Handyman:
         if "message_broker" in instance.properties:
             with _extend_in_place(path_segments, ["message_broker"]):
                 instance.properties["message_broker"] = _generate_model_reference(
-                    expected_type=aas_core_meta.v3rc2.Key_types.Referable,
+                    expected_type=aas_core_meta.v3.Key_types.Referable,
                     path_segments=path_segments,
                 )
 
@@ -967,7 +989,7 @@ class Handyman:
             with _extend_in_place(path_segments, ["derived_from"]):
                 instance.properties["derived_from"] = _generate_model_reference(
                     expected_type=(
-                        aas_core_meta.v3rc2.Key_types.Asset_administration_shell
+                        aas_core_meta.v3.Key_types.Asset_administration_shell
                     ),
                     path_segments=path_segments,
                 )
@@ -978,7 +1000,7 @@ class Handyman:
                 instance.properties["submodels"] = ListOfInstances(
                     values=[
                         _generate_model_reference(
-                            expected_type=aas_core_meta.v3rc2.Key_types.Submodel,
+                            expected_type=aas_core_meta.v3.Key_types.Submodel,
                             path_segments=path_segments,
                         )
                     ]
@@ -1010,7 +1032,7 @@ class Handyman:
                         path_segments, ["embedded_data_specifications", i]
                     ):
                         if category != "VALUE":
-                            # Fix AASc-003: If not category "VALUE",
+                            # Fix AASc-3a-008: If not category "VALUE",
                             # the definition at least in English
                             if "definition" not in content.properties:
                                 content.properties["definition"] = ListOfInstances([])
@@ -1023,6 +1045,11 @@ class Handyman:
                                 _extend_lang_string_set_to_have_an_entry_at_least_in_English(
                                     lang_string_set=content.properties["definition"],
                                     path_segments=path_segments,
+                                    lang_string_cls=self.symbol_table.must_find_class(
+                                        Identifier(
+                                            'Lang_string_definition_type_IEC_61360'
+                                        )
+                                    )
                                 )
 
         self._recurse_into_properties(instance=instance, path_segments=path_segments)
@@ -1063,21 +1090,23 @@ class Handyman:
                         hsh = _hash_path(path_segments=path_segments)
                         instance.properties["unit"] = f"something_random_{hsh}"
 
-                if "unit_id" not in instance.properties:
-                    with _extend_in_place(path_segments, ["unit_id"]):
+                if "unit_ID" not in instance.properties:
+                    with _extend_in_place(path_segments, ["unit_ID"]):
                         hsh = _hash_path(path_segments=path_segments)
-                        instance.properties["unit_id"] = f"something_random_{hsh}"
+                        instance.properties["unit_ID"] = f"something_random_{hsh}"
 
         # If no English in the preferred_name, add an entry
-        preferred_name = instance.properties["preferred_name"]
-        assert isinstance(preferred_name, ListOfInstances)
-
         with _extend_in_place(path_segments, ["preferred_name"]):
             assert isinstance(instance.properties["preferred_name"], ListOfInstances)
 
             _extend_lang_string_set_to_have_an_entry_at_least_in_English(
                 lang_string_set=instance.properties["preferred_name"],
                 path_segments=path_segments,
+                lang_string_cls=self.symbol_table.must_find_class(
+                    Identifier(
+                        'Lang_string_definition_type_IEC_61360'
+                    )
+                )
             )
 
         self._recurse_into_properties(instance=instance, path_segments=path_segments)
@@ -1096,10 +1125,10 @@ class Handyman:
             ]
 
             if entity_type == self_managed_entity_literal.value:
-                instance.properties.pop("specific_asset_id", None)
+                instance.properties.pop("specific_asset_ID", None)
             else:
-                instance.properties.pop("specific_asset_id", None)
-                instance.properties.pop("global_asset_id", None)
+                instance.properties.pop("specific_asset_ID", None)
+                instance.properties.pop("global_asset_ID", None)
 
         self._recurse_into_properties(instance=instance, path_segments=path_segments)
 
@@ -1110,7 +1139,7 @@ class Handyman:
         if "source" in instance.properties:
             with _extend_in_place(path_segments, ["source"]):
                 instance.properties["source"] = _generate_model_reference(
-                    expected_type=aas_core_meta.v3rc2.Key_types.Referable,
+                    expected_type=aas_core_meta.v3.Key_types.Referable,
                     path_segments=path_segments,
                 )
 
@@ -1118,7 +1147,7 @@ class Handyman:
         if "observable_reference" in instance.properties:
             with _extend_in_place(path_segments, ["observable_reference"]):
                 instance.properties["observable_reference"] = _generate_model_reference(
-                    expected_type=aas_core_meta.v3rc2.Key_types.Referable,
+                    expected_type=aas_core_meta.v3.Key_types.Referable,
                     path_segments=path_segments,
                 )
 
@@ -1218,7 +1247,7 @@ class Handyman:
                 # they existed or not.
                 with _extend_in_place(path_segments, ["submodel_elements", i]):
                     submodel_element.properties[
-                        "id_short"
+                        "ID_short"
                     ] = f"some_id_short_{_hash_path(path_segments)}"
 
         # region Fix qualifiers for the constraint AASd-119
@@ -1233,7 +1262,7 @@ class Handyman:
 
         qualifiers = instance.properties.get("qualifiers", None)
         if qualifiers is not None:
-            must_be_modeling_kind_template = False
+            must_be_modelling_kind_template = False
 
             assert isinstance(qualifiers, ListOfInstances)
             for qualifier in qualifiers.values:
@@ -1241,19 +1270,19 @@ class Handyman:
                     qualifier.properties.get("kind", None)
                     == qualifier_kind_template_qualifier
                 ):
-                    must_be_modeling_kind_template = True
+                    must_be_modelling_kind_template = True
                     break
 
-            if must_be_modeling_kind_template:
-                modeling_kind_enum = self.symbol_table.must_find_enumeration(
-                    Identifier("Modeling_kind")
+            if must_be_modelling_kind_template:
+                modelling_kind_enum = self.symbol_table.must_find_enumeration(
+                    Identifier("Modelling_kind")
                 )
 
-                modeling_kind_template = modeling_kind_enum.literals_by_name[
+                modelling_kind_template = modelling_kind_enum.literals_by_name[
                     "Template"
                 ].value
 
-                instance.properties["kind"] = modeling_kind_template
+                instance.properties["kind"] = modelling_kind_template
 
         # endregion
 
@@ -1269,10 +1298,10 @@ class Handyman:
             assert isinstance(value, ListOfInstances)
 
             for item in value.values:
-                if "id_short" not in item.properties:
-                    with _extend_in_place(path_segments, ["id_short"]):
+                if "ID_short" not in item.properties:
+                    with _extend_in_place(path_segments, ["ID_short"]):
                         hsh = _hash_path(path_segments=path_segments)
-                        item.properties["id_short"] = f"something_random_{hsh}"
+                        item.properties["ID_short"] = f"something_random_{hsh}"
 
         self._recurse_into_properties(instance=instance, path_segments=path_segments)
 
@@ -1290,13 +1319,13 @@ class Handyman:
             )
 
             data_type_def_xsd_enum = self.symbol_table.must_find_enumeration(
-                Identifier("Data_type_def_xsd")
+                Identifier("Data_type_def_XSD")
             )
 
             xs_boolean_literal = data_type_def_xsd_enum.literals_by_name["Boolean"]
 
             aas_submodel_elements_enum = self.symbol_table.must_find_enumeration(
-                Identifier("Aas_submodel_elements")
+                Identifier("AAS_submodel_elements")
             )
 
             property_literal = aas_submodel_elements_enum.literals_by_name["Property"]
@@ -1311,7 +1340,7 @@ class Handyman:
                     symbol_table=self.symbol_table,
                 )
                 value0.properties["value_type"] = xs_boolean_literal.value
-                value0.properties["semantic_id"] = semantic_id
+                value0.properties["semantic_ID"] = semantic_id
 
             with _extend_in_place(path_segments, ["value", 1]):
                 value1 = generate_minimal_instance(
@@ -1321,14 +1350,14 @@ class Handyman:
                     symbol_table=self.symbol_table,
                 )
                 value1.properties["value_type"] = xs_boolean_literal.value
-                value1.properties["semantic_id"] = semantic_id
+                value1.properties["semantic_ID"] = semantic_id
 
             values = [value0, value1]
 
             instance.properties["value"] = ListOfInstances(values=values)
             instance.properties["type_value_list_element"] = property_literal.value
             instance.properties["value_type_list_element"] = xs_boolean_literal.value
-            instance.properties["semantic_id_list_element"] = semantic_id
+            instance.properties["semantic_ID_list_element"] = semantic_id
 
         self._recurse_into_properties(instance=instance, path_segments=path_segments)
 
@@ -1353,7 +1382,7 @@ def generate_minimal_instance_in_minimal_environment(
         # NOTE (mristin, 2022-07-10):
         # We manually create the environment for the ``Reference`` class as we want
         # to avoid any constraints on the target.
-        path_segments = ["submodels", 0, "semantic_id"]  # type: List[Union[str, int]]
+        path_segments = ["submodels", 0, "semantic_ID"]  # type: List[Union[str, int]]
         container = Instance(
             properties=collections.OrderedDict(
                 [
@@ -1364,9 +1393,9 @@ def generate_minimal_instance_in_minimal_environment(
                                 Instance(
                                     properties=collections.OrderedDict(
                                         [
-                                            ("id", "some_submodel"),
+                                            ("ID", "some_submodel"),
                                             (
-                                                "semantic_id",
+                                                "semantic_ID",
                                                 _generate_global_reference(
                                                     path_segments=path_segments
                                                 ),
@@ -1784,7 +1813,7 @@ class CaseUnexpectedAdditionalProperty(Case):
         )
 
 
-class CaseDateTimeStampUtcViolationOnFebruary29th(Case):
+class CaseDateTimeUtcViolationOnFebruary29th(Case):
     """Represent a test case where we supply an invalid UTC date time stamp."""
 
     def __init__(
@@ -2007,7 +2036,7 @@ CaseUnion = Union[
     CaseMinLengthViolation,
     CaseMaxLengthViolation,
     CaseUnexpectedAdditionalProperty,
-    CaseDateTimeStampUtcViolationOnFebruary29th,
+    CaseDateTimeUtcViolationOnFebruary29th,
     CasePositiveValueExample,
     CaseInvalidValueExample,
     CasePositiveMinMaxExample,
@@ -2148,14 +2177,14 @@ def _generate_additional_cases_for_submodel_element_list(
     property_cls = symbol_table.must_find_concrete_class(Identifier("Property"))
 
     data_type_def_xsd_enum = symbol_table.must_find_enumeration(
-        Identifier("Data_type_def_xsd")
+        Identifier("Data_type_def_XSD")
     )
 
     xs_boolean_literal = data_type_def_xsd_enum.literals_by_name["Boolean"]
     xs_int_literal = data_type_def_xsd_enum.literals_by_name["Int"]
 
     aas_submodel_elements_enum = symbol_table.must_find_enumeration(
-        Identifier("Aas_submodel_elements")
+        Identifier("AAS_submodel_elements")
     )
 
     property_literal = aas_submodel_elements_enum.literals_by_name["Property"]
@@ -2182,7 +2211,7 @@ def _generate_additional_cases_for_submodel_element_list(
             symbol_table=symbol_table,
         )
         value0.properties["value_type"] = xs_boolean_literal.value
-        value0.properties["semantic_id"] = semantic_id
+        value0.properties["semantic_ID"] = semantic_id
 
     with _extend_in_place(path_segments, ["value", 1]):
         value1 = generate_minimal_instance(
@@ -2192,14 +2221,14 @@ def _generate_additional_cases_for_submodel_element_list(
             symbol_table=symbol_table,
         )
         value1.properties["value_type"] = xs_boolean_literal.value
-        value1.properties["semantic_id"] = semantic_id
+        value1.properties["semantic_ID"] = semantic_id
 
     values = [value0, value1]
 
     instance.properties["value"] = ListOfInstances(values=values)
     instance.properties["type_value_list_element"] = property_literal.value
     instance.properties["value_type_list_element"] = xs_boolean_literal.value
-    instance.properties["semantic_id_list_element"] = semantic_id
+    instance.properties["semantic_ID_list_element"] = semantic_id
 
     # Set up a new replicator
     replicator = ContainerInstanceReplicator(
@@ -2212,21 +2241,21 @@ def _generate_additional_cases_for_submodel_element_list(
 
     container, instance, path_segments = replicator.replicate()
     assert isinstance(instance.properties["value"], ListOfInstances)
-    del instance.properties["value"].values[0].properties["semantic_id"]
+    del instance.properties["value"].values[0].properties["semantic_ID"]
 
     yield CasePositiveManual(
         container_class=replicator.container_class,
         container=container,
         cls=cls,
-        name="one_child_without_semantic_id",
+        name="one_child_without_semantic_ID",
     )
 
     # endregion
 
-    # region Expected: no semantic_id_list_element
+    # region Expected: no semantic_ID_list_element
 
     container, instance, path_segments = replicator.replicate()
-    del instance.properties["semantic_id_list_element"]
+    del instance.properties["semantic_ID_list_element"]
 
     yield CasePositiveManual(
         container_class=replicator.container_class,
@@ -2249,7 +2278,7 @@ def _generate_additional_cases_for_submodel_element_list(
             symbol_table=symbol_table,
         )
         value0.properties["value_type"] = xs_boolean_literal.value
-        value0.properties["semantic_id"] = semantic_id
+        value0.properties["semantic_ID"] = semantic_id
 
     with _extend_in_place(path_segments, ["value", 1]):
         value1 = generate_minimal_instance(
@@ -2259,7 +2288,7 @@ def _generate_additional_cases_for_submodel_element_list(
             symbol_table=symbol_table,
         )
         value1.properties["value_type"] = xs_boolean_literal.value
-        value1.properties["semantic_id"] = semantic_id
+        value1.properties["semantic_ID"] = semantic_id
 
     instance.properties["value"] = ListOfInstances(values=[value0, value1])
 
@@ -2284,7 +2313,7 @@ def _generate_additional_cases_for_submodel_element_list(
             symbol_table=symbol_table,
         )
         value0.properties["value_type"] = xs_int_literal.value
-        value0.properties["semantic_id"] = semantic_id
+        value0.properties["semantic_ID"] = semantic_id
 
     instance.properties["value"] = ListOfInstances(values=[value0])
 
@@ -2309,7 +2338,7 @@ def _generate_additional_cases_for_submodel_element_list(
             symbol_table=symbol_table,
         )
         value0.properties["value_type"] = xs_boolean_literal.value
-        value0.properties["semantic_id"] = another_semantic_id
+        value0.properties["semantic_ID"] = another_semantic_id
 
     instance.properties["value"] = ListOfInstances(values=[value0])
 
@@ -2334,7 +2363,7 @@ def _generate_additional_cases_for_submodel_element_list(
             symbol_table=symbol_table,
         )
         value0.properties["value_type"] = xs_boolean_literal.value
-        value0.properties["semantic_id"] = semantic_id
+        value0.properties["semantic_ID"] = semantic_id
 
     with _extend_in_place(path_segments, ["value", 1]):
         value1 = generate_minimal_instance(
@@ -2344,10 +2373,10 @@ def _generate_additional_cases_for_submodel_element_list(
             symbol_table=symbol_table,
         )
         value1.properties["value_type"] = xs_boolean_literal.value
-        value1.properties["semantic_id"] = another_semantic_id
+        value1.properties["semantic_ID"] = another_semantic_id
 
     instance.properties["value"] = ListOfInstances(values=[value0, value1])
-    del instance.properties["semantic_id_list_element"]
+    del instance.properties["semantic_ID_list_element"]
 
     yield CaseConstraintViolation(
         container_class=replicator.container_class,
@@ -2370,9 +2399,9 @@ def _generate_additional_cases_for_submodel_element_list(
             symbol_table=symbol_table,
         )
         value0.properties["value_type"] = xs_boolean_literal.value
-        value0.properties["semantic_id"] = semantic_id
+        value0.properties["semantic_ID"] = semantic_id
 
-        value0.properties["id_short"] = "unexpected"
+        value0.properties["ID_short"] = "unexpected"
 
     instance.properties["value"] = ListOfInstances(values=[value0])
 
@@ -2389,16 +2418,6 @@ def _generate_additional_cases_for_submodel_element_list(
 class _ReferenceConstructor:
     """Help make the construction code of the references a bit more succinct."""
 
-    # fmt: off
-    @require(
-        lambda symbol_table, reference_type:
-        reference_type in (
-                symbol_table
-                .must_find_enumeration(Identifier("Reference_types"))
-                .literals_by_name
-        )
-    )
-    # fmt: on
     def __init__(
         self,
         replicator: ContainerInstanceReplicator,
@@ -2409,9 +2428,21 @@ class _ReferenceConstructor:
         self.replicator = replicator
         self.symbol_table = symbol_table
 
-        reference_type_literal = symbol_table.must_find_enumeration(
+        reference_types_enum = symbol_table.must_find_enumeration(
             Identifier("Reference_types")
-        ).literals_by_name[reference_type]
+        )
+
+        # fmt: off
+        reference_type_literal = (
+            reference_types_enum.literals_by_name.get(reference_type, None)
+        )
+        # fmt: on
+
+        if reference_type_literal is None:
+            raise KeyError(
+                f"The reference type {reference_type!r} could not be found as literal "
+                f"in {reference_types_enum.name}"
+            )
 
         self.reference_type = reference_type_literal.value
 
@@ -2422,15 +2453,14 @@ class _ReferenceConstructor:
             Identifier("Key_types")
         )
 
-    # fmt: off
-    @require(
-        lambda self, key_type:
-        key_type in self.key_types_enum.literals_by_name
-    )
-    # fmt: on
     def add_key(self, key_type: str, key_value: str) -> None:
         """Add the key to reference keys."""
-        literal = self.key_types_enum.literals_by_name[key_type]
+        literal = self.key_types_enum.literals_by_name.get(key_type, None)
+        if literal is None:
+            raise KeyError(
+                f"The key type {key_type!r} could not be found "
+                f"in the enumeration {self.key_types_enum.name}"
+            )
 
         self._chain.append((literal.value, key_value))
 
@@ -2497,9 +2527,9 @@ def _generate_additional_cases_for_reference(
             reference_type="Model_reference",
         )
 
-    def new_constructor_of_global_reference() -> _ReferenceConstructor:
+    def new_constructor_of_external_reference() -> _ReferenceConstructor:
         """
-        Produce a constructor of a global reference.
+        Produce a constructor of an external reference.
 
         This makes the code much shorter and the examples a bit more readable even
         though it takes the reader a bit longer to understand the code in
@@ -2508,7 +2538,7 @@ def _generate_additional_cases_for_reference(
         return _ReferenceConstructor(
             replicator=replicator,
             symbol_table=symbol_table,
-            reference_type="Global_reference",
+            reference_type="External_reference",
         )
 
     def assert_key_type_in_set(
@@ -2577,13 +2607,13 @@ def _generate_additional_cases_for_reference(
 
     # endregion
 
-    # region For a global references, first key not in Generic globally identifiables
+    # region For an external references, first key not in Generic globally identifiables
 
     assert_key_type_outside_set(
         key_type="Blob", the_set="Generic_globally_identifiables"
     )
 
-    constructor = new_constructor_of_global_reference()
+    constructor = new_constructor_of_external_reference()
 
     constructor.add_key(key_type="Blob", key_value="something")
 
@@ -2593,7 +2623,7 @@ def _generate_additional_cases_for_reference(
         container_class=replicator.container_class,
         container=container,
         cls=cls,
-        name="for_a_global_reference_first_key_not_in_generic_globally_identifiables",
+        name="for_an_external_reference_first_key_not_in_generic_globally_identifiables",
     )
 
     # endregion
@@ -2601,7 +2631,7 @@ def _generate_additional_cases_for_reference(
     # region For a model reference, first key not in AAS identifiables
 
     assert_key_type_outside_set(
-        key_type="Global_reference", the_set="Aas_identifiables"
+        key_type="Global_reference", the_set="AAS_identifiables"
     )
 
     constructor = new_constructor_of_model_reference()
@@ -2619,7 +2649,7 @@ def _generate_additional_cases_for_reference(
 
     # endregion
 
-    # region For a global reference invalid last key
+    # region For an external reference invalid last key
 
     assert_key_type_outside_set(
         key_type="Blob", the_set="Generic_globally_identifiables"
@@ -2627,7 +2657,7 @@ def _generate_additional_cases_for_reference(
 
     assert_key_type_outside_set(key_type="Blob", the_set="Generic_fragment_keys")
 
-    constructor = new_constructor_of_global_reference()
+    constructor = new_constructor_of_external_reference()
 
     constructor.add_key(key_type="Global_reference", key_value="something")
     constructor.add_key(key_type="Blob", key_value="something_more")
@@ -2638,7 +2668,7 @@ def _generate_additional_cases_for_reference(
         container_class=replicator.container_class,
         container=container,
         cls=cls,
-        name="for_a_global_reference_invalid_last_key",
+        name="for_an_external_reference_invalid_last_key",
     )
 
     # endregion
@@ -2731,13 +2761,13 @@ def _generate_additional_cases_for_reference(
     # NOTE (mristin, 2022-07-10):
     # Now we generate the positive examples.
 
-    # region For a global references, first key in Generic globally identifiables
+    # region For an external references, first key in Generic globally identifiables
 
     assert_key_type_in_set(
         key_type="Global_reference", the_set="Globally_identifiables"
     )
 
-    constructor = new_constructor_of_global_reference()
+    constructor = new_constructor_of_external_reference()
 
     constructor.add_key(key_type="Global_reference", key_value="something")
 
@@ -2756,7 +2786,7 @@ def _generate_additional_cases_for_reference(
 
     assert_key_type_in_set(key_type="Submodel", the_set="Globally_identifiables")
 
-    assert_key_type_in_set(key_type="Submodel", the_set="Aas_identifiables")
+    assert_key_type_in_set(key_type="Submodel", the_set="AAS_identifiables")
 
     constructor = new_constructor_of_model_reference()
 
@@ -2779,7 +2809,7 @@ def _generate_additional_cases_for_reference(
         key_type="Global_reference", the_set="Generic_globally_identifiables"
     )
 
-    constructor = new_constructor_of_global_reference()
+    constructor = new_constructor_of_external_reference()
 
     constructor.add_key(key_type="Global_reference", key_value="something")
     constructor.add_key(key_type="Global_reference", key_value="something_more")
@@ -2801,7 +2831,7 @@ def _generate_additional_cases_for_reference(
         key_type="Fragment_reference", the_set="Generic_fragment_keys"
     )
 
-    constructor = new_constructor_of_global_reference()
+    constructor = new_constructor_of_external_reference()
 
     constructor.add_key(key_type="Global_reference", key_value="something")
     constructor.add_key(key_type="Fragment_reference", key_value="something_more")
@@ -3218,15 +3248,15 @@ def generate(
 
         # region Break date-time with UTC with February 29th
 
-        date_time_stamp_utc_symbol = symbol_table.must_find_constrained_primitive(
-            Identifier("Date_time_stamp_UTC")
+        date_time_utc_symbol = symbol_table.must_find_constrained_primitive(
+            Identifier("Date_time_UTC")
         )
 
         for prop in our_type.properties:
             type_anno = intermediate.beneath_optional(prop.type_annotation)
             if (
                 isinstance(type_anno, intermediate.OurTypeAnnotation)
-                and type_anno.our_type is date_time_stamp_utc_symbol
+                and type_anno.our_type is date_time_utc_symbol
             ):
                 replicator = replication.minimal
                 container, instance, path_segments = replicator.replicate()
@@ -3236,7 +3266,7 @@ def generate(
 
                     instance.properties[prop.name] = f"2022-02-29T{time_of_day}Z"
 
-                    yield CaseDateTimeStampUtcViolationOnFebruary29th(
+                    yield CaseDateTimeUtcViolationOnFebruary29th(
                         container_class=replicator.container_class,
                         container=container,
                         cls=our_type,
@@ -3316,7 +3346,7 @@ def generate(
     qualifier_cls = symbol_table.must_find_concrete_class(Identifier("Qualifier"))
 
     data_type_def_xsd_symbol = symbol_table.must_find_enumeration(
-        Identifier("Data_type_def_xsd")
+        Identifier("Data_type_def_XSD")
     )
 
     for cls in (property_cls, range_cls, extension_cls, qualifier_cls):

@@ -3,6 +3,7 @@ import base64
 import math
 import os
 import pathlib
+import re
 from typing import (
     List,
     Optional,
@@ -16,6 +17,36 @@ from aas_core_codegen.common import Identifier
 from icontract import ensure
 
 from aas_core3_0_testgen import common, generation, ontology
+
+
+_XML_1_0_TEXT_RE = re.compile(
+    r"^[\x09\x0A\x0D\x20-\uD7FF\uE000-\uFFFD\U00010000-\U0010FFFF]*$"
+)
+
+
+def _conforms_to_xml_1_0(value: generation.ValueUnion) -> bool:
+    """Check recursively that the value conforms to XML 1.0."""
+    if isinstance(value, generation.PrimitiveValueTuple):
+        if isinstance(value, str):
+            return _XML_1_0_TEXT_RE.match(value) is not None
+        else:
+            return True
+    elif isinstance(value, generation.Instance):
+        # noinspection PyTypeChecker
+        for prop_value in value.properties.values():
+            if not _conforms_to_xml_1_0(prop_value):
+                return False
+
+        return True
+    elif isinstance(value, generation.ListOfInstances):
+        for instance in value.values:
+            if not _conforms_to_xml_1_0(instance):
+                return False
+
+        return True
+
+    else:
+        aas_core_codegen.common.assert_never(value)
 
 
 @ensure(lambda result: not result.is_absolute())
@@ -91,7 +122,7 @@ def _relative_path(
     elif isinstance(test_case, generation.CaseUnexpectedAdditionalProperty):
         return base_pth / "invalid.xml"
 
-    elif isinstance(test_case, generation.CaseDateTimeStampUtcViolationOnFebruary29th):
+    elif isinstance(test_case, generation.CaseDateTimeUtcViolationOnFebruary29th):
         prop_name = aas_core_codegen.naming.xml_property(test_case.property_name)
 
         return base_pth / f"{prop_name}.xml"
@@ -323,7 +354,7 @@ def generate(test_data_dir: pathlib.Path) -> None:
 
         pth = test_data_dir / relative_pth
 
-        if not common.conforms_to_xml_1_0(test_case.container):
+        if not _conforms_to_xml_1_0(test_case.container):
             # NOTE (mristin, 2022-09-01):
             # The test case can not be represented in XML 1.0, so we have to skip it.
             continue

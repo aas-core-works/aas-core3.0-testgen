@@ -106,7 +106,7 @@ def _relative_path(
     elif isinstance(test_case, generation.CaseUnexpectedAdditionalProperty):
         return base_pth / "invalid.ttl"
 
-    elif isinstance(test_case, generation.CaseDateTimeStampUtcViolationOnFebruary29th):
+    elif isinstance(test_case, generation.CaseDateTimeUtcViolationOnFebruary29th):
         prop_name = aas_core_codegen.rdf_shacl.naming.property_name(
             test_case.property_name
         )
@@ -249,14 +249,19 @@ def _serialize_primitive_value(value: generation.PrimitiveValueUnion) -> Strippe
 def _serialize_root_identifiable(
     instance: generation.Instance, symbol_table: intermediate.SymbolTable
 ) -> Stripped:
-    """Serialize the instance as a block of RDF turtle."""
+    """Serialize the identifiable instance as a block of RDF turtle."""
     identifiable_cls = symbol_table.must_find_abstract_class(Identifier("Identifiable"))
 
     cls = symbol_table.must_find_concrete_class(instance.model_type)
 
     assert cls.is_subclass_of(identifiable_cls)
 
-    iri = instance.properties["id"]
+    iri = instance.properties.get("ID", "ID-UNSPECIFIED")
+    if iri is None:
+        raise AssertionError(
+            f"The generated identifiable instance of class {cls.name!r} lacks "
+            f"the 'ID' property; why was it not set?"
+        )
 
     rdf_name = aas_core_codegen.rdf_shacl.naming.class_name(cls.name)
 
@@ -542,9 +547,15 @@ def generate(test_data_dir: pathlib.Path) -> None:
         if not parent.exists():
             parent.mkdir(parents=True)
 
-        text = _serialize_environment(
-            instance=test_case.container, symbol_table=symbol_table
-        )
+        try:
+            text = _serialize_environment(
+                instance=test_case.container, symbol_table=symbol_table
+            )
+        except Exception as exception:
+            raise RuntimeError(
+                f"Failed to serialize the container "
+                f"for the case {test_case.__class__.__name__} to {pth}"
+            ) from exception
 
         with pth.open("wt", encoding="utf-8") as fid:
             fid.write(text)
