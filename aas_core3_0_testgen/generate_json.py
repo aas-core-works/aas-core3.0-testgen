@@ -395,6 +395,11 @@ def generate(test_data_dir: pathlib.Path) -> None:
         if not parent.exists():
             parent.mkdir(parents=True)
 
+        if test_case.__class__.__name__ == 'CaseComplete':
+            if pth.parent.name == "AdministrativeInformation":
+                print(f"pth is {pth!r}")  # TODO: debug
+                print(f"test_case.container is {generation.dump(test_case.container)}")  # TODO: debug
+
         with pth.open("wt") as fid:
             json.dump(jsonable, fid, indent=2, sort_keys=True)
 

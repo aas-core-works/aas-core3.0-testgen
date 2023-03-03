@@ -850,6 +850,7 @@ class Handyman:
 
         self._dispatch_concrete = {
             "Administrative_information": Handyman._fix_administrative_information,
+            "Asset_information": Handyman._fix_asset_information,
             "Asset_administration_shell": Handyman._fix_asset_administration_shell,
             "Basic_event_element": Handyman._fix_basic_event_element,
             "Concept_description": Handyman._fix_concept_description,
@@ -981,6 +982,19 @@ class Handyman:
 
         self._recurse_into_properties(instance=instance, path_segments=path_segments)
 
+    def _fix_asset_information(
+        self, instance: Instance, path_segments: List[Union[str, int]]
+   ) -> None:
+        # Fix for AASd-131: Either the global asset ID shall be defined or at least one
+        # specific asset ID.
+        if (
+                "global_asset_ID" not in instance.properties
+                and "specific_asset_IDs" not in instance.properties
+        ):
+            with _extend_in_place(path_segments, "global_asset_ID"):
+                hsh = _hash_path(path_segments=path_segments)
+                instance.properties["global_asset_ID"] = f"something_random_{hsh}"
+
     def _fix_asset_administration_shell(
         self, instance: Instance, path_segments: List[Union[str, int]]
     ) -> None:
@@ -1057,10 +1071,14 @@ class Handyman:
     def _fix_data_specification_iec_61360(
         self, instance: Instance, path_segments: List[Union[str, int]]
     ) -> None:
+        # TODO (mristin, 2023-03-3): rem
+        instance.properties["XXX"] = "YYY"
+
         # If value and value_list, pick value
         if "value" in instance.properties and "value_list" in instance.properties:
             del instance.properties["value_list"]
 
+        # If neither value nor value_list, set value
         if (
             "value" not in instance.properties
             and "value_list" not in instance.properties
@@ -1068,6 +1086,8 @@ class Handyman:
             with _extend_in_place(path_segments, ["value"]):
                 hsh = _hash_path(path_segments=path_segments)
                 instance.properties["value"] = f"something_random_{hsh}"
+
+        assert "value" in instance.properties or "value_list" in instance.properties
 
         # Set dummy unit and unit ID if the data type requires it
         data_type = instance.properties.get("data_type", None)
@@ -2903,6 +2923,8 @@ def _compute_replication_map(
             continue
 
         if our_type.name not in class_graph.shortest_paths:
+            # It is a self-contained class.
+
             container = generate_minimal_instance(
                 cls=our_type,
                 path_segments=[],
@@ -2953,6 +2975,8 @@ def _compute_replication_map(
                 constraints_by_class=constraints_by_class,
                 symbol_table=symbol_table,
             )
+
+            # TODO (mristin, 2023-03-3): continue here; property XXX is simply not added to data specification iec 6130!
 
             handyman.fix_instance(instance=env, path_segments=[])
 

@@ -1,13 +1,17 @@
 # pylint: disable=missing-docstring
 import difflib
+import json
 import os.path
 import pathlib
 import tempfile
 import unittest
 from typing import List, Tuple
 
-import aas_core3_0_testgen.generate_json
+import jsonschema
 
+import aas_core3_0_testgen.generate_json
+import aas_core3.jsonization
+import aas_core3.verification
 
 class Test_against_recorded(unittest.TestCase):
     def test_that_it_matches(self) -> None:
@@ -91,6 +95,81 @@ class Test_against_recorded(unittest.TestCase):
                     parts.append(f"In {pth}:\n{diff}")
 
                 raise AssertionError("\n\n".join(parts))
+
+    def test_that_expected_conform_to_schema(self) -> None:
+        repo_root = pathlib.Path(os.path.realpath(__file__)).parent.parent
+        test_data_dir = repo_root / "test_data"
+        if not test_data_dir.exists():
+            raise FileNotFoundError(
+                f"Directory with the test data does not exist: {test_data_dir}"
+            )
+
+        if not test_data_dir.is_dir():
+            raise NotADirectoryError(
+                f"The test data dir is not a directory: {test_data_dir}"
+            )
+
+        schema_pth = test_data_dir / "schema.json"
+        with schema_pth.open('rt') as fid:
+            schema = json.load(fid)
+
+        ok_files = sorted(
+            test_data_dir.glob("Json/ContainedInEnvironment/Expected/**/*.json")
+        )
+
+        for pth in ok_files:
+            try:
+                with pth.open('rt') as fid:
+                    instance = json.load(fid)
+
+                jsonschema.validate(instance=instance, schema=schema)
+            except Exception as exception:
+                raise AssertionError(
+                    f"Failed to validate {pth} against {schema_pth}"
+                ) from exception
+
+    def test_that_expected_are_valid_according_to_python_sdk(self) -> None:
+        repo_root = pathlib.Path(os.path.realpath(__file__)).parent.parent
+        test_data_dir = repo_root / "test_data"
+        if not test_data_dir.exists():
+            raise FileNotFoundError(
+                f"Directory with the test data does not exist: {test_data_dir}"
+            )
+
+        if not test_data_dir.is_dir():
+            raise NotADirectoryError(
+                f"The test data dir is not a directory: {test_data_dir}"
+            )
+
+        schema_pth = test_data_dir / "schema.json"
+        with schema_pth.open('rt') as fid:
+            schema = json.load(fid)
+
+        ok_files = sorted(
+            test_data_dir.glob("Json/ContainedInEnvironment/Expected/**/*.json")
+        )
+
+        for pth in ok_files:
+            try:
+                with pth.open('rt') as fid:
+                    jsonable = json.load(fid)
+
+                instance = aas_core3.jsonization.environment_from_jsonable(jsonable)
+            except Exception as exception:
+                raise AssertionError(
+                    f"Failed to de-serialize {pth} using {aas_core3.__name__}"
+                ) from exception
+
+            errors = list(aas_core3.verification.verify(instance))
+            if len(errors) > 0:
+                errors_joined = "\n".join(
+                    f"{error.path}: {error.cause}"
+                    for error in errors
+                )
+                raise AssertionError(
+                    f"Failed to verify {pth} using {aas_core3.__name__}:\n"
+                    f"{errors_joined}"
+                )
 
 
 if __name__ == "__main__":

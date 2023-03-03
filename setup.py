@@ -50,6 +50,8 @@ setup(
             "aas-core-codegen@git+https://github.com/aas-core-works/aas-core-codegen@ef689ea#egg=aas-core-codegen",
             "hypothesis==6.46.3",
             "xmlschema==1.10.0",
+            "jsonschema==4.17.3",
+            "aas-core3.0@git+https://github.com/aas-core-works/aas-core3.0-python@77b5900#egg=aas-core3.0"
         ]
     },
     # fmt: on
