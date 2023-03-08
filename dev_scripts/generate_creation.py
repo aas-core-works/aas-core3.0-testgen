@@ -5,7 +5,7 @@ import enum
 import os
 import pathlib
 import sys
-from typing import Union, List, Optional, Sequence, Tuple
+from typing import Union, List, Optional, Sequence, Tuple, Mapping
 
 from aas_core_codegen.common import (
     Stripped, indent_but_first_line, Identifier, assert_never
@@ -64,18 +64,18 @@ def _generate_primitive_value_out_of_set(
         else:
             assert_never(literal)
 
-    if len(literals) == 0:
-        return Stripped("[]")
-    elif len(literals) == 1:
+    assert len(literals) > 0
+
+    if len(literals) == 1:
         return Stripped(f"[{literals[0]}]")
-    else:
-        literals_joined = ",\n".join(literals)
-        return Stripped(
-            f"""\
+
+    literals_joined = ",\n".join(literals)
+    return Stripped(
+        f"""\
 [
 {I}{indent_but_first_line(literals_joined, I)}
 ]"""
-        )
+    )
 
 
 @require(
@@ -94,8 +94,23 @@ def _generate_primitive_property_value(
             infer_for_schema.SetOfPrimitivesConstraint],
 ) -> Tuple[Optional[Stripped], Optional[str]]:
     """Generate the code to generate a primitive value."""
+    prop_name_literal = python_common.string_literal(prop.name)
+
     if set_of_primitives_constraint is not None:
-        return _generate_primitive_value_out_of_set(set_of_primitives_constraint), None
+        literals_literal = _generate_primitive_value_out_of_set(
+            set_of_primitives_constraint
+        )
+
+        return Stripped(
+            f"""\
+primitiving.choose_value(
+{I}common.hash_path(
+{II}path_hash,
+{II}{prop_name_literal}
+{I}),
+{I}{indent_but_first_line(literals_literal, I)}
+)"""
+        ), None
 
     if (
             primitive_type in (
@@ -126,8 +141,6 @@ def _generate_primitive_property_value(
                 f"Unexpected pattern constraint(s) on {primitive_type.name}: "
                 f"{pattern_constraints_str}"
             )
-
-    prop_name_literal = python_common.string_literal(prop.name)
 
     if (
             primitive_type in (
@@ -238,6 +251,148 @@ primitiving.generate_bytes(
         assert_never(primitive_type)
 
 
+def _generate_enumeration_literal(
+        prop: intermediate.Property,
+        set_of_enumeration_literals_constraint: Optional[
+            infer_for_schema.SetOfEnumerationLiteralsConstraint
+        ]
+) -> Stripped:
+    """Generate the code for literal generation."""
+    type_anno = intermediate.beneath_optional(prop.type_annotation)
+    assert isinstance(type_anno, intermediate.OurTypeAnnotation)
+    assert isinstance(type_anno.our_type, intermediate.Enumeration)
+
+    enumeration = type_anno.our_type
+
+    prop_name_literal = python_common.string_literal(prop.name)
+
+    if set_of_enumeration_literals_constraint is not None:
+        enum_name = python_naming.enum_name(enumeration.name)
+        literals = [
+            f"aas_types.{enum_name}.{python_naming.enum_literal_name(literal.name)}"
+            for literal in set_of_enumeration_literals_constraint.literals
+        ]
+        assert len(literals) > 0
+
+        if len(literals) == 1:
+            literals_literal = f"[{literals[0]}]"
+        else:
+            literals_joined = ",\n".join(literals)
+            literals_literal = f"""\
+[
+{I}{indent_but_first_line(literals_joined, I)}
+]"""
+
+        return Stripped(
+            f"""\
+primitiving.choose_value(
+{I}common.hash_path(
+{II}path_hash,
+{II}{prop_name_literal}
+{I}),
+{I}{indent_but_first_line(literals_literal, I)}
+)"""
+        )
+
+    pick_function_name = python_naming.function_name(
+        Identifier(f"pick_{enumeration.name}")
+    )
+
+    return Stripped(
+        f"""\
+{pick_function_name}(
+{I}common.hash_path(
+{II}path_hash,
+{II}{prop_name_literal}
+{I})
+)"""
+    )
+
+
+def _generate_minimal_instance(prop: intermediate.Property) -> Stripped:
+    """Generate the code to create a minimal instance as the property value."""
+    type_anno = intermediate.beneath_optional(prop.type_annotation)
+    assert isinstance(type_anno, intermediate.OurTypeAnnotation)
+    assert isinstance(type_anno.our_type, intermediate.Class)
+
+    cls = type_anno.our_type
+
+    minimal_function_name = python_naming.function_name(
+        Identifier(f"minimal_{cls.name}")
+    )
+
+    prop_name_literal = python_common.string_literal(prop.name)
+
+    return Stripped(
+        f"""\
+{minimal_function_name}(
+{I}common.hash_path(
+{II}path_hash,
+{II}{prop_name_literal}
+{I})
+)"""
+    )
+
+
+def _generate_list_of_instances(
+        prop: intermediate.Property,
+        len_constraint: Optional[infer_for_schema.LenConstraint],
+) -> Stripped:
+    """Generate the code to generate a list of instances."""
+    type_anno = intermediate.beneath_optional(prop.type_annotation)
+
+    assert isinstance(type_anno, intermediate.ListTypeAnnotation)
+    assert (
+            isinstance(type_anno.items, intermediate.OurTypeAnnotation)
+            and isinstance(type_anno.items.our_type, intermediate.Class)
+    )
+
+    cls = type_anno.items.our_type
+
+    prop_name_literal = python_common.string_literal(prop.name)
+
+    minimal_function_name = python_naming.function_name(
+        Identifier(f"minimal_{cls.name}")
+    )
+
+    count = 1
+    if len_constraint is not None:
+        if len_constraint.min_value is not None:
+            count = len_constraint.min_value
+
+        if len_constraint.max_value == 0:
+            count = 0
+
+
+
+    if count == 0:
+        return Stripped("[]")
+    elif count == 1:
+        return Stripped(
+            f"""\
+[
+{I}{minimal_function_name}(
+{II}common.hash_path(
+{III}path_hash,
+{III}{prop_name_literal}
+{II})
+{I})
+]"""
+        )
+    else:
+        return Stripped(
+            f"""\
+[
+{I}{minimal_function_name}(
+{II}common.hash_path(
+{III}path_hash,
+{III}[{prop_name_literal}, i]
+{II})
+{I})
+{I}for i in range({count})
+]"""
+)
+
 @ensure(lambda result: (result[0] is not None) ^ (result[1] is not None))
 def _generate_property_value(
         prop: intermediate.Property,
@@ -282,46 +437,121 @@ def _generate_property_value(
 
         assert block is not None
         return block, None
-    # TODO (mristin, 2023-03-8): continue here once done with primitive values
+    elif isinstance(type_anno, intermediate.OurTypeAnnotation):
+        our_type = type_anno.our_type
+
+        if isinstance(our_type, intermediate.Enumeration):
+            block = _generate_enumeration_literal(
+                prop,
+                set_of_enumeration_literals_constraint
+            )
+            return block, None
+        elif isinstance(our_type, intermediate.ConstrainedPrimitive):
+            raise AssertionError("Should have been handled before")
+
+        elif isinstance(
+                our_type, (intermediate.AbstractClass, intermediate.ConcreteClass)
+        ):
+            block = _generate_minimal_instance(prop)
+            return block, None
+
+        else:
+            assert_never(our_type)
+    elif isinstance(type_anno, intermediate.ListTypeAnnotation):
+        assert isinstance(
+            type_anno.items, intermediate.OurTypeAnnotation
+        ) and isinstance(type_anno.items.our_type, intermediate.Class), (
+            "(mristin, 2023-03-08) We handle only lists of classes in the generation "
+            "at the moment. The meta-model does not contain "
+            "any other lists, so we wanted to keep the code as simple as "
+            "possible, and avoid unrolling. Please contact the developers "
+            "if you need this feature."
+        )
+
+        block = _generate_list_of_instances(prop, len_constraint)
+        return block, None
     else:
         assert_never(type_anno)
 
 
-def generate_concrete_constructor(
+@ensure(lambda result: (result[0] is not None) ^ (result[1] is not None))
+def generate_concrete_constructor_call(
         cls: intermediate.ConcreteClass,
         creation_kind: CreationKind,
+        constraints_by_class: Mapping[
+            intermediate.ClassUnion,
+            infer_for_schema.ConstraintsByProperty
+        ]
+) -> Tuple[Optional[Stripped], Optional[str]]:
+    """Generate the code to create the instance."""
+    # fmt: off
+    assert (
+            sorted(
+                (arg.name, str(arg.type_annotation))
+                for arg in cls.constructor.arguments
+            ) == sorted(
+        (prop.name, str(prop.type_annotation))
+        for prop in cls.properties
+    )
+    ), (
+        "(mristin, 2023-03-08) We assume that the properties and constructor arguments "
+        "are identical at this point. If this is not the case, we have to re-write the "
+        "logic substantially! Please contact the developers if you see this."
+    )
+    # fmt: on
 
-) -> Stripped:
-    """Generate the code to create the minimal instance."""
     arguments = []  # type: List[Stripped]
-    for arg in cls.constructor.arguments:
+    for prop in cls.properties:
         if (
-                isinstance(arg.type_annotation, intermediate.OptionalTypeAnnotation)
+                isinstance(prop.type_annotation, intermediate.OptionalTypeAnnotation)
                 and creation_kind is CreationKind.MINIMAL
         ):
             continue
 
-        type_anno = intermediate.beneath_optional(arg.type_annotation)
+        arg_name = python_naming.argument_name(prop.name)
+        arg_name_literal = python_common.string_literal(prop.name)
 
-        arg_name = python_naming.argument_name(arg.name)
-        arg_name_literal = python_common.string_literal(arg.name)
+        constraints_by_prop = constraints_by_class[cls]
 
-        if isinstance(type_anno, intermediate.PrimitiveTypeAnnotation):
-            primitiving_function = PRIMITIVE_TYPE_TO_PRIMITIVING_FUNCTION[
-                type_anno.a_type
-            ]
+        # fmt: off
+        value_code, error = _generate_property_value(
+            prop=prop,
+            len_constraint=constraints_by_prop.len_constraints_by_property.get(
+                prop, None
+            ),
+            pattern_constraints=constraints_by_prop.patterns_by_property.get(
+                prop, None
+            ),
+            set_of_primitives_constraint=(
+                    constraints_by_prop.set_of_primitives_by_property.get(
+                    prop, None
+                )
+            ),
+            set_of_enumeration_literals_constraint=(
+                constraints_by_prop.set_of_enumeration_literals_by_property(
+                    prop, None
+                )
+            )
+        )
+        # fmt: on
 
-            arguments.append(
-                Stripped(
+        if error is not None:
+            return None, error
+
+        assert value_code is not None
+
+        arguments.append(
+            Stripped(
                     f"""\
-{arg_name}={primitiving_function}(
-{I}hash_path(
-{II}path_hash,
-{II}{arg_name_literal}
-{I})
+{arg_name}=(
+{I}{indent_but_first_line(value_code, I)}
 )"""
                 )
             )
+
+    # TODO (mristin, 2023-03-8): continue here
+    # TODO (mristin, 2023-03-8): add call to constructor
+    # TODO (mristin, 2023-03-8): return
 
 
 def generate_create_minimal(
