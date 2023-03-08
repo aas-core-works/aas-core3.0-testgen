@@ -20,17 +20,11 @@ from aas_core_codegen.python.common import (
     INDENT2 as II,
     INDENT3 as III
 )
-
-# TODO (mristin, 2023-03-8): generate_concrete_create_minimal
-
-# TODO (mristin, 2023-03-8): generate MINIMAL_TO_CONCRETE_MINIMAL
-
-# TODO (mristin, 2023-03-8): generate pick_literal_of_{enum}(path_hash)
-
-# TODO (mristin, 2023-03-8): generate pick_item_of_{constant enum set}(path_hash)
-
-# TODO (mristin, 2023-03-8): generate pick_item_of_{constant value set}(path_hash)
 from icontract import ensure, require
+
+import aas_core3_0_testgen.common
+
+import dev_scripts.codegen.common
 
 
 class CreationKind(enum.Enum):
@@ -168,6 +162,7 @@ primitiving.choose_value(
             # We drop the constraint for XML serializable strings since it permeates
             # all the specification. However, once we drop it, all the types have a single
             # constraint.
+            # noinspection SpellCheckingInspection
             pattern_constraints_without_xml = [
                 pattern_constraint
                 for pattern_constraint in pattern_constraints
@@ -185,7 +180,10 @@ primitiving.choose_value(
                     f"{pattern_constraints_joined}"
                 )
 
-            pattern_constraint = pattern_constraints_without_xml[0]
+            assert len(pattern_constraints_without_xml) <= 1
+
+            if len(pattern_constraints_without_xml) == 1:
+                pattern_constraint = pattern_constraints_without_xml[0]
 
         if pattern_constraint is not None:
             pattern_literal = python_common.string_literal(pattern_constraint.pattern)
@@ -294,22 +292,21 @@ primitiving.choose_value(
 )"""
         )
 
-    pick_function_name = python_naming.function_name(
-        Identifier(f"pick_{enumeration.name}")
-    )
+    enum_name = python_naming.enum_name(enumeration.name)
 
     return Stripped(
         f"""\
-{pick_function_name}(
+primitiving.choose_value(
 {I}common.hash_path(
 {II}path_hash,
 {II}{prop_name_literal}
-{I})
+{I}),
+{I}list(aas_types.{enum_name})
 )"""
     )
 
 
-def _generate_minimal_instance(prop: intermediate.Property) -> Stripped:
+def _generate_call_to_create_minimal(prop: intermediate.Property) -> Stripped:
     """Generate the code to create a minimal instance as the property value."""
     type_anno = intermediate.beneath_optional(prop.type_annotation)
     assert isinstance(type_anno, intermediate.OurTypeAnnotation)
@@ -317,7 +314,7 @@ def _generate_minimal_instance(prop: intermediate.Property) -> Stripped:
 
     cls = type_anno.our_type
 
-    minimal_function_name = python_naming.function_name(
+    function_name = python_naming.function_name(
         Identifier(f"minimal_{cls.name}")
     )
 
@@ -325,7 +322,7 @@ def _generate_minimal_instance(prop: intermediate.Property) -> Stripped:
 
     return Stripped(
         f"""\
-{minimal_function_name}(
+{function_name}(
 {I}common.hash_path(
 {II}path_hash,
 {II}{prop_name_literal}
@@ -363,8 +360,6 @@ def _generate_list_of_instances(
         if len_constraint.max_value == 0:
             count = 0
 
-
-
     if count == 0:
         return Stripped("[]")
     elif count == 1:
@@ -391,7 +386,8 @@ def _generate_list_of_instances(
 {I})
 {I}for i in range({count})
 ]"""
-)
+        )
+
 
 @ensure(lambda result: (result[0] is not None) ^ (result[1] is not None))
 def _generate_property_value(
@@ -414,7 +410,7 @@ def _generate_property_value(
     if (
             isinstance(type_anno, intermediate.PrimitiveTypeAnnotation)
             or (
-            isinstance(type_anno, intermediate.OurType)
+            isinstance(type_anno, intermediate.OurTypeAnnotation)
             and isinstance(type_anno.our_type, intermediate.ConstrainedPrimitive)
     )
     ):
@@ -452,7 +448,7 @@ def _generate_property_value(
         elif isinstance(
                 our_type, (intermediate.AbstractClass, intermediate.ConcreteClass)
         ):
-            block = _generate_minimal_instance(prop)
+            block = _generate_call_to_create_minimal(prop)
             return block, None
 
         else:
@@ -475,13 +471,10 @@ def _generate_property_value(
 
 
 @ensure(lambda result: (result[0] is not None) ^ (result[1] is not None))
-def generate_concrete_constructor_call(
+def _generate_concrete_constructor_call(
         cls: intermediate.ConcreteClass,
         creation_kind: CreationKind,
-        constraints_by_class: Mapping[
-            intermediate.ClassUnion,
-            infer_for_schema.ConstraintsByProperty
-        ]
+        constraints_by_property: infer_for_schema.ConstraintsByProperty
 ) -> Tuple[Optional[Stripped], Optional[str]]:
     """Generate the code to create the instance."""
     # fmt: off
@@ -509,26 +502,23 @@ def generate_concrete_constructor_call(
             continue
 
         arg_name = python_naming.argument_name(prop.name)
-        arg_name_literal = python_common.string_literal(prop.name)
-
-        constraints_by_prop = constraints_by_class[cls]
 
         # fmt: off
         value_code, error = _generate_property_value(
             prop=prop,
-            len_constraint=constraints_by_prop.len_constraints_by_property.get(
+            len_constraint=constraints_by_property.len_constraints_by_property.get(
                 prop, None
             ),
-            pattern_constraints=constraints_by_prop.patterns_by_property.get(
+            pattern_constraints=constraints_by_property.patterns_by_property.get(
                 prop, None
             ),
             set_of_primitives_constraint=(
-                    constraints_by_prop.set_of_primitives_by_property.get(
+                    constraints_by_property.set_of_primitives_by_property.get(
                     prop, None
                 )
             ),
             set_of_enumeration_literals_constraint=(
-                constraints_by_prop.set_of_enumeration_literals_by_property(
+                constraints_by_property.set_of_enumeration_literals_by_property.get(
                     prop, None
                 )
             )
@@ -542,39 +532,507 @@ def generate_concrete_constructor_call(
 
         arguments.append(
             Stripped(
-                    f"""\
+                f"""\
 {arg_name}=(
 {I}{indent_but_first_line(value_code, I)}
 )"""
+            )
+        )
+
+    class_name = python_naming.class_name(cls.name)
+
+    if len(arguments) == 0:
+        return Stripped(f"aas_types.{class_name}()"), None
+
+    arguments_joined = ",\n".join(arguments)
+
+    return Stripped(
+        f"""\
+aas_types.{class_name}(
+{I}{indent_but_first_line(arguments_joined, I)}
+)"""
+    ), None
+
+
+@require(lambda cls: len(cls.concrete_descendants) > 0)
+def _generate_concrete_create_minimal(
+        cls: intermediate.ConcreteClass,
+        constraints_by_property: infer_for_schema.ConstraintsByProperty
+) -> Tuple[Optional[Stripped], Optional[str]]:
+    """Generate the function to be dispatched to create an instance of ``cls``."""
+    constructor_call, error = _generate_concrete_constructor_call(
+        cls=cls,
+        creation_kind=CreationKind.MINIMAL,
+        constraints_by_property=constraints_by_property
+    )
+
+    if error is not None:
+        return None, error
+    assert constructor_call is not None
+
+    function_name = python_naming.function_name(
+        Identifier(f"concrete_minimal_{cls.name}")
+    )
+    cls_name = python_naming.class_name(cls.name)
+
+    body = f"return {constructor_call}"
+
+    return Stripped(
+        f"""\
+def {function_name}(
+{I}path_hash: common.CanHash
+) -> aas_types.{cls_name}:
+{I}\"\"\"
+{I}Generate a minimal instance based on the ``path_hash``.
+
+{I}.. note::
+
+{II}You should not call this function directly. It will be dispatched
+{II}to.
+
+{I}.. note::
+
+{II}The generated instance satisfies only the type constraints.
+{II}That means it can be serialized as-is, but probably violates one or
+{II}more meta-model constraints.
+{I}\"\"\"
+{I}{indent_but_first_line(body, I)}"""
+    ), None
+
+
+def _generate_class_name_to_concrete_minimal_dispatch(
+        symbol_table: intermediate.SymbolTable
+) -> Stripped:
+    """Generate the dispatching map to minimal functions."""
+    items = []  # type: List[Tuple[Stripped, Stripped]]
+    for our_type in symbol_table.our_types:
+        if not isinstance(
+                our_type,
+                (intermediate.AbstractClass, intermediate.ConcreteClass)
+        ):
+            continue
+
+        if len(our_type.concrete_descendants) == 0:
+            continue
+
+        concrete_functions = []  # type: List[Stripped]
+        if isinstance(our_type, intermediate.ConcreteClass):
+            concrete_functions.append(
+                python_naming.function_name(
+                    Identifier(f"concrete_minimal_{our_type.name}")
                 )
             )
 
-    # TODO (mristin, 2023-03-8): continue here
-    # TODO (mristin, 2023-03-8): add call to constructor
-    # TODO (mristin, 2023-03-8): return
+        for concrete_descendant in our_type.concrete_descendants:
+            concrete_functions.append(
+                python_naming.function_name(
+                    Identifier(f"minimal_{concrete_descendant.name}")
+                )
+            )
 
+        concrete_functions_joined = ",\n".join(concrete_functions)
+        concrete_functions_literal = Stripped(
+            f"""\
+[
+{I}{indent_but_first_line(concrete_functions_joined, I)}
+]"""
+        )
 
-def generate_create_minimal(
-        cls: Union[intermediate.AbstractClass, intermediate.ConcreteClass]
-) -> Stripped:
-    """Generate the function to generate the minimal instance of the ``cls``."""
-    blocks = []  # type: List[Stripped]
-
-    if len(cls.concrete_descendants) > 0:
-        cls_name = cls.name
-        blocks.append(
-            Stripped(
-                f"""\
-concrete_minimal_functions = MINIMAL_TO_CONCRETE_MINIMAL[
-{I}{python_common.string_literal(cls_name)}
-]
-concrete_minimal_function = concrete_minimal_functions[
-{I}common.int_digest(prefix_hash) % concrete_minimal_functions
-]
-return concrete_minimal_function(prefix_hash)"""
+        items.append(
+            (
+                python_common.string_literal(our_type.name),
+                concrete_functions_literal
             )
         )
+
+    items_literals = [
+        Stripped(
+            f"""\
+{key}:
+{value}"""
+        )
+        for key, value in items
+    ]
+    items_literals_joined = ",\n".join(items_literals)
+
+    return Stripped(
+        f"""\
+_CLASS_NAME_TO_CONCRETE_MINIMAL = {{
+{I}{indent_but_first_line(items_literals_joined, I)}
+}}"""
+    )
+
+
+@ensure(lambda result: (result[0] is not None) ^ (result[1] is not None))
+def _generate_create_minimal(
+        cls: Union[intermediate.AbstractClass, intermediate.ConcreteClass],
+        constraints_by_property: infer_for_schema.ConstraintsByProperty
+) -> Tuple[Optional[Stripped], Optional[str]]:
+    """Generate the function to generate the minimal instance of the ``cls``."""
+    # noinspection PyUnusedLocal
+    body = None  # type: Optional[Stripped]
+
+    # Class name in Python
+    cls_name = python_naming.class_name(cls.name)
+
+    if len(cls.concrete_descendants) > 0:
+        body = Stripped(
+            f"""\
+number = int(path_hash.hexdigest()[:8], base=16)
+concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMAL[
+{I}{python_common.string_literal(cls.name)}
+]
+concrete_minimal_function = concrete_minimal_functions[
+{I}number % concrete_minimal_functions
+]
+instance = concrete_minimal_function(path_hash)
+assert isinstance(
+{I}instance,
+{I}aas_types.{cls_name},
+)
+return instance"""
+        )
     else:
+        constructor_call, error = _generate_concrete_constructor_call(
+            cls=cls,
+            creation_kind=CreationKind.MINIMAL,
+            constraints_by_property=constraints_by_property
+        )
+
+        if error is not None:
+            return None, error
+        assert constructor_call is not None
+
+        body = Stripped(
+            f"""\
+return {constructor_call}"""
+        )
+
+    function_name = python_naming.function_name(
+        Identifier(f"minimal_{cls.name}")
+    )
+
+    assert body is not None
+    return Stripped(
+        f"""\
+def {function_name}(
+{I}path_hash: common.CanHash
+) -> aas_types.{cls_name}:
+{I}\"\"\"
+{I}Generate a minimal instance based on the ``path_hash``.
+
+{I}.. note::
+
+{II}The generated instance satisfies only the type constraints.
+{II}That means it can be serialized as-is, but probably violates one or
+{II}more meta-model constraints.
+{I}\"\"\"
+{I}{indent_but_first_line(body, I)}"""
+    ), None
+
+
+@require(lambda cls: len(cls.concrete_descendants) > 0)
+def _generate_concrete_create_maximal(
+        cls: intermediate.ConcreteClass,
+        constraints_by_property: infer_for_schema.ConstraintsByProperty
+) -> Tuple[Optional[Stripped], Optional[str]]:
+    """Generate the function to be dispatched to create an instance of ``cls``."""
+    constructor_call, error = _generate_concrete_constructor_call(
+        cls=cls,
+        creation_kind=CreationKind.MAXIMAL,
+        constraints_by_property=constraints_by_property
+    )
+
+    if error is not None:
+        return None, error
+    assert constructor_call is not None
+
+    function_name = python_naming.function_name(
+        Identifier(f"concrete_maximal_{cls.name}")
+    )
+    cls_name = python_naming.class_name(cls.name)
+
+    body = f"return {constructor_call}"
+
+    return Stripped(
+        f"""\
+def {function_name}(
+{I}path_hash: common.CanHash
+) -> aas_types.{cls_name}:
+{I}\"\"\"
+{I}Generate a maximal instance based on the ``path_hash``.
+
+{I}.. note::
+
+{II}You should not call this function directly. It will be dispatched
+{II}to.
+
+{I}.. note::
+
+{II}The generated instance satisfies only the type constraints.
+{II}That means it can be serialized as-is, but probably violates one or
+{II}more meta-model constraints.
+{I}\"\"\"
+{I}{indent_but_first_line(body, I)}"""
+    ), None
+
+
+def _generate_class_name_to_concrete_maximal_dispatch(
+        symbol_table: intermediate.SymbolTable
+) -> Stripped:
+    """Generate the dispatching map to minimal functions."""
+    items = []  # type: List[Tuple[Stripped, Stripped]]
+    for our_type in symbol_table.our_types:
+        if not isinstance(
+                our_type,
+                (intermediate.AbstractClass, intermediate.ConcreteClass)
+        ):
+            continue
+
+        if len(our_type.concrete_descendants) == 0:
+            continue
+
+        concrete_functions = []  # type: List[Stripped]
+        if isinstance(our_type, intermediate.ConcreteClass):
+            concrete_functions.append(
+                python_naming.function_name(
+                    Identifier(f"concrete_maximal_{our_type.name}")
+                )
+            )
+
+        for concrete_descendant in our_type.concrete_descendants:
+            concrete_functions.append(
+                python_naming.function_name(
+                    Identifier(f"maximal_{concrete_descendant.name}")
+                )
+            )
+
+        concrete_functions_joined = ",\n".join(concrete_functions)
+        concrete_functions_literal = Stripped(
+            f"""\
+[
+{I}{indent_but_first_line(concrete_functions_joined, I)}
+]"""
+        )
+
+        items.append(
+            (
+                python_common.string_literal(our_type.name),
+                concrete_functions_literal
+            )
+        )
+
+    items_literals = [
+        Stripped(
+            f"""\
+{key}:
+{value}"""
+        )
+        for key, value in items
+    ]
+    items_literals_joined = ",\n".join(items_literals)
+
+    return Stripped(
+        f"""\
+_CLASS_NAME_TO_CONCRETE_MAXIMAL = {{
+{I}{indent_but_first_line(items_literals_joined, I)}
+}}"""
+    )
+
+
+@ensure(lambda result: (result[0] is not None) ^ (result[1] is not None))
+def _generate_create_maximal(
+        cls: Union[intermediate.AbstractClass, intermediate.ConcreteClass],
+        constraints_by_property: infer_for_schema.ConstraintsByProperty
+) -> Tuple[Optional[Stripped], Optional[str]]:
+    """Generate the function to generate the maximal instance of the ``cls``."""
+    # noinspection PyUnusedLocal
+    body = None  # type: Optional[Stripped]
+
+    # Class name in Python
+    cls_name = python_naming.class_name(cls.name)
+
+    if len(cls.concrete_descendants) > 0:
+        body = Stripped(
+            f"""\
+number = int(path_hash.hexdigest()[:8], base=16)
+concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMAL[
+{I}{python_common.string_literal(cls.name)}
+]
+concrete_minimal_function = concrete_minimal_functions[
+{I}number % concrete_minimal_functions
+]
+instance = concrete_minimal_function(path_hash)
+assert isinstance(
+{I}instance,
+{I}aas_types.{cls_name},
+)
+return instance"""
+        )
+    else:
+        constructor_call, error = _generate_concrete_constructor_call(
+            cls=cls,
+            creation_kind=CreationKind.MAXIMAL,
+            constraints_by_property=constraints_by_property
+        )
+
+        if error is not None:
+            return None, error
+        assert constructor_call is not None
+
+        body = Stripped(
+            f"""\
+return {constructor_call}"""
+        )
+
+    function_name = python_naming.function_name(
+        Identifier(f"maximal_{cls.name}")
+    )
+
+    assert body is not None
+    return Stripped(
+        f"""\
+def {function_name}(
+{I}path_hash: common.CanHash
+) -> aas_types.{cls_name}:
+{I}\"\"\"
+{I}Generate a minimal instance based on the ``path_hash``.
+
+{I}.. note::
+
+{II}The generated instance satisfies only the type constraints.
+{II}That means it can be serialized as-is, but probably violates one or
+{II}more meta-model constraints.
+{I}\"\"\"
+{I}{indent_but_first_line(body, I)}"""
+    ), None
+
+
+_REPO_DIR = pathlib.Path(os.path.realpath(__file__)).parent.parent.parent
+
+
+@ensure(lambda result: (result[0] is not None) ^ (result[1] is not None))
+def _generate(
+        symbol_table: intermediate.SymbolTable,
+        constraints_by_class: Mapping[
+            intermediate.ClassUnion, infer_for_schema.ConstraintsByProperty
+        ]
+) -> Tuple[Optional[Stripped], Optional[str]]:
+    """Generate the creation module."""
+    warning = dev_scripts.codegen.common.generate_warning(__file__)
+
+    blocks = [
+        Stripped(f"\"\"\"Create instances which satisfy the type constraints.\"\"\""),
+        warning,
+        Stripped(
+            f"""\
+from aas_core3 import types as aas_types
+
+import aas_core3_0_testgen.common as common
+import aas_core3_0_testgen.primitiving as primitiving"""
+        )
+    ]  # type: List[Stripped]
+
+    for our_type in symbol_table.our_types:
+        if not isinstance(
+                our_type, (intermediate.AbstractClass, intermediate.ConcreteClass)
+        ):
+            continue
+
+        constraints_by_property = constraints_by_class[our_type]
+
+        if (
+                isinstance(our_type, intermediate.ConcreteClass)
+                and len(our_type.concrete_descendants) > 0
+        ):
+            concrete_minimal, error = _generate_concrete_create_minimal(
+                cls=our_type,
+                constraints_by_property=constraints_by_property
+            )
+            if error is not None:
+                return None, (
+                    f"Failed to generate the concrete minimal function "
+                    f"for class {our_type.name}: {error}"
+                )
+
+            assert concrete_minimal is not None
+            blocks.append(concrete_minimal)
+
+        minimal, error = _generate_create_minimal(
+            cls=our_type,
+            constraints_by_property=constraints_by_property
+        )
+        if error is not None:
+            return None, (
+                f"Failed to generate the minimal function "
+                f"for class {our_type.name}: {error}"
+            )
+
+        assert minimal is not None
+        blocks.append(minimal)
+
+    blocks.append(_generate_class_name_to_concrete_minimal_dispatch(symbol_table))
+
+    for our_type in symbol_table.our_types:
+        if not isinstance(
+                our_type,
+                (intermediate.AbstractClass, intermediate.ConcreteClass)
+        ):
+            continue
+
+        constraints_by_property = constraints_by_class[our_type]
+
+        if (
+                isinstance(our_type, intermediate.ConcreteClass)
+                and len(our_type.concrete_descendants) > 0
+        ):
+            concrete_maximal, error = _generate_concrete_create_maximal(
+                cls=our_type,
+                constraints_by_property=constraints_by_property
+            )
+            if error is not None:
+                return None, (
+                    f"Failed to generate the concrete maximal function "
+                    f"for class {our_type.name}: {error}"
+                )
+
+            assert concrete_maximal is not None
+            blocks.append(concrete_maximal)
+
+        maximal, error = _generate_create_maximal(
+            cls=our_type,
+            constraints_by_property=constraints_by_property
+        )
+        if error is not None:
+            return None, (
+                f"Failed to generate the maximal function "
+                f"for class {our_type.name}: {error}"
+            )
+
+        assert maximal is not None
+        blocks.append(maximal)
+
+    blocks.append(_generate_class_name_to_concrete_maximal_dispatch(symbol_table))
+
+    blocks.append(warning)
+
+    return Stripped("\n\n\n".join(blocks)), None
+
+
+def generate_and_write() -> Optional[str]:
+    """Generate the code and write it to the pre-defined file."""
+    # fmt: off
+    symbol_table, constraints_by_class = (
+        aas_core3_0_testgen.common.load_symbol_table_and_infer_constraints_for_schema()
+    )
+    # fmt: on
+
+    code, error = _generate(symbol_table, constraints_by_class)
+    if error is not None:
+        return error
+
+    path = _REPO_DIR / "aas_core3_0_testgen" / "codegened" / "creation.py"
+    path.write_text(code + "\n")
 
 
 def main() -> int:
@@ -582,7 +1040,10 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     _ = parser.parse_args()
 
-    repo_dir = pathlib.Path(os.path.realpath(__file__)).parent.parent
+    error = generate_and_write()
+    if error is not None:
+        print(error, file=sys.stderr)
+        return 1
 
     return 0
 
