@@ -1,12 +1,12 @@
 """Provide common data types for the frozen_examples."""
-from typing import Mapping
+from typing import OrderedDict
 
 
 class Examples:
     """Represent frozen_examples and counter-frozen_examples of something textual."""
 
     def __init__(
-        self, positives: Mapping[str, str], negatives: Mapping[str, str]
+        self, positives: OrderedDict[str, str], negatives: OrderedDict[str, str]
     ) -> None:
         """Initialize with the given values."""
         self.positives = positives

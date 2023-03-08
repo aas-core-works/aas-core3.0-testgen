@@ -1,15 +1,17 @@
 """Provide common methods for generation of data in different formats."""
-
+import collections.abc
+import hashlib
 import io
 import pathlib
-import re
-from typing import MutableMapping, Tuple
+from typing import MutableMapping, Tuple, Union, Iterable, Protocol, TypeVar
 
 import aas_core_codegen.common
 import aas_core_codegen.parse
 import aas_core_codegen.run
 import aas_core_meta.v3
+import icontract
 from aas_core_codegen import intermediate, infer_for_schema
+from icontract import ensure
 
 
 def load_symbol_table_and_infer_constraints_for_schema() -> Tuple[
@@ -77,8 +79,8 @@ def load_symbol_table_and_infer_constraints_for_schema() -> Tuple[
         writer = io.StringIO()
         aas_core_codegen.run.write_error_report(
             message=f"Failed to translate the parsed symbol table "
-            f"to intermediate symbol table "
-            f"based on {model_path}",
+                    f"to intermediate symbol table "
+                    f"based on {model_path}",
             errors=[lineno_columner.error_message(error)],
             stderr=writer,
         )
@@ -98,7 +100,7 @@ def load_symbol_table_and_infer_constraints_for_schema() -> Tuple[
         writer = io.StringIO()
         aas_core_codegen.run.write_error_report(
             message=f"Failed to infer the constraints for the schema "
-            f"based on {model_path}",
+                    f"based on {model_path}",
             errors=[lineno_columner.error_message(error) for error in inference_errors],
             stderr=writer,
         )
@@ -117,7 +119,7 @@ def load_symbol_table_and_infer_constraints_for_schema() -> Tuple[
         writer = io.StringIO()
         aas_core_codegen.run.write_error_report(
             message=f"Failed to infer the constraints for the schema "
-            f"based on {model_path}",
+                    f"based on {model_path}",
             errors=[lineno_columner.error_message(merge_error)],
             stderr=writer,
         )
@@ -127,3 +129,74 @@ def load_symbol_table_and_infer_constraints_for_schema() -> Tuple[
     assert constraints_by_class is not None
 
     return ir_symbol_table, constraints_by_class
+
+
+CanHashT = TypeVar('CanHashT', bound='CanHash')
+
+
+class CanHash(Protocol):
+    def update(self, data: bytes) -> None:
+        """Update the hasher with the given data."""
+        raise NotImplementedError()
+
+    def digest(self) -> bytes:
+        """Return the hash digest as bytes."""
+        raise NotImplementedError()
+
+    def hexdigest(self) -> str:
+        """Return the hexadecimal hash digest in hex."""
+        raise NotImplementedError()
+
+    def copy(self: CanHashT) -> CanHashT:
+        """Copy the hasher state."""
+        raise NotImplementedError()
+
+
+@ensure(
+    lambda prefix_hash, segment_or_segments, result:
+    not (
+            isinstance(segment_or_segments, collections.abc.Sized)
+            and len(segment_or_segments) > 0)
+    or (
+            prefix_hash is not result
+    ),
+    "Hash is always copied unless there were no segments to hash"
+)
+@ensure(
+    lambda prefix_hash, segment_or_segments, result:
+    not isinstance(segment_or_segments, (int, str))
+    or (prefix_hash is not result),
+    "Hash is always copied when there is a segment given"
+)
+@ensure(
+    lambda prefix_hash, segment_or_segments, result:
+    not isinstance(segment_or_segments, (int, str))
+    or result.hexdigest() == hash_path(prefix_hash, [segment_or_segments]),
+    "Hashing a single segment in a list is equal to hashing that segment directly",
+    enabled=icontract.SLOW
+)
+def hash_path(
+        prefix_hash: CanHash,
+        segment_or_segments: Union[int, str, Iterable[Union[int, str]]]
+) -> CanHash:
+    """Hash a path extended with a segment and pre-hashed prefix."""
+    if isinstance(segment_or_segments, (int, str)):
+        segment_bytes = f"/{repr(segment_or_segments)}".encode('utf-8')
+        hsh = prefix_hash.copy()
+        hsh.update(segment_bytes)
+        return hsh
+
+    elif (
+            isinstance(segment_or_segments, collections.abc.Iterable)
+            and isinstance(segment_or_segments, collections.abc.Sized)
+    ):
+        if len(segment_or_segments) == 0:
+            return prefix_hash
+
+        hsh = prefix_hash.copy()
+        # noinspection PyTypeChecker
+        for segment in segment_or_segments:
+            segment_bytes = f"/{repr(segment)}".encode('utf-8')
+            hsh.update(segment_bytes)
+
+        return hsh
