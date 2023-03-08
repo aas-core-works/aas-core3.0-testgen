@@ -34,31 +34,86 @@ def generate_float(path_hash: common.CanHash) -> float:
 
 # fmt: off
 @ensure(
-    lambda count, result:
-    not (count is not None)
-    or (len(result) == count)
+    lambda length, result:
+    len(result) == length
+)
+# fmt: on
+def generate_str_of_exact_len(
+    hexdigest: str,
+    length: int
+) -> str:
+    """Generate a semi-random string of the exact given ``length``."""
+    if length < 12:
+        # NOTE (mristin, 2023-03-08):
+        # Short strings look just as hexadecimal.
+        return hexdigest[:length]
+
+    if length <= 10 + len(hexdigest):
+        len_hexdigest_part = length - 10
+        return f"something_{hexdigest[:len_hexdigest_part]}"
+    
+    prefix = f"something_{hexdigest}"
+
+    ruler = "1234567890"
+
+    tens = length // 10
+    remainder = length % 10
+    return "".join(
+        [
+            prefix,
+            ruler[len(prefix): 10],
+            ruler * (tens - 1),
+            ruler[:remainder]
+        ]
+    )
+
+
+# fmt: off
+@ensure(
+    lambda min_len, result:
+    not (min_len is not None)
+    or (min_len <= len(result))
+)
+@ensure(
+    lambda max_len, result:
+    not (max_len is not None)
+    or (len(result) <= max_len)
 )
 # fmt: on
 def generate_str(
         path_hash: common.CanHash,
-        count: Optional[int] = None
+        min_len: Optional[int] = None,
+        max_len: Optional[int] = None
 ) -> str:
     """Transform the digest to a semi-meaningful string value."""
     hexdigest = path_hash.hexdigest()
 
-    if count is None:
-        return f"something_{hexdigest[:8]}"
+    default = f"something_{hexdigest[:8]}"
 
-    if len(hexdigest) > count:
-        return hexdigest[:count]
+    if min_len is None and max_len is None:
+        return default
+    
+    elif min_len is not None and max_len is None:
+        if min_len <= len(default):
+            return default
 
-    ruler = "1234567890"
+        return generate_str_of_exact_len(hexdigest, min_len)
+            
+    elif min_len is None and max_len is not None:
+        if len(default) < max_len:
+            return default
 
-    tens = count // 10
-    remainder = count % 10
-    return "".join(
-        [hexdigest, ruler[len(hexdigest) : 10], ruler * (tens - 1), ruler[:remainder]]
-    )
+        return generate_str_of_exact_len(hexdigest, max_len)
+    
+    elif min_len is not None and max_len is not None:
+        if min_len <= len(default) <= max_len:
+            return default
+
+        return generate_str_of_exact_len(hexdigest, min_len)
+
+    else:
+        raise AssertionError(f"Unexpected case: {min_len=}, {max_len=}")
+
 
 # fmt: off
 @ensure(
@@ -83,50 +138,76 @@ def generate_str_satisfying_pattern(
 
 # fmt: off
 @ensure(
-    lambda count, result:
-    not (count is not None)
-    or (len(result) == count)
+    lambda min_len, result:
+    not (min_len is not None)
+    or (min_len <= len(result))
+)
+@ensure(
+    lambda max_len, result:
+    not (max_len is not None)
+    or (len(result) <= max_len)
 )
 # fmt: on
 def generate_bytes(
         path_hash: common.CanHash,
-        count: Optional[int] = None
+        min_len: Optional[int] = None,
+        max_len: Optional[int] = None
 ) -> bytes:
     """Transform the digest to a meaningless byte array."""
     digest = path_hash.digest()
 
-    if count is None:
-        # NOTE (mristin, 2023-03-08):
-        # We return here an arbitrary number of bytes to make it explicit
-        # in the generated examples that there is no limit on 8 bytes or something
-        # similar.
-        return digest[:12]
+    # NOTE (mristin, 2023-03-08):
+    # We return here an arbitrary number of bytes to make it explicit
+    # in the generated examples that there is no limit on 8 bytes or something
+    # similar.
+    default_len = 11
 
-    if count < len(digest):
-        return digest[:count]
+    count = None  # type: Optional[int]
 
-    parts = []  # type: List[bytes]
-    length = 0
+    if min_len is None and max_len is None:
+        count = default_len
+    elif min_len is not None and max_len is None:
+        count = min_len
+    elif min_len is None and max_len is not None:
+        count = min(max_len, default_len)
+    elif (
+            min_len is not None
+            and max_len is not None
+    ):
+        count = min_len
+    else:
+        raise AssertionError("Unhandled case")
 
-    current_digest = digest
+    assert count is not None
 
-    while length < count:
-        remaining = length - count
-        if len(current_digest) < remaining:
-            parts.append(current_digest)
-            length += len(current_digest)
+    if count <= len(digest):
+        result = digest[:count]
+    else:
+        parts = []  # type: List[bytes]
+        length = 0
 
-            # NOTE (mristin, 2023-03-08):
-            # Re-hash for a "random" effect. This works OK for examples.
-            hasher = hashlib.md5()
-            hasher.update(current_digest)
-            current_digest = hasher.digest()
+        current_digest = digest
 
-        else:
-            parts.append(current_digest[:remaining])
-            length += remaining
+        while length < count:
+            remaining = length - count
+            if len(current_digest) < remaining:
+                parts.append(current_digest)
+                length += len(current_digest)
 
-    return b"".join(parts)
+                # NOTE (mristin, 2023-03-08):
+                # Re-hash for a "random" effect. This works OK for examples.
+                hasher = hashlib.md5()
+                hasher.update(current_digest)
+                current_digest = hasher.digest()
+
+            else:
+                parts.append(current_digest[:remaining])
+                length += remaining
+
+        result = b"".join(parts)
+
+    assert len(result) == count
+    return result
 
 
 T = TypeVar("T")

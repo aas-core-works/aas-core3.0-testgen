@@ -21,7 +21,6 @@ from aas_core_codegen.python.common import (
     INDENT3 as III
 )
 
-
 # TODO (mristin, 2023-03-8): generate_concrete_create_minimal
 
 # TODO (mristin, 2023-03-8): generate MINIMAL_TO_CONCRETE_MINIMAL
@@ -86,7 +85,7 @@ def _generate_primitive_value_out_of_set(
     ) is primitive_type
 )
 @ensure(lambda result: (result[0] is not None) ^ (result[1] is not None))
-def _generate_primitive_value(
+def _generate_primitive_property_value(
         prop: intermediate.Property,
         primitive_type: intermediate.PrimitiveType,
         len_constraint: Optional[infer_for_schema.LenConstraint],
@@ -166,25 +165,81 @@ def _generate_primitive_value(
 
             if len(pattern_constraints_without_xml) > 1:
                 pattern_constraints_joined = ", ".join(str(pattern_constraints))
-                raise NotImplementedError(
-                    f"Currently, we only support frozen examples for a single constraint. "
-                    f"However, two or more more pattern constraints had to be satisfied: "
+                return None, (
+                    f"(mristin, 2023-03-08): Currently, we only support frozen "
+                    f"examples for a single constraint. However, two or more "
+                    f"more pattern constraints had to be satisfied: "
                     f"{pattern_constraints_joined}"
                 )
 
             pattern_constraint = pattern_constraints_without_xml[0]
 
         if pattern_constraint is not None:
-            # TODO (mristin, 2023-03-8): continue here
-            raise NotImplementedError()
+            pattern_literal = python_common.string_literal(pattern_constraint.pattern)
+            return Stripped(
+                f"""\
+primitiving.generate_str_satisfying_pattern(
+{I}common.hash_path(
+{II}path_hash,
+{II}{prop_name_literal}
+{I}),
+{I}{pattern_literal}
+)"""
+            ), None
+
+        if len_constraint is not None:
+            return Stripped(
+                f"""\
+primitiving.generate_str(
+{I}common.hash_path(
+{II}path_hash,
+{II}{prop_name_literal}
+{I}),
+{I}min_len={repr(len_constraint.min_value)},
+{I}max_len={repr(len_constraint.max_value)}
+)"""
+            ), None
+
+        return Stripped(
+            f"""\
+primitiving.generate_str(
+{I}common.hash_path(
+{II}path_hash,
+{II}{prop_name_literal}
+{I})
+)"""
+        ), None
+
     elif primitive_type is intermediate.PrimitiveType.BYTEARRAY:
-        # TODO (mristin, 2023-03-8): implement
-        raise NotImplementedError()
+        if len_constraint is not None:
+            return Stripped(
+                f"""\
+primitiving.generate_bytes(
+{I}common.hash_path(
+{II}path_hash,
+{II}{prop_name_literal}
+{I}),
+{I}min_len={repr(len_constraint.min_value)},
+{I}max_len={repr(len_constraint.max_value)}
+)"""
+            ), None
+
+        return Stripped(
+            f"""\
+primitiving.generate_bytes(
+{I}common.hash_path(
+{II}path_hash,
+{II}{prop_name_literal}
+{I})
+)"""
+        ), None
+
     else:
         assert_never(primitive_type)
 
 
-def generate_property_value(
+@ensure(lambda result: (result[0] is not None) ^ (result[1] is not None))
+def _generate_property_value(
         prop: intermediate.Property,
         len_constraint: Optional[infer_for_schema.LenConstraint],
         pattern_constraints: Optional[Sequence[infer_for_schema.PatternConstraint]],
@@ -193,7 +248,7 @@ def generate_property_value(
         set_of_enumeration_literals_constraint: Optional[
             infer_for_schema.SetOfEnumerationLiteralsConstraint
         ]
-) -> Stripped:
+) -> Tuple[Optional[Stripped], Optional[str]]:
     """
     Generate the snippet to generate a value for the property.
 
@@ -211,12 +266,22 @@ def generate_property_value(
         primitive_type = intermediate.try_primitive_type(type_anno)
         assert primitive_type is not None
 
-        return generate_primitive_value(
+        block, error = _generate_primitive_property_value(
+            prop=prop,
             primitive_type=primitive_type,
             len_constraint=len_constraint,
             pattern_constraints=pattern_constraints,
             set_of_primitives_constraint=set_of_primitives_constraint
         )
+
+        if error is not None:
+            return None, (
+                f"Failed to generate the generation code "
+                f"for the property {prop.name!r}: {error}"
+            )
+
+        assert block is not None
+        return block, None
     # TODO (mristin, 2023-03-8): continue here once done with primitive values
     else:
         assert_never(type_anno)
