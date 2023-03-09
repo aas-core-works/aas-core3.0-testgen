@@ -1,11 +1,11 @@
 """Generate all the code for the test gen."""
 
 import argparse
-import os
-import pathlib
 import sys
 
 import dev_scripts.codegen.generate_creation
+import dev_scripts.codegen.generate_wrapping
+import dev_scripts.codegen.generate_preserialization
 
 
 def main() -> int:
@@ -14,6 +14,16 @@ def main() -> int:
     _ = parser.parse_args()
 
     error = dev_scripts.codegen.generate_creation.generate_and_write()
+    if error is not None:
+        print(f"Failed to generate creation: {error}", file=sys.stderr)
+        return 1
+
+    error = dev_scripts.codegen.generate_wrapping.generate_and_write()
+    if error is not None:
+        print(f"Failed to generate creation: {error}", file=sys.stderr)
+        return 1
+
+    error = dev_scripts.codegen.generate_preserialization.generate_and_write()
     if error is not None:
         print(f"Failed to generate creation: {error}", file=sys.stderr)
         return 1
