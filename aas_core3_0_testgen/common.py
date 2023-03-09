@@ -3,7 +3,7 @@ import collections.abc
 import hashlib
 import io
 import pathlib
-from typing import MutableMapping, Tuple, Union, Iterable, Protocol, TypeVar
+from typing import MutableMapping, Tuple, Union, Iterable, Protocol, TypeVar, Optional
 
 import aas_core_codegen.common
 import aas_core_codegen.parse
@@ -176,13 +176,13 @@ class CanHash(Protocol):
     enabled=icontract.SLOW
 )
 def hash_path(
-        prefix_hash: CanHash,
+        prefix_hash: Optional[CanHash],
         segment_or_segments: Union[int, str, Iterable[Union[int, str]]]
 ) -> CanHash:
     """Hash a path extended with a segment and pre-hashed prefix."""
     if isinstance(segment_or_segments, (int, str)):
         segment_bytes = f"/{repr(segment_or_segments)}".encode('utf-8')
-        hsh = prefix_hash.copy()
+        hsh = prefix_hash.copy() if prefix_hash is not None else hashlib.md5()
         hsh.update(segment_bytes)
         return hsh
 
@@ -191,9 +191,9 @@ def hash_path(
             and isinstance(segment_or_segments, collections.abc.Sized)
     ):
         if len(segment_or_segments) == 0:
-            return prefix_hash
+            return prefix_hash if prefix_hash is not None else hashlib.md5()
 
-        hsh = prefix_hash.copy()
+        hsh = prefix_hash.copy() if prefix_hash is not None else hashlib.md5()
         # noinspection PyTypeChecker
         for segment in segment_or_segments:
             segment_bytes = f"/{repr(segment)}".encode('utf-8')

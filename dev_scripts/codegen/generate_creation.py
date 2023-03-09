@@ -587,7 +587,7 @@ def {function_name}(
 
 {I}.. note::
 
-{II}You should not call this function directly. It will be dispatched
+{II}You usually do not call this function directly. It will be dispatched
 {II}to.
 
 {I}.. note::
@@ -764,7 +764,7 @@ def {function_name}(
 
 {I}.. note::
 
-{II}You should not call this function directly. It will be dispatched
+{II}You usually do not call this function directly. It will be dispatched
 {II}to.
 
 {I}.. note::
