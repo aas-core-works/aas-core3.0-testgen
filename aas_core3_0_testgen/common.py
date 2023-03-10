@@ -3,7 +3,8 @@ import collections.abc
 import hashlib
 import io
 import pathlib
-from typing import MutableMapping, Tuple, Union, Iterable, Protocol, TypeVar, Optional
+from typing import MutableMapping, Tuple, Union, Iterable, Protocol, TypeVar, Optional, \
+    Sequence, Type, Any
 
 import aas_core_codegen.common
 import aas_core_codegen.parse
@@ -12,6 +13,7 @@ import aas_core_meta.v3
 import icontract
 from aas_core_codegen import intermediate, infer_for_schema
 from icontract import ensure
+import aas_core3.types as aas_types
 
 
 def load_symbol_table_and_infer_constraints_for_schema() -> Tuple[
@@ -200,3 +202,73 @@ def hash_path(
             hsh.update(segment_bytes)
 
         return hsh
+
+AasClassT = TypeVar("AasClassT", bound=aas_types.Class)
+
+def must_dereference_instance(
+        container: aas_types.Class,
+        path: Sequence[Union[str, int]],
+        expected_type: Type[AasClassT]
+)->AasClassT:
+    """
+    Follow the path, and assert that the target is of ``expected_type``.
+
+    The segments of ``path`` should be either indices in the lists or property names
+    of the meta-model instances.
+
+    The property names are expected as Python names, and *not* as aas-meta-model names
+    (``semantic_ids`` instead of ``semantic_IDs``).
+    """
+    something = container  # type: Any
+    for i, segment in enumerate(path):
+        if isinstance(segment, int):
+            if not isinstance(something, collections.abc.Sequence):
+                subpath_str = "/".join(path[:i])
+                path_str = "/".join(path)
+                raise ValueError(
+                    f"Expected a sequence at /{subpath_str}, "
+                    f"but got: {something} on path /{path_str}"
+                )
+
+            if len(something) <= segment:
+                subpath_str = "/".join(path[:i])
+                path_str = "/".join(path)
+
+                raise ValueError(
+                    f"The sequence at /{subpath_str} has "
+                    f"only {len(something)} element(s), "
+                    f"but we want to access index {segment} on path /{path_str}"
+                )
+
+            something = something[segment]
+
+        elif isinstance(segment, str):
+            if not isinstance(something, aas_types.Class):
+                subpath_str = "/".join(path[:i])
+                path_str = "/".join(path)
+                raise ValueError(
+                    f"Expected an instance at /{subpath_str}, "
+                    f"but got: {something} on path /{path_str}"
+                )
+
+            if not hasattr(something, segment):
+                subpath_str = "/".join(path[:i])
+                path_str = "/".join(path)
+                raise ValueError(
+                    f"The instance at /{subpath_str} does not have "
+                    f"the attribute {segment!r} on path /{path_str}"
+                )
+
+            something = getattr(something, segment)
+
+        else:
+            aas_core_codegen.common.assert_never(segment)
+
+        if not isinstance(something, expected_type):
+            path_str = "/".join(path)
+            raise ValueError(
+                f"Expected an instance of {expected_type.__name__}, "
+                f"but got: {something} on path /{path_str}"
+            )
+
+        return something

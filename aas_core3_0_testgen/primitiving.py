@@ -221,3 +221,20 @@ def choose_value(
     number = int(path_hash.hexdigest()[:8], base=16)
 
     return choice[number % len(choice)]
+
+
+def generate_time_of_day(
+        path_hash: common.CanHash
+) -> str:
+    """Generate a semi-random time of the day based on the ``path_hash``."""
+    number = int(path_hash.hexdigest()[:8], base=16)
+
+    remainder = number
+    hours = (remainder // 3600) % 24
+    remainder = remainder % 3600
+    minutes = (remainder // 60) % 60
+    seconds = remainder % 60
+
+    fraction = number % 1000000
+
+    return f"{hours:02d}:{minutes:02d}:{seconds:02d}.{fraction}"
