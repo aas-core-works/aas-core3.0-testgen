@@ -6,6 +6,7 @@ import sys
 import dev_scripts.codegen.generate_creation
 import dev_scripts.codegen.generate_wrapping
 import dev_scripts.codegen.generate_preserialization
+import dev_scripts.codegen.generate_abstract_fixing
 
 
 def main() -> int:
@@ -24,6 +25,11 @@ def main() -> int:
         return 1
 
     error = dev_scripts.codegen.generate_preserialization.generate_and_write()
+    if error is not None:
+        print(f"Failed to generate creation: {error}", file=sys.stderr)
+        return 1
+
+    error = dev_scripts.codegen.generate_abstract_fixing.generate_and_write()
     if error is not None:
         print(f"Failed to generate creation: {error}", file=sys.stderr)
         return 1

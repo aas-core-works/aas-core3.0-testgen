@@ -145,9 +145,36 @@ def generate_external_reference(path_hash: common.CanHash) -> aas_types.Referenc
     )
 
 
-class _Handyman(aas_types.PassThroughVisitor):
+class _Handyman(aas_types.PassThroughVisitorWithContext[common.CanHash]):
     """Fix the instances recursively on the best-effort basis."""
-    # TODO (mristin, 2023-03-10): continue here
+
+    def visit_basic_event_element(
+            self,
+            that: aas_types.BasicEventElement,
+            context: common.CanHash
+    ) -> None:
+        # Fix that the observed is a proper model reference
+        if that.observed is not None:
+            that.observed = generate_model_reference(
+                common.hash_path(context, "observed"),
+                expected_type=aas_types.KeyTypes.REFERABLE
+            )
+
+        # Override that the direction is output so that we can always set
+        # the max interval
+        if that.direction is not None:
+            that.direction = aas_types.Direction.OUTPUT
+
+        # Fix that the message broker is a proper model reference
+        if that.message_broker is not None:
+            that.message_broker = generate_model_reference(
+                common.hash_path(context, "message_broker"),
+                expected_type=aas_types.KeyTypes.REFERABLE
+            )
+
+        for child in that.descend_once()
+            self.visit(child, )
+
 
 # TODO (mristin, 2023-03-9): implement Handyman 🠒 use PassThrough visitor
 # TODO (mristin, 2023-03-9): implement dereference function in common
