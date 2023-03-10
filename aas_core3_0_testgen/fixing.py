@@ -6,12 +6,13 @@ Fix instances in place to conform to the meta-model constraints.
     We fix instances on the best-effort basis. It might be that something goes wrong.
     Please always verify the results.
 """
-from typing import TypeVar, List, Type, Generic, Protocol
+from typing import TypeVar, List, Type, Generic, Protocol, Sequence, Union
 
 import typing_extensions
 
 import aas_core3.types as aas_types
 import aas_core3.constants as aas_constants
+import aas_core3.verification as aas_verification
 
 from aas_core3_0_testgen import common, primitiving
 from aas_core3_0_testgen.codegened import abstract_fixing
@@ -175,32 +176,60 @@ class _Handyman(abstract_fixing):
                 common.hash_path(path_hash, "message_broker"),
                 expected_type=aas_types.KeyTypes.REFERABLE
             )
-
-    @typing_extensions.override
-    def _fix_asset_information(
-            self,
-            that: aas_types.AssetInformation,
-            path_hash: common.CanHash
-    ) -> None:
-        # Fix for AASd-131: Either the global asset ID shall be defined or at least one
-        # specific asset ID.
-        if (
-                that.global_asset_id is None
-                and that.specific_asset_ids is None
-        ):
-            that.global_asset_id = primitiving.generate_str(
-                common.hash_path(path_hash, "global_asset_id")
-            )
+    # TODO (mristin, 2023-03-10): continue here, finish the loop
+    # TODO (mristin, 2023-03-10): fix this once the loop is running.
 
 
+def assert_instance_at_path_in_environment(
+        environment: aas_types.Environment,
+        instance: aas_types.Class,
+        path: Sequence[Union[str, int]]
+) -> None:
+    """Assert that the ``instance`` still resides in ``environment`` at ``path``."""
+    something, error = common.dereference_instance(
+        container=environment,
+        path=path,
+        expected_type=aas_types.Class
+    )
+
+    if error is not None:
+        path_str = common.instance_path_as_posix(path)
+        raise AssertionError(
+            f"Expected to find an instance "
+            f"in the environment {environment} at path {path_str}, "
+            f"but there was no instance: {error}"
+        )
+    assert something is not None
+
+    if instance is not something:
+        path_str = common.instance_path_as_posix(path)
+        raise AssertionError(
+            f"Expected to find instance {instance} at path {path_str}, "
+            f"but got: {something}"
+        )
 
 
-# TODO (mristin, 2023-03-9): implement Handyman 🠒 use PassThrough visitor
-# TODO (mristin, 2023-03-9): implement dereference function in common
-# TODO (mristin, 2023-03-9): implement function to assert that the instance still exists in the wrapped environment after fixing
-# TODO (mristin, 2023-03-9):  assert_instance_at_path_in_environment(environment, instance, path)
+_HANDYMAN = _Handyman()
 
-# TODO (mristin, 2023-03-9): fix(instance: Class)
 
-# TODO (mristin, 2023-03-9): fix_wrapping(environment, instance, path)
-# TODO (mristin, 2023-03-9):  🠒 call assert_instance_at_path_in_environment
+def fix(root: aas_types.Class) -> None:
+    """
+    Fix recursively the ``root`` instance.
+
+    Usually, the ``root`` is either an Environment, or a self-contained instance.
+    """
+    path_hash = common.hash_path(prefix_hash=None, segment_or_segments=[])
+    _HANDYMAN.visit_with_context(root, path_hash)
+
+    errors = list(aas_verification.verify(root))
+    if len(errors) > 0:
+        errors_joined = "\n".join(
+            f"* {error.path}: {error.cause}"
+            for error in errors
+        )
+
+        raise AssertionError(
+            f"Expected no errors after fixing the self-contained instance {root}, "
+            f"but got errors:\n"
+            f"{errors_joined}"
+        )

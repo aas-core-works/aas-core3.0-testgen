@@ -203,13 +203,24 @@ def hash_path(
 
         return hsh
 
+
+
+def instance_path_as_posix(
+path: Sequence[Union[str, int]]
+) -> str:
+    """Create a string representation as a POSIX-like path."""
+    return "/" + "/".join(str(segment) for segment in path)
+
+
 AasClassT = TypeVar("AasClassT", bound=aas_types.Class)
 
-def must_dereference_instance(
+
+@ensure(lambda result: (result[0] is not None) ^ (result[1] is not None))
+def dereference_instance(
         container: aas_types.Class,
         path: Sequence[Union[str, int]],
         expected_type: Type[AasClassT]
-)->AasClassT:
+)->Tuple[Optional[AasClassT], Optional[str]]:
     """
     Follow the path, and assert that the target is of ``expected_type``.
 
@@ -223,40 +234,40 @@ def must_dereference_instance(
     for i, segment in enumerate(path):
         if isinstance(segment, int):
             if not isinstance(something, collections.abc.Sequence):
-                subpath_str = "/".join(path[:i])
-                path_str = "/".join(path)
-                raise ValueError(
-                    f"Expected a sequence at /{subpath_str}, "
-                    f"but got: {something} on path /{path_str}"
+                subpath_str = instance_path_as_posix(path[:i])
+                path_str = instance_path_as_posix(path)
+                return None, (
+                    f"Expected a sequence at {subpath_str}, "
+                    f"but got: {something} on path {path_str}"
                 )
 
             if len(something) <= segment:
-                subpath_str = "/".join(path[:i])
-                path_str = "/".join(path)
+                subpath_str = instance_path_as_posix(path[:i])
+                path_str = instance_path_as_posix(path)
 
-                raise ValueError(
-                    f"The sequence at /{subpath_str} has "
+                return None, (
+                    f"The sequence at {subpath_str} has "
                     f"only {len(something)} element(s), "
-                    f"but we want to access index {segment} on path /{path_str}"
+                    f"but we want to access index {segment} on path {path_str}"
                 )
 
             something = something[segment]
 
         elif isinstance(segment, str):
             if not isinstance(something, aas_types.Class):
-                subpath_str = "/".join(path[:i])
-                path_str = "/".join(path)
-                raise ValueError(
-                    f"Expected an instance at /{subpath_str}, "
-                    f"but got: {something} on path /{path_str}"
+                subpath_str = instance_path_as_posix(path[:i])
+                path_str = instance_path_as_posix(path)
+                return None, (
+                    f"Expected an instance at {subpath_str}, "
+                    f"but got: {something} on path {path_str}"
                 )
 
             if not hasattr(something, segment):
-                subpath_str = "/".join(path[:i])
-                path_str = "/".join(path)
-                raise ValueError(
-                    f"The instance at /{subpath_str} does not have "
-                    f"the attribute {segment!r} on path /{path_str}"
+                subpath_str = instance_path_as_posix(path[:i])
+                path_str = instance_path_as_posix(path)
+                return None, (
+                    f"The instance at {subpath_str} does not have "
+                    f"the attribute {segment!r} on path {path_str}"
                 )
 
             something = getattr(something, segment)
@@ -265,10 +276,11 @@ def must_dereference_instance(
             aas_core_codegen.common.assert_never(segment)
 
         if not isinstance(something, expected_type):
-            path_str = "/".join(path)
-            raise ValueError(
+            path_str = instance_path_as_posix(path)
+            return None, (
                 f"Expected an instance of {expected_type.__name__}, "
-                f"but got: {something} on path /{path_str}"
+                f"but got: {something} on path {path_str}"
             )
 
-        return something
+        return something, None
+
