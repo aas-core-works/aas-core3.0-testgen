@@ -21,9 +21,7 @@ def main() -> None:
     (
         symbol_table_atok,
         error,
-    ) = (
-        aas_core_codegen.run.load_model(pathlib.Path(aas_core_meta.v3.__file__))
-    )
+    ) = aas_core_codegen.run.load_model(pathlib.Path(aas_core_meta.v3.__file__))
     if error is not None:
         raise RuntimeError(error)
     assert symbol_table_atok is not None

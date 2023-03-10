@@ -25,29 +25,25 @@ BY_PATTERN: Mapping[str, Examples] = collections.OrderedDict(
             Examples(
                 positives=collections.OrderedDict(
                     [
-                        ('zero', '0'),
-                        ('one', '1'),
-                        ('two_digits', '10'),
-                        ('three_digits', '120'),
-                        ('four_digits', '1230'),
-                        ('fuzzed_01', '59'),
-                        ('fuzzed_02', '116'),
-                        ('fuzzed_03', '7'),
-                        ('fuzzed_04', '32'),
+                        ("zero", "0"),
+                        ("one", "1"),
+                        ("two_digits", "10"),
+                        ("three_digits", "120"),
+                        ("four_digits", "1230"),
+                        ("fuzzed_01", "59"),
+                        ("fuzzed_02", "116"),
+                        ("fuzzed_03", "7"),
+                        ("fuzzed_04", "32"),
                     ]
                 ),
                 negatives=collections.OrderedDict(
-                    [
-                        ('negative', '-1'),
-                        ('dot', '1.0'),
-                        ('letter', '1.0rc1')
-                    ]
+                    [("negative", "-1"), ("dot", "1.0"), ("letter", "1.0rc1")]
                 ),
             ),
         ),
         # Date-time UTC
         (
-            '^-?(([1-9][0-9][0-9][0-9]+)|(0[0-9][0-9][0-9]))-((0[1-9])|(1[0-2]))-((0[1-9])|([12][0-9])|(3[01]))T(((([01][0-9])|(2[0-3])):[0-5][0-9]:([0-5][0-9])(\\.[0-9]+)?)|24:00:00(\\.0+)?)(Z|\\+00:00|-00:00)$',
+            "^-?(([1-9][0-9][0-9][0-9]+)|(0[0-9][0-9][0-9]))-((0[1-9])|(1[0-2]))-((0[1-9])|([12][0-9])|(3[01]))T(((([01][0-9])|(2[0-3])):[0-5][0-9]:([0-5][0-9])(\\.[0-9]+)?)|24:00:00(\\.0+)?)(Z|\\+00:00|-00:00)$",
             Examples(
                 positives=collections.OrderedDict(
                     [
@@ -118,7 +114,7 @@ BY_PATTERN: Mapping[str, Examples] = collections.OrderedDict(
         ),
         # duration
         (
-            '^-?P((([0-9]+Y([0-9]+M)?([0-9]+D)?|([0-9]+M)([0-9]+D)?|([0-9]+D))(T(([0-9]+H)([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?|([0-9]+M)([0-9]+(\\.[0-9]+)?S)?|([0-9]+(\\.[0-9]+)?S)))?)|(T(([0-9]+H)([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?|([0-9]+M)([0-9]+(\\.[0-9]+)?S)?|([0-9]+(\\.[0-9]+)?S))))$',
+            "^-?P((([0-9]+Y([0-9]+M)?([0-9]+D)?|([0-9]+M)([0-9]+D)?|([0-9]+D))(T(([0-9]+H)([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?|([0-9]+M)([0-9]+(\\.[0-9]+)?S)?|([0-9]+(\\.[0-9]+)?S)))?)|(T(([0-9]+H)([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?|([0-9]+M)([0-9]+(\\.[0-9]+)?S)?|([0-9]+(\\.[0-9]+)?S))))$",
             Examples(
                 positives=collections.OrderedDict(
                     [
@@ -174,7 +170,7 @@ BY_PATTERN: Mapping[str, Examples] = collections.OrderedDict(
                         ("the_order_matters", "P1M2Y"),
                     ]
                 ),
-            )
+            ),
         ),
         # is_BCP_47_for_english
         (
@@ -182,57 +178,64 @@ BY_PATTERN: Mapping[str, Examples] = collections.OrderedDict(
             Examples(
                 positives=collections.OrderedDict(
                     [
-                        ('just_english_lowercase', 'en'),
-                        ('just_english_uppercase', 'EN'),
-                        ('english_lowercase_great_britain', 'en-GB'),
-                        ('english_lowercase_south_africa', 'en-ZA'),
-                        ('english_uppercase_great_britain', 'en-GB'),
+                        ("just_english_lowercase", "en"),
+                        ("just_english_uppercase", "EN"),
+                        ("english_lowercase_great_britain", "en-GB"),
+                        ("english_lowercase_south_africa", "en-ZA"),
+                        ("english_uppercase_great_britain", "en-GB"),
                     ]
                 ),
                 negatives=collections.OrderedDict(
                     [
-                        ('german_lowercase', 'de'),
-                        ('german_uppercase', 'DE'),
-                        ('german_swiss', 'de-CH')
+                        ("german_lowercase", "de"),
+                        ("german_uppercase", "DE"),
+                        ("german_swiss", "de-CH"),
                     ]
                 ),
             ),
         ),
         # XML serializable string
         (
-            '^[\\x09\\x0A\\x0D\\x20-\\uD7FF\\uE000-\\uFFFD\\U00010000-\\U0010FFFF]*$',
+            "^[\\x09\\x0A\\x0D\\x20-\\uD7FF\\uE000-\\uFFFD\\U00010000-\\U0010FFFF]*$",
             Examples(
                 positives=collections.OrderedDict(
                     [
-                        ('fuzzed_01', '11ÕÑ\U00010ee8´K\U00102b2de<\U000e15de¨ngA'),
-                        ('fuzzed_02', '𠤢4𠤢'),
-                        ('fuzzed_03', '[\\h$\U00052e9fìÖċ\x8a1¿'),
-                        ('fuzzed_04', 'öĖa\U0010d8e1\x99|'),
-                        ('fuzzed_05', 'J5'),
-                        ('fuzzed_06', 'Ûă<P\U000e8c7d²|dn\x9cÞ®'),
-                        ('fuzzed_07', '6'),
-                        ('fuzzed_08', '\U000a444cM𪠇\U0001b50a\U00082132'),
-                        ('fuzzed_09', '<ă<P\U000e8c7d²|dn\x9cÞ®'),
-                        ('fuzzed_10', '0'),
+                        ("fuzzed_01", "11ÕÑ\U00010ee8´K\U00102b2de<\U000e15de¨ngA"),
+                        ("fuzzed_02", "𠤢4𠤢"),
+                        ("fuzzed_03", "[\\h$\U00052e9fìÖċ\x8a1¿"),
+                        ("fuzzed_04", "öĖa\U0010d8e1\x99|"),
+                        ("fuzzed_05", "J5"),
+                        ("fuzzed_06", "Ûă<P\U000e8c7d²|dn\x9cÞ®"),
+                        ("fuzzed_07", "6"),
+                        ("fuzzed_08", "\U000a444cM𪠇\U0001b50a\U00082132"),
+                        ("fuzzed_09", "<ă<P\U000e8c7d²|dn\x9cÞ®"),
+                        ("fuzzed_10", "0"),
                     ]
                 ),
                 negatives=collections.OrderedDict(
                     [
-                        ('negatively_fuzzed_01',
-                         '\U00086b7aØõ\U00015e66,å½Ý\x92½\U000c5b6b\U000d0635\U0008817a©\x00\x92Ü'),
-                        ('negatively_fuzzed_02', '餍\x17½é'),
-                        ('negatively_fuzzed_03',
-                         '\U000fea28AD\x0f\U000ca696\x85\U000eff4fÕ'),
-                        ('negatively_fuzzed_04', 'ºò\x18\x7f'),
                         (
-                            'negatively_fuzzed_05',
-                            'A\x04\x1e»\U00069a46\U000bb36f\x17°P'),
-                        ('negatively_fuzzed_06', '0\x00\x9a\U000b1206'),
-                        ('negatively_fuzzed_07', '봇àc\x1dr\x0c'),
-                        ('negatively_fuzzed_08',
-                         'Q\x1a\x90(^\\\x8a\U00052727\x8dü\U000104aa×\U000d6657\U00016006\x13'),
-                        ('negatively_fuzzed_09', "Âû\x9f\x1c\x96m'ß"),
-                        ('negatively_fuzzed_10', 'êò\x0f\U00086254U'),
+                            "negatively_fuzzed_01",
+                            "\U00086b7aØõ\U00015e66,å½Ý\x92½\U000c5b6b\U000d0635\U0008817a©\x00\x92Ü",
+                        ),
+                        ("negatively_fuzzed_02", "餍\x17½é"),
+                        (
+                            "negatively_fuzzed_03",
+                            "\U000fea28AD\x0f\U000ca696\x85\U000eff4fÕ",
+                        ),
+                        ("negatively_fuzzed_04", "ºò\x18\x7f"),
+                        (
+                            "negatively_fuzzed_05",
+                            "A\x04\x1e»\U00069a46\U000bb36f\x17°P",
+                        ),
+                        ("negatively_fuzzed_06", "0\x00\x9a\U000b1206"),
+                        ("negatively_fuzzed_07", "봇àc\x1dr\x0c"),
+                        (
+                            "negatively_fuzzed_08",
+                            "Q\x1a\x90(^\\\x8a\U00052727\x8dü\U000104aa×\U000d6657\U00016006\x13",
+                        ),
+                        ("negatively_fuzzed_09", "Âû\x9f\x1c\x96m'ß"),
+                        ("negatively_fuzzed_10", "êò\x0f\U00086254U"),
                     ]
                 ),
             ),
@@ -447,15 +450,14 @@ def _assert_all_pattern_verification_functions_covered_and_not_more() -> None:
         verification.pattern
         for verification in symbol_table.verification_functions
         if (
-                isinstance(verification, intermediate.PatternVerification)
-                # NOTE (mristin, 2023-03-01):
-                # We test the ``matches_xs_*`` functions in xs_value.py.
-                and not verification.name.startswith('matches_xs_')
+            isinstance(verification, intermediate.PatternVerification)
+            # NOTE (mristin, 2023-03-01):
+            # We test the ``matches_xs_*`` functions in xs_value.py.
+            and not verification.name.startswith("matches_xs_")
         )
     }
 
-    pattern_to_sources = dict(
-    )  # type: MutableMapping[str, List[str]]
+    pattern_to_sources = dict()  # type: MutableMapping[str, List[str]]
     for verification in symbol_table.verification_functions:
         if not isinstance(verification, intermediate.PatternVerification):
             continue
@@ -484,8 +486,7 @@ def _assert_all_pattern_verification_functions_covered_and_not_more() -> None:
 
     if len(not_covered) > 0:
         pattern_analysis_joined = "\n".join(
-            f"{pattern!r} -> {pattern_to_sources[pattern]}"
-            for pattern in not_covered
+            f"{pattern!r} -> {pattern_to_sources[pattern]}" for pattern in not_covered
         )
         raise AssertionError(
             f"The following patterns from the respective pattern verification "

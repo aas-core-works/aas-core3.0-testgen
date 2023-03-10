@@ -3,8 +3,18 @@ import collections.abc
 import hashlib
 import io
 import pathlib
-from typing import MutableMapping, Tuple, Union, Iterable, Protocol, TypeVar, Optional, \
-    Sequence, Type, Any
+from typing import (
+    MutableMapping,
+    Tuple,
+    Union,
+    Iterable,
+    Protocol,
+    TypeVar,
+    Optional,
+    Sequence,
+    Type,
+    Any,
+)
 
 import aas_core_codegen.common
 import aas_core_codegen.parse
@@ -81,8 +91,8 @@ def load_symbol_table_and_infer_constraints_for_schema() -> Tuple[
         writer = io.StringIO()
         aas_core_codegen.run.write_error_report(
             message=f"Failed to translate the parsed symbol table "
-                    f"to intermediate symbol table "
-                    f"based on {model_path}",
+            f"to intermediate symbol table "
+            f"based on {model_path}",
             errors=[lineno_columner.error_message(error)],
             stderr=writer,
         )
@@ -102,7 +112,7 @@ def load_symbol_table_and_infer_constraints_for_schema() -> Tuple[
         writer = io.StringIO()
         aas_core_codegen.run.write_error_report(
             message=f"Failed to infer the constraints for the schema "
-                    f"based on {model_path}",
+            f"based on {model_path}",
             errors=[lineno_columner.error_message(error) for error in inference_errors],
             stderr=writer,
         )
@@ -121,7 +131,7 @@ def load_symbol_table_and_infer_constraints_for_schema() -> Tuple[
         writer = io.StringIO()
         aas_core_codegen.run.write_error_report(
             message=f"Failed to infer the constraints for the schema "
-                    f"based on {model_path}",
+            f"based on {model_path}",
             errors=[lineno_columner.error_message(merge_error)],
             stderr=writer,
         )
@@ -133,7 +143,7 @@ def load_symbol_table_and_infer_constraints_for_schema() -> Tuple[
     return ir_symbol_table, constraints_by_class
 
 
-CanHashT = TypeVar('CanHashT', bound='CanHash')
+CanHashT = TypeVar("CanHashT", bound="CanHash")
 
 
 class CanHash(Protocol):
@@ -155,42 +165,41 @@ class CanHash(Protocol):
 
 
 @ensure(
-    lambda prefix_hash, segment_or_segments, result:
-    not (
-            isinstance(segment_or_segments, collections.abc.Sized)
-            and len(segment_or_segments) > 0)
-    or (
-            prefix_hash is not result
-    ),
-    "Hash is always copied unless there were no segments to hash"
-)
-@ensure(
-    lambda prefix_hash, segment_or_segments, result:
-    not isinstance(segment_or_segments, (int, str))
+    lambda prefix_hash, segment_or_segments, result: not (
+        isinstance(segment_or_segments, collections.abc.Sized)
+        and len(segment_or_segments) > 0
+    )
     or (prefix_hash is not result),
-    "Hash is always copied when there is a segment given"
+    "Hash is always copied unless there were no segments to hash",
 )
 @ensure(
-    lambda prefix_hash, segment_or_segments, result:
-    not isinstance(segment_or_segments, (int, str))
+    lambda prefix_hash, segment_or_segments, result: not isinstance(
+        segment_or_segments, (int, str)
+    )
+    or (prefix_hash is not result),
+    "Hash is always copied when there is a segment given",
+)
+@ensure(
+    lambda prefix_hash, segment_or_segments, result: not isinstance(
+        segment_or_segments, (int, str)
+    )
     or result.hexdigest() == hash_path(prefix_hash, [segment_or_segments]),
     "Hashing a single segment in a list is equal to hashing that segment directly",
-    enabled=icontract.SLOW
+    enabled=icontract.SLOW,
 )
 def hash_path(
-        prefix_hash: Optional[CanHash],
-        segment_or_segments: Union[int, str, Iterable[Union[int, str]]]
+    prefix_hash: Optional[CanHash],
+    segment_or_segments: Union[int, str, Iterable[Union[int, str]]],
 ) -> CanHash:
     """Hash a path extended with a segment and pre-hashed prefix."""
     if isinstance(segment_or_segments, (int, str)):
-        segment_bytes = f"/{repr(segment_or_segments)}".encode('utf-8')
+        segment_bytes = f"/{repr(segment_or_segments)}".encode("utf-8")
         hsh = prefix_hash.copy() if prefix_hash is not None else hashlib.md5()
         hsh.update(segment_bytes)
         return hsh
 
-    elif (
-            isinstance(segment_or_segments, collections.abc.Iterable)
-            and isinstance(segment_or_segments, collections.abc.Sized)
+    elif isinstance(segment_or_segments, collections.abc.Iterable) and isinstance(
+        segment_or_segments, collections.abc.Sized
     ):
         if len(segment_or_segments) == 0:
             return prefix_hash if prefix_hash is not None else hashlib.md5()
@@ -198,16 +207,13 @@ def hash_path(
         hsh = prefix_hash.copy() if prefix_hash is not None else hashlib.md5()
         # noinspection PyTypeChecker
         for segment in segment_or_segments:
-            segment_bytes = f"/{repr(segment)}".encode('utf-8')
+            segment_bytes = f"/{repr(segment)}".encode("utf-8")
             hsh.update(segment_bytes)
 
         return hsh
 
 
-
-def instance_path_as_posix(
-path: Sequence[Union[str, int]]
-) -> str:
+def instance_path_as_posix(path: Sequence[Union[str, int]]) -> str:
     """Create a string representation as a POSIX-like path."""
     return "/" + "/".join(str(segment) for segment in path)
 
@@ -217,10 +223,10 @@ AasClassT = TypeVar("AasClassT", bound=aas_types.Class)
 
 @ensure(lambda result: (result[0] is not None) ^ (result[1] is not None))
 def dereference_instance(
-        container: aas_types.Class,
-        path: Sequence[Union[str, int]],
-        expected_type: Type[AasClassT]
-)->Tuple[Optional[AasClassT], Optional[str]]:
+    container: aas_types.Class,
+    path: Sequence[Union[str, int]],
+    expected_type: Type[AasClassT],
+) -> Tuple[Optional[AasClassT], Optional[str]]:
     """
     Follow the path, and assert that the target is of ``expected_type``.
 
@@ -283,4 +289,3 @@ def dereference_instance(
             )
 
         return something, None
-

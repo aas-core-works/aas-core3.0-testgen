@@ -8,17 +8,13 @@ from typing import List, Optional, Tuple
 
 from aas_core_codegen import intermediate
 from aas_core_codegen.common import (
-    Stripped, indent_but_first_line, assert_never, Identifier
+    Stripped,
+    indent_but_first_line,
+    assert_never,
+    Identifier,
 )
-from aas_core_codegen.python import (
-    common as python_common,
-    naming as python_naming
-)
-from aas_core_codegen.python.common import (
-    INDENT as I,
-    INDENT2 as II,
-    INDENT3 as III
-)
+from aas_core_codegen.python import common as python_common, naming as python_naming
+from aas_core_codegen.python.common import INDENT as I, INDENT2 as II, INDENT3 as III
 from icontract import ensure
 
 import aas_core3_0_testgen.common
@@ -30,9 +26,7 @@ _REPO_DIR = pathlib.Path(os.path.realpath(__file__)).parent.parent.parent
 
 def _generate_fix_method(cls: intermediate.ConcreteClass) -> Stripped:
     """Generate an empty fix method for ``cls``."""
-    method_name = python_naming.method_name(
-        Identifier(f"_fix_{cls.name}")
-    )
+    method_name = python_naming.method_name(Identifier(f"_fix_{cls.name}"))
     cls_name = python_naming.class_name(cls.name)
 
     return Stripped(
@@ -55,12 +49,8 @@ def {method_name}(
 
 def _generate_visit_method(cls: intermediate.ConcreteClass) -> Stripped:
     """Generate the visit method that fixes the instances and recurses into children."""
-    fix_method = python_naming.method_name(
-        Identifier(f"_fix_{cls.name}")
-    )
-    blocks = [
-        Stripped(f"self.{fix_method}(that, context)")
-    ]
+    fix_method = python_naming.method_name(Identifier(f"_fix_{cls.name}"))
+    blocks = [Stripped(f"self.{fix_method}(that, context)")]
 
     for prop in cls.properties:
         type_anno = intermediate.beneath_optional(prop.type_annotation)
@@ -82,8 +72,8 @@ def _generate_visit_method(cls: intermediate.ConcreteClass) -> Stripped:
                 continue
 
             elif isinstance(
-                    type_anno.our_type,
-                    (intermediate.AbstractClass, intermediate.ConcreteClass)
+                type_anno.our_type,
+                (intermediate.AbstractClass, intermediate.ConcreteClass),
             ):
 
                 block = Stripped(
@@ -185,7 +175,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
 
 @ensure(lambda result: (result[0] is not None) ^ (result[1] is not None))
 def _generate(
-        symbol_table: intermediate.SymbolTable
+    symbol_table: intermediate.SymbolTable,
 ) -> Tuple[Optional[Stripped], Optional[str]]:
     """Generate the module."""
     warning = dev_scripts.codegen.common.generate_warning(__file__)
@@ -200,7 +190,7 @@ from aas_core3 import types as aas_types
 from aas_core3_0_testgen import common"""
         ),
         _generate_abstract_handyman(symbol_table=symbol_table),
-        warning
+        warning,
     ]
 
     return Stripped("\n\n\n".join(blocks)), None
@@ -221,8 +211,10 @@ def generate_and_write() -> Optional[str]:
     path = _REPO_DIR / "aas_core3_0_testgen" / "codegened" / "abstract_fixing.py"
     path.write_text(code + "\n")
 
+
 # TODO (mristin, 2023-03-10): continue here, test this
 # TODO (mristin, 2023-03-10): then fix fixing, use AbstractHandyman
+
 
 def main() -> int:
     """Execute the main routine."""

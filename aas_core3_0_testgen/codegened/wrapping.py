@@ -13,12 +13,7 @@ Create instances wrapped in environment.
 # Do NOT edit or append!
 
 
-from typing import (
-    Callable,
-    List,
-    Tuple,
-    Union
-)
+from typing import Callable, List, Tuple, Union
 
 from aas_core3 import types as aas_types
 
@@ -27,15 +22,8 @@ import aas_core3_0_testgen.codegened.creation as creation
 
 
 def _extension_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.Extension
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.Extension, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.Extension]
+) -> Tuple[aas_types.Environment, aas_types.Extension, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -45,58 +33,31 @@ def _extension_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.extend(
-        ['extensions', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['extensions', 0]
-    )
-    the_extension = creation_function(
-        path_hash
-    )
-    the_asset_administration_shell.extensions = [
-        the_extension
-    ]
+    path.extend(["extensions", 0])
+    path_hash = common.hash_path(path_hash, ["extensions", 0])
+    the_extension = creation_function(path_hash)
+    the_asset_administration_shell.extensions = [the_extension]
 
-    return (
-        the_environment,
-        the_extension,
-        path
-    )
+    return (the_environment, the_extension, path)
 
 
 def _administrative_information_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.AdministrativeInformation
-    ]
+    creation_function: Callable[[common.CanHash], aas_types.AdministrativeInformation]
 ) -> Tuple[
-    aas_types.Environment, 
-    aas_types.AdministrativeInformation, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.AdministrativeInformation, List[Union[str, int]]
 ]:
     """
     Generate an instance wrapped in an Environment.
@@ -107,57 +68,30 @@ def _administrative_information_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.append(
-        'administration'
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        'administration'
-    )
-    the_administrative_information = creation_function(
-        path_hash
-    )
+    path.append("administration")
+    path_hash = common.hash_path(path_hash, "administration")
+    the_administrative_information = creation_function(path_hash)
     the_asset_administration_shell.administration = the_administrative_information
 
-    return (
-        the_environment,
-        the_administrative_information,
-        path
-    )
+    return (the_environment, the_administrative_information, path)
 
 
 def _qualifier_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.Qualifier
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.Qualifier, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.Qualifier]
+) -> Tuple[aas_types.Environment, aas_types.Qualifier, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -167,58 +101,29 @@ def _qualifier_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation.minimal_submodel(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation.minimal_submodel(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    path.extend(
-        ['qualifiers', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['qualifiers', 0]
-    )
-    the_qualifier = creation_function(
-        path_hash
-    )
-    the_submodel.qualifiers = [
-        the_qualifier
-    ]
+    path.extend(["qualifiers", 0])
+    path_hash = common.hash_path(path_hash, ["qualifiers", 0])
+    the_qualifier = creation_function(path_hash)
+    the_submodel.qualifiers = [the_qualifier]
 
-    return (
-        the_environment,
-        the_qualifier,
-        path
-    )
+    return (the_environment, the_qualifier, path)
 
 
 def _asset_administration_shell_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.AssetAdministrationShell
-    ]
+    creation_function: Callable[[common.CanHash], aas_types.AssetAdministrationShell]
 ) -> Tuple[
-    aas_types.Environment, 
-    aas_types.AssetAdministrationShell, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.AssetAdministrationShell, List[Union[str, int]]
 ]:
     """
     Generate an instance wrapped in an Environment.
@@ -229,45 +134,23 @@ def _asset_administration_shell_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
-    the_asset_administration_shell = creation_function(
-        path_hash
-    )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
+    the_asset_administration_shell = creation_function(path_hash)
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    return (
-        the_environment,
-        the_asset_administration_shell,
-        path
-    )
+    return (the_environment, the_asset_administration_shell, path)
 
 
 def _asset_information_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.AssetInformation
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.AssetInformation, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.AssetInformation]
+) -> Tuple[aas_types.Environment, aas_types.AssetInformation, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -277,57 +160,30 @@ def _asset_information_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.append(
-        'asset_information'
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        'asset_information'
-    )
-    the_asset_information = creation_function(
-        path_hash
-    )
+    path.append("asset_information")
+    path_hash = common.hash_path(path_hash, "asset_information")
+    the_asset_information = creation_function(path_hash)
     the_asset_administration_shell.asset_information = the_asset_information
 
-    return (
-        the_environment,
-        the_asset_information,
-        path
-    )
+    return (the_environment, the_asset_information, path)
 
 
 def _resource_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.Resource
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.Resource, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.Resource]
+) -> Tuple[aas_types.Environment, aas_types.Resource, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -337,69 +193,35 @@ def _resource_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.append(
-        'asset_information'
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        'asset_information'
-    )
-    the_asset_information = creation.minimal_asset_information(
-        path_hash
-    )
+    path.append("asset_information")
+    path_hash = common.hash_path(path_hash, "asset_information")
+    the_asset_information = creation.minimal_asset_information(path_hash)
     the_asset_administration_shell.asset_information = the_asset_information
 
-    path.append(
-        'default_thumbnail'
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        'default_thumbnail'
-    )
-    the_resource = creation_function(
-        path_hash
-    )
+    path.append("default_thumbnail")
+    path_hash = common.hash_path(path_hash, "default_thumbnail")
+    the_resource = creation_function(path_hash)
     the_asset_information.default_thumbnail = the_resource
 
-    return (
-        the_environment,
-        the_resource,
-        path
-    )
+    return (the_environment, the_resource, path)
 
 
 def _specific_asset_id_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.SpecificAssetID
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.SpecificAssetID, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.SpecificAssetID]
+) -> Tuple[aas_types.Environment, aas_types.SpecificAssetID, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -409,71 +231,35 @@ def _specific_asset_id_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.append(
-        'asset_information'
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        'asset_information'
-    )
-    the_asset_information = creation.minimal_asset_information(
-        path_hash
-    )
+    path.append("asset_information")
+    path_hash = common.hash_path(path_hash, "asset_information")
+    the_asset_information = creation.minimal_asset_information(path_hash)
     the_asset_administration_shell.asset_information = the_asset_information
 
-    path.extend(
-        ['specific_asset_ids', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['specific_asset_ids', 0]
-    )
-    the_specific_asset_id = creation_function(
-        path_hash
-    )
-    the_asset_information.specific_asset_ids = [
-        the_specific_asset_id
-    ]
+    path.extend(["specific_asset_ids", 0])
+    path_hash = common.hash_path(path_hash, ["specific_asset_ids", 0])
+    the_specific_asset_id = creation_function(path_hash)
+    the_asset_information.specific_asset_ids = [the_specific_asset_id]
 
-    return (
-        the_environment,
-        the_specific_asset_id,
-        path
-    )
+    return (the_environment, the_specific_asset_id, path)
 
 
 def _submodel_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.Submodel
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.Submodel, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.Submodel]
+) -> Tuple[aas_types.Environment, aas_types.Submodel, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -483,45 +269,23 @@ def _submodel_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation_function(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation_function(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    return (
-        the_environment,
-        the_submodel,
-        path
-    )
+    return (the_environment, the_submodel, path)
 
 
 def _relationship_element_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.RelationshipElement
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.RelationshipElement, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.RelationshipElement]
+) -> Tuple[aas_types.Environment, aas_types.RelationshipElement, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -531,59 +295,28 @@ def _relationship_element_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation.minimal_submodel(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation.minimal_submodel(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    path.extend(
-        ['submodel_elements', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodel_elements', 0]
-    )
-    the_relationship_element = creation_function(
-        path_hash
-    )
-    the_submodel.submodel_elements = [
-        the_relationship_element
-    ]
+    path.extend(["submodel_elements", 0])
+    path_hash = common.hash_path(path_hash, ["submodel_elements", 0])
+    the_relationship_element = creation_function(path_hash)
+    the_submodel.submodel_elements = [the_relationship_element]
 
-    return (
-        the_environment,
-        the_relationship_element,
-        path
-    )
+    return (the_environment, the_relationship_element, path)
 
 
 def _submodel_element_list_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.SubmodelElementList
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.SubmodelElementList, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.SubmodelElementList]
+) -> Tuple[aas_types.Environment, aas_types.SubmodelElementList, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -593,58 +326,29 @@ def _submodel_element_list_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation.minimal_submodel(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation.minimal_submodel(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    path.extend(
-        ['submodel_elements', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodel_elements', 0]
-    )
-    the_submodel_element_list = creation_function(
-        path_hash
-    )
-    the_submodel.submodel_elements = [
-        the_submodel_element_list
-    ]
+    path.extend(["submodel_elements", 0])
+    path_hash = common.hash_path(path_hash, ["submodel_elements", 0])
+    the_submodel_element_list = creation_function(path_hash)
+    the_submodel.submodel_elements = [the_submodel_element_list]
 
-    return (
-        the_environment,
-        the_submodel_element_list,
-        path
-    )
+    return (the_environment, the_submodel_element_list, path)
 
 
 def _submodel_element_collection_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.SubmodelElementCollection
-    ]
+    creation_function: Callable[[common.CanHash], aas_types.SubmodelElementCollection]
 ) -> Tuple[
-    aas_types.Environment, 
-    aas_types.SubmodelElementCollection, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.SubmodelElementCollection, List[Union[str, int]]
 ]:
     """
     Generate an instance wrapped in an Environment.
@@ -655,59 +359,28 @@ def _submodel_element_collection_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation.minimal_submodel(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation.minimal_submodel(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    path.extend(
-        ['submodel_elements', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodel_elements', 0]
-    )
-    the_submodel_element_collection = creation_function(
-        path_hash
-    )
-    the_submodel.submodel_elements = [
-        the_submodel_element_collection
-    ]
+    path.extend(["submodel_elements", 0])
+    path_hash = common.hash_path(path_hash, ["submodel_elements", 0])
+    the_submodel_element_collection = creation_function(path_hash)
+    the_submodel.submodel_elements = [the_submodel_element_collection]
 
-    return (
-        the_environment,
-        the_submodel_element_collection,
-        path
-    )
+    return (the_environment, the_submodel_element_collection, path)
 
 
 def _property_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.Property
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.Property, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.Property]
+) -> Tuple[aas_types.Environment, aas_types.Property, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -717,58 +390,29 @@ def _property_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation.minimal_submodel(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation.minimal_submodel(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    path.extend(
-        ['submodel_elements', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodel_elements', 0]
-    )
-    the_property = creation_function(
-        path_hash
-    )
-    the_submodel.submodel_elements = [
-        the_property
-    ]
+    path.extend(["submodel_elements", 0])
+    path_hash = common.hash_path(path_hash, ["submodel_elements", 0])
+    the_property = creation_function(path_hash)
+    the_submodel.submodel_elements = [the_property]
 
-    return (
-        the_environment,
-        the_property,
-        path
-    )
+    return (the_environment, the_property, path)
 
 
 def _multi_language_property_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.MultiLanguageProperty
-    ]
+    creation_function: Callable[[common.CanHash], aas_types.MultiLanguageProperty]
 ) -> Tuple[
-    aas_types.Environment, 
-    aas_types.MultiLanguageProperty, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.MultiLanguageProperty, List[Union[str, int]]
 ]:
     """
     Generate an instance wrapped in an Environment.
@@ -779,59 +423,28 @@ def _multi_language_property_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation.minimal_submodel(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation.minimal_submodel(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    path.extend(
-        ['submodel_elements', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodel_elements', 0]
-    )
-    the_multi_language_property = creation_function(
-        path_hash
-    )
-    the_submodel.submodel_elements = [
-        the_multi_language_property
-    ]
+    path.extend(["submodel_elements", 0])
+    path_hash = common.hash_path(path_hash, ["submodel_elements", 0])
+    the_multi_language_property = creation_function(path_hash)
+    the_submodel.submodel_elements = [the_multi_language_property]
 
-    return (
-        the_environment,
-        the_multi_language_property,
-        path
-    )
+    return (the_environment, the_multi_language_property, path)
 
 
 def _range_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.Range
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.Range, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.Range]
+) -> Tuple[aas_types.Environment, aas_types.Range, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -841,59 +454,28 @@ def _range_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation.minimal_submodel(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation.minimal_submodel(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    path.extend(
-        ['submodel_elements', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodel_elements', 0]
-    )
-    the_range = creation_function(
-        path_hash
-    )
-    the_submodel.submodel_elements = [
-        the_range
-    ]
+    path.extend(["submodel_elements", 0])
+    path_hash = common.hash_path(path_hash, ["submodel_elements", 0])
+    the_range = creation_function(path_hash)
+    the_submodel.submodel_elements = [the_range]
 
-    return (
-        the_environment,
-        the_range,
-        path
-    )
+    return (the_environment, the_range, path)
 
 
 def _reference_element_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.ReferenceElement
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.ReferenceElement, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.ReferenceElement]
+) -> Tuple[aas_types.Environment, aas_types.ReferenceElement, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -903,59 +485,28 @@ def _reference_element_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation.minimal_submodel(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation.minimal_submodel(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    path.extend(
-        ['submodel_elements', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodel_elements', 0]
-    )
-    the_reference_element = creation_function(
-        path_hash
-    )
-    the_submodel.submodel_elements = [
-        the_reference_element
-    ]
+    path.extend(["submodel_elements", 0])
+    path_hash = common.hash_path(path_hash, ["submodel_elements", 0])
+    the_reference_element = creation_function(path_hash)
+    the_submodel.submodel_elements = [the_reference_element]
 
-    return (
-        the_environment,
-        the_reference_element,
-        path
-    )
+    return (the_environment, the_reference_element, path)
 
 
 def _blob_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.Blob
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.Blob, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.Blob]
+) -> Tuple[aas_types.Environment, aas_types.Blob, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -965,59 +516,28 @@ def _blob_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation.minimal_submodel(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation.minimal_submodel(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    path.extend(
-        ['submodel_elements', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodel_elements', 0]
-    )
-    the_blob = creation_function(
-        path_hash
-    )
-    the_submodel.submodel_elements = [
-        the_blob
-    ]
+    path.extend(["submodel_elements", 0])
+    path_hash = common.hash_path(path_hash, ["submodel_elements", 0])
+    the_blob = creation_function(path_hash)
+    the_submodel.submodel_elements = [the_blob]
 
-    return (
-        the_environment,
-        the_blob,
-        path
-    )
+    return (the_environment, the_blob, path)
 
 
 def _file_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.File
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.File, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.File]
+) -> Tuple[aas_types.Environment, aas_types.File, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -1027,58 +547,31 @@ def _file_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation.minimal_submodel(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation.minimal_submodel(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    path.extend(
-        ['submodel_elements', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodel_elements', 0]
-    )
-    the_file = creation_function(
-        path_hash
-    )
-    the_submodel.submodel_elements = [
-        the_file
-    ]
+    path.extend(["submodel_elements", 0])
+    path_hash = common.hash_path(path_hash, ["submodel_elements", 0])
+    the_file = creation_function(path_hash)
+    the_submodel.submodel_elements = [the_file]
 
-    return (
-        the_environment,
-        the_file,
-        path
-    )
+    return (the_environment, the_file, path)
 
 
 def _annotated_relationship_element_in_environment(
     creation_function: Callable[
-        [common.CanHash],
-        aas_types.AnnotatedRelationshipElement
+        [common.CanHash], aas_types.AnnotatedRelationshipElement
     ]
 ) -> Tuple[
-    aas_types.Environment, 
-    aas_types.AnnotatedRelationshipElement, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.AnnotatedRelationshipElement, List[Union[str, int]]
 ]:
     """
     Generate an instance wrapped in an Environment.
@@ -1089,59 +582,28 @@ def _annotated_relationship_element_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation.minimal_submodel(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation.minimal_submodel(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    path.extend(
-        ['submodel_elements', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodel_elements', 0]
-    )
-    the_annotated_relationship_element = creation_function(
-        path_hash
-    )
-    the_submodel.submodel_elements = [
-        the_annotated_relationship_element
-    ]
+    path.extend(["submodel_elements", 0])
+    path_hash = common.hash_path(path_hash, ["submodel_elements", 0])
+    the_annotated_relationship_element = creation_function(path_hash)
+    the_submodel.submodel_elements = [the_annotated_relationship_element]
 
-    return (
-        the_environment,
-        the_annotated_relationship_element,
-        path
-    )
+    return (the_environment, the_annotated_relationship_element, path)
 
 
 def _entity_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.Entity
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.Entity, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.Entity]
+) -> Tuple[aas_types.Environment, aas_types.Entity, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -1151,59 +613,28 @@ def _entity_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation.minimal_submodel(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation.minimal_submodel(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    path.extend(
-        ['submodel_elements', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodel_elements', 0]
-    )
-    the_entity = creation_function(
-        path_hash
-    )
-    the_submodel.submodel_elements = [
-        the_entity
-    ]
+    path.extend(["submodel_elements", 0])
+    path_hash = common.hash_path(path_hash, ["submodel_elements", 0])
+    the_entity = creation_function(path_hash)
+    the_submodel.submodel_elements = [the_entity]
 
-    return (
-        the_environment,
-        the_entity,
-        path
-    )
+    return (the_environment, the_entity, path)
 
 
 def _basic_event_element_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.BasicEventElement
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.BasicEventElement, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.BasicEventElement]
+) -> Tuple[aas_types.Environment, aas_types.BasicEventElement, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -1213,59 +644,28 @@ def _basic_event_element_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation.minimal_submodel(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation.minimal_submodel(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    path.extend(
-        ['submodel_elements', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodel_elements', 0]
-    )
-    the_basic_event_element = creation_function(
-        path_hash
-    )
-    the_submodel.submodel_elements = [
-        the_basic_event_element
-    ]
+    path.extend(["submodel_elements", 0])
+    path_hash = common.hash_path(path_hash, ["submodel_elements", 0])
+    the_basic_event_element = creation_function(path_hash)
+    the_submodel.submodel_elements = [the_basic_event_element]
 
-    return (
-        the_environment,
-        the_basic_event_element,
-        path
-    )
+    return (the_environment, the_basic_event_element, path)
 
 
 def _operation_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.Operation
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.Operation, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.Operation]
+) -> Tuple[aas_types.Environment, aas_types.Operation, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -1275,59 +675,28 @@ def _operation_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation.minimal_submodel(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation.minimal_submodel(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    path.extend(
-        ['submodel_elements', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodel_elements', 0]
-    )
-    the_operation = creation_function(
-        path_hash
-    )
-    the_submodel.submodel_elements = [
-        the_operation
-    ]
+    path.extend(["submodel_elements", 0])
+    path_hash = common.hash_path(path_hash, ["submodel_elements", 0])
+    the_operation = creation_function(path_hash)
+    the_submodel.submodel_elements = [the_operation]
 
-    return (
-        the_environment,
-        the_operation,
-        path
-    )
+    return (the_environment, the_operation, path)
 
 
 def _operation_variable_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.OperationVariable
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.OperationVariable, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.OperationVariable]
+) -> Tuple[aas_types.Environment, aas_types.OperationVariable, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -1337,73 +706,33 @@ def _operation_variable_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation.minimal_submodel(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation.minimal_submodel(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    path.extend(
-        ['submodel_elements', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodel_elements', 0]
-    )
-    the_operation = creation.minimal_operation(
-        path_hash
-    )
-    the_submodel.submodel_elements = [
-        the_operation
-    ]
+    path.extend(["submodel_elements", 0])
+    path_hash = common.hash_path(path_hash, ["submodel_elements", 0])
+    the_operation = creation.minimal_operation(path_hash)
+    the_submodel.submodel_elements = [the_operation]
 
-    path.extend(
-        ['input_variables', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['input_variables', 0]
-    )
-    the_operation_variable = creation_function(
-        path_hash
-    )
-    the_operation.input_variables = [
-        the_operation_variable
-    ]
+    path.extend(["input_variables", 0])
+    path_hash = common.hash_path(path_hash, ["input_variables", 0])
+    the_operation_variable = creation_function(path_hash)
+    the_operation.input_variables = [the_operation_variable]
 
-    return (
-        the_environment,
-        the_operation_variable,
-        path
-    )
+    return (the_environment, the_operation_variable, path)
 
 
 def _capability_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.Capability
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.Capability, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.Capability]
+) -> Tuple[aas_types.Environment, aas_types.Capability, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -1413,59 +742,28 @@ def _capability_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['submodels', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodels', 0]
-    )
-    the_submodel = creation.minimal_submodel(
-        path_hash
-    )
-    the_environment.submodels = [
-        the_submodel
-    ]
+    path.extend(["submodels", 0])
+    path_hash = common.hash_path(path_hash, ["submodels", 0])
+    the_submodel = creation.minimal_submodel(path_hash)
+    the_environment.submodels = [the_submodel]
 
-    path.extend(
-        ['submodel_elements', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['submodel_elements', 0]
-    )
-    the_capability = creation_function(
-        path_hash
-    )
-    the_submodel.submodel_elements = [
-        the_capability
-    ]
+    path.extend(["submodel_elements", 0])
+    path_hash = common.hash_path(path_hash, ["submodel_elements", 0])
+    the_capability = creation_function(path_hash)
+    the_submodel.submodel_elements = [the_capability]
 
-    return (
-        the_environment,
-        the_capability,
-        path
-    )
+    return (the_environment, the_capability, path)
 
 
 def _concept_description_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.ConceptDescription
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.ConceptDescription, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.ConceptDescription]
+) -> Tuple[aas_types.Environment, aas_types.ConceptDescription, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -1475,45 +773,23 @@ def _concept_description_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['concept_descriptions', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['concept_descriptions', 0]
-    )
-    the_concept_description = creation_function(
-        path_hash
-    )
-    the_environment.concept_descriptions = [
-        the_concept_description
-    ]
+    path.extend(["concept_descriptions", 0])
+    path_hash = common.hash_path(path_hash, ["concept_descriptions", 0])
+    the_concept_description = creation_function(path_hash)
+    the_environment.concept_descriptions = [the_concept_description]
 
-    return (
-        the_environment,
-        the_concept_description,
-        path
-    )
+    return (the_environment, the_concept_description, path)
 
 
 def _reference_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.Reference
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.Reference, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.Reference]
+) -> Tuple[aas_types.Environment, aas_types.Reference, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -1523,57 +799,30 @@ def _reference_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.append(
-        'derived_from'
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        'derived_from'
-    )
-    the_reference = creation_function(
-        path_hash
-    )
+    path.append("derived_from")
+    path_hash = common.hash_path(path_hash, "derived_from")
+    the_reference = creation_function(path_hash)
     the_asset_administration_shell.derived_from = the_reference
 
-    return (
-        the_environment,
-        the_reference,
-        path
-    )
+    return (the_environment, the_reference, path)
 
 
 def _key_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.Key
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.Key, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.Key]
+) -> Tuple[aas_types.Environment, aas_types.Key, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -1583,71 +832,35 @@ def _key_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.append(
-        'derived_from'
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        'derived_from'
-    )
-    the_reference = creation.minimal_reference(
-        path_hash
-    )
+    path.append("derived_from")
+    path_hash = common.hash_path(path_hash, "derived_from")
+    the_reference = creation.minimal_reference(path_hash)
     the_asset_administration_shell.derived_from = the_reference
 
-    path.extend(
-        ['keys', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['keys', 0]
-    )
-    the_key = creation_function(
-        path_hash
-    )
-    the_reference.keys = [
-        the_key
-    ]
+    path.extend(["keys", 0])
+    path_hash = common.hash_path(path_hash, ["keys", 0])
+    the_key = creation_function(path_hash)
+    the_reference.keys = [the_key]
 
-    return (
-        the_environment,
-        the_key,
-        path
-    )
+    return (the_environment, the_key, path)
 
 
 def _lang_string_name_type_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.LangStringNameType
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.LangStringNameType, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.LangStringNameType]
+) -> Tuple[aas_types.Environment, aas_types.LangStringNameType, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -1657,59 +870,30 @@ def _lang_string_name_type_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.extend(
-        ['display_name', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['display_name', 0]
-    )
-    the_lang_string_name_type = creation_function(
-        path_hash
-    )
-    the_asset_administration_shell.display_name = [
-        the_lang_string_name_type
-    ]
+    path.extend(["display_name", 0])
+    path_hash = common.hash_path(path_hash, ["display_name", 0])
+    the_lang_string_name_type = creation_function(path_hash)
+    the_asset_administration_shell.display_name = [the_lang_string_name_type]
 
-    return (
-        the_environment,
-        the_lang_string_name_type,
-        path
-    )
+    return (the_environment, the_lang_string_name_type, path)
 
 
 def _lang_string_text_type_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.LangStringTextType
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.LangStringTextType, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.LangStringTextType]
+) -> Tuple[aas_types.Environment, aas_types.LangStringTextType, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -1719,58 +903,31 @@ def _lang_string_text_type_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.extend(
-        ['description', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['description', 0]
-    )
-    the_lang_string_text_type = creation_function(
-        path_hash
-    )
-    the_asset_administration_shell.description = [
-        the_lang_string_text_type
-    ]
+    path.extend(["description", 0])
+    path_hash = common.hash_path(path_hash, ["description", 0])
+    the_lang_string_text_type = creation_function(path_hash)
+    the_asset_administration_shell.description = [the_lang_string_text_type]
 
-    return (
-        the_environment,
-        the_lang_string_text_type,
-        path
-    )
+    return (the_environment, the_lang_string_text_type, path)
 
 
 def _embedded_data_specification_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.EmbeddedDataSpecification
-    ]
+    creation_function: Callable[[common.CanHash], aas_types.EmbeddedDataSpecification]
 ) -> Tuple[
-    aas_types.Environment, 
-    aas_types.EmbeddedDataSpecification, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.EmbeddedDataSpecification, List[Union[str, int]]
 ]:
     """
     Generate an instance wrapped in an Environment.
@@ -1781,59 +938,32 @@ def _embedded_data_specification_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.extend(
-        ['embedded_data_specifications', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['embedded_data_specifications', 0]
-    )
-    the_embedded_data_specification = creation_function(
-        path_hash
-    )
+    path.extend(["embedded_data_specifications", 0])
+    path_hash = common.hash_path(path_hash, ["embedded_data_specifications", 0])
+    the_embedded_data_specification = creation_function(path_hash)
     the_asset_administration_shell.embedded_data_specifications = [
         the_embedded_data_specification
     ]
 
-    return (
-        the_environment,
-        the_embedded_data_specification,
-        path
-    )
+    return (the_environment, the_embedded_data_specification, path)
 
 
 def _level_type_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.LevelType
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.LevelType, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.LevelType]
+) -> Tuple[aas_types.Environment, aas_types.LevelType, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -1843,35 +973,21 @@ def _level_type_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.extend(
-        ['embedded_data_specifications', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['embedded_data_specifications', 0]
-    )
+    path.extend(["embedded_data_specifications", 0])
+    path_hash = common.hash_path(path_hash, ["embedded_data_specifications", 0])
     the_embedded_data_specification = creation.minimal_embedded_data_specification(
         path_hash
     )
@@ -1879,47 +995,26 @@ def _level_type_in_environment(
         the_embedded_data_specification
     ]
 
-    path.append(
-        'data_specification_content'
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        'data_specification_content'
-    )
+    path.append("data_specification_content")
+    path_hash = common.hash_path(path_hash, "data_specification_content")
     the_data_specification_iec_61360 = creation.minimal_data_specification_iec_61360(
         path_hash
     )
-    the_embedded_data_specification.data_specification_content = the_data_specification_iec_61360
+    the_embedded_data_specification.data_specification_content = (
+        the_data_specification_iec_61360
+    )
 
-    path.append(
-        'level_type'
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        'level_type'
-    )
-    the_level_type = creation_function(
-        path_hash
-    )
+    path.append("level_type")
+    path_hash = common.hash_path(path_hash, "level_type")
+    the_level_type = creation_function(path_hash)
     the_data_specification_iec_61360.level_type = the_level_type
 
-    return (
-        the_environment,
-        the_level_type,
-        path
-    )
+    return (the_environment, the_level_type, path)
 
 
 def _value_reference_pair_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.ValueReferencePair
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.ValueReferencePair, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.ValueReferencePair]
+) -> Tuple[aas_types.Environment, aas_types.ValueReferencePair, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -1929,35 +1024,21 @@ def _value_reference_pair_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.extend(
-        ['embedded_data_specifications', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['embedded_data_specifications', 0]
-    )
+    path.extend(["embedded_data_specifications", 0])
+    path_hash = common.hash_path(path_hash, ["embedded_data_specifications", 0])
     the_embedded_data_specification = creation.minimal_embedded_data_specification(
         path_hash
     )
@@ -1965,61 +1046,31 @@ def _value_reference_pair_in_environment(
         the_embedded_data_specification
     ]
 
-    path.append(
-        'data_specification_content'
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        'data_specification_content'
-    )
+    path.append("data_specification_content")
+    path_hash = common.hash_path(path_hash, "data_specification_content")
     the_data_specification_iec_61360 = creation.minimal_data_specification_iec_61360(
         path_hash
     )
-    the_embedded_data_specification.data_specification_content = the_data_specification_iec_61360
+    the_embedded_data_specification.data_specification_content = (
+        the_data_specification_iec_61360
+    )
 
-    path.append(
-        'value_list'
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        'value_list'
-    )
-    the_value_list = creation.minimal_value_list(
-        path_hash
-    )
+    path.append("value_list")
+    path_hash = common.hash_path(path_hash, "value_list")
+    the_value_list = creation.minimal_value_list(path_hash)
     the_data_specification_iec_61360.value_list = the_value_list
 
-    path.extend(
-        ['value_reference_pairs', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['value_reference_pairs', 0]
-    )
-    the_value_reference_pair = creation_function(
-        path_hash
-    )
-    the_value_list.value_reference_pairs = [
-        the_value_reference_pair
-    ]
+    path.extend(["value_reference_pairs", 0])
+    path_hash = common.hash_path(path_hash, ["value_reference_pairs", 0])
+    the_value_reference_pair = creation_function(path_hash)
+    the_value_list.value_reference_pairs = [the_value_reference_pair]
 
-    return (
-        the_environment,
-        the_value_reference_pair,
-        path
-    )
+    return (the_environment, the_value_reference_pair, path)
 
 
 def _value_list_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.ValueList
-    ]
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.ValueList, 
-    List[Union[str, int]]
-]:
+    creation_function: Callable[[common.CanHash], aas_types.ValueList]
+) -> Tuple[aas_types.Environment, aas_types.ValueList, List[Union[str, int]]]:
     """
     Generate an instance wrapped in an Environment.
 
@@ -2029,35 +1080,21 @@ def _value_list_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.extend(
-        ['embedded_data_specifications', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['embedded_data_specifications', 0]
-    )
+    path.extend(["embedded_data_specifications", 0])
+    path_hash = common.hash_path(path_hash, ["embedded_data_specifications", 0])
     the_embedded_data_specification = creation.minimal_embedded_data_specification(
         path_hash
     )
@@ -2065,46 +1102,31 @@ def _value_list_in_environment(
         the_embedded_data_specification
     ]
 
-    path.append(
-        'data_specification_content'
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        'data_specification_content'
-    )
+    path.append("data_specification_content")
+    path_hash = common.hash_path(path_hash, "data_specification_content")
     the_data_specification_iec_61360 = creation.minimal_data_specification_iec_61360(
         path_hash
     )
-    the_embedded_data_specification.data_specification_content = the_data_specification_iec_61360
+    the_embedded_data_specification.data_specification_content = (
+        the_data_specification_iec_61360
+    )
 
-    path.append(
-        'value_list'
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        'value_list'
-    )
-    the_value_list = creation_function(
-        path_hash
-    )
+    path.append("value_list")
+    path_hash = common.hash_path(path_hash, "value_list")
+    the_value_list = creation_function(path_hash)
     the_data_specification_iec_61360.value_list = the_value_list
 
-    return (
-        the_environment,
-        the_value_list,
-        path
-    )
+    return (the_environment, the_value_list, path)
 
 
 def _lang_string_preferred_name_type_iec_61360_in_environment(
     creation_function: Callable[
-        [common.CanHash],
-        aas_types.LangStringPreferredNameTypeIEC61360
+        [common.CanHash], aas_types.LangStringPreferredNameTypeIEC61360
     ]
 ) -> Tuple[
-    aas_types.Environment, 
-    aas_types.LangStringPreferredNameTypeIEC61360, 
-    List[Union[str, int]]
+    aas_types.Environment,
+    aas_types.LangStringPreferredNameTypeIEC61360,
+    List[Union[str, int]],
 ]:
     """
     Generate an instance wrapped in an Environment.
@@ -2115,35 +1137,21 @@ def _lang_string_preferred_name_type_iec_61360_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.extend(
-        ['embedded_data_specifications', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['embedded_data_specifications', 0]
-    )
+    path.extend(["embedded_data_specifications", 0])
+    path_hash = common.hash_path(path_hash, ["embedded_data_specifications", 0])
     the_embedded_data_specification = creation.minimal_embedded_data_specification(
         path_hash
     )
@@ -2151,48 +1159,33 @@ def _lang_string_preferred_name_type_iec_61360_in_environment(
         the_embedded_data_specification
     ]
 
-    path.append(
-        'data_specification_content'
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        'data_specification_content'
-    )
+    path.append("data_specification_content")
+    path_hash = common.hash_path(path_hash, "data_specification_content")
     the_data_specification_iec_61360 = creation.minimal_data_specification_iec_61360(
         path_hash
     )
-    the_embedded_data_specification.data_specification_content = the_data_specification_iec_61360
+    the_embedded_data_specification.data_specification_content = (
+        the_data_specification_iec_61360
+    )
 
-    path.extend(
-        ['preferred_name', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['preferred_name', 0]
-    )
-    the_lang_string_preferred_name_type_iec_61360 = creation_function(
-        path_hash
-    )
+    path.extend(["preferred_name", 0])
+    path_hash = common.hash_path(path_hash, ["preferred_name", 0])
+    the_lang_string_preferred_name_type_iec_61360 = creation_function(path_hash)
     the_data_specification_iec_61360.preferred_name = [
         the_lang_string_preferred_name_type_iec_61360
     ]
 
-    return (
-        the_environment,
-        the_lang_string_preferred_name_type_iec_61360,
-        path
-    )
+    return (the_environment, the_lang_string_preferred_name_type_iec_61360, path)
 
 
 def _lang_string_short_name_type_iec_61360_in_environment(
     creation_function: Callable[
-        [common.CanHash],
-        aas_types.LangStringShortNameTypeIEC61360
+        [common.CanHash], aas_types.LangStringShortNameTypeIEC61360
     ]
 ) -> Tuple[
-    aas_types.Environment, 
-    aas_types.LangStringShortNameTypeIEC61360, 
-    List[Union[str, int]]
+    aas_types.Environment,
+    aas_types.LangStringShortNameTypeIEC61360,
+    List[Union[str, int]],
 ]:
     """
     Generate an instance wrapped in an Environment.
@@ -2203,35 +1196,21 @@ def _lang_string_short_name_type_iec_61360_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.extend(
-        ['embedded_data_specifications', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['embedded_data_specifications', 0]
-    )
+    path.extend(["embedded_data_specifications", 0])
+    path_hash = common.hash_path(path_hash, ["embedded_data_specifications", 0])
     the_embedded_data_specification = creation.minimal_embedded_data_specification(
         path_hash
     )
@@ -2239,48 +1218,33 @@ def _lang_string_short_name_type_iec_61360_in_environment(
         the_embedded_data_specification
     ]
 
-    path.append(
-        'data_specification_content'
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        'data_specification_content'
-    )
+    path.append("data_specification_content")
+    path_hash = common.hash_path(path_hash, "data_specification_content")
     the_data_specification_iec_61360 = creation.minimal_data_specification_iec_61360(
         path_hash
     )
-    the_embedded_data_specification.data_specification_content = the_data_specification_iec_61360
+    the_embedded_data_specification.data_specification_content = (
+        the_data_specification_iec_61360
+    )
 
-    path.extend(
-        ['short_name', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['short_name', 0]
-    )
-    the_lang_string_short_name_type_iec_61360 = creation_function(
-        path_hash
-    )
+    path.extend(["short_name", 0])
+    path_hash = common.hash_path(path_hash, ["short_name", 0])
+    the_lang_string_short_name_type_iec_61360 = creation_function(path_hash)
     the_data_specification_iec_61360.short_name = [
         the_lang_string_short_name_type_iec_61360
     ]
 
-    return (
-        the_environment,
-        the_lang_string_short_name_type_iec_61360,
-        path
-    )
+    return (the_environment, the_lang_string_short_name_type_iec_61360, path)
 
 
 def _lang_string_definition_type_iec_61360_in_environment(
     creation_function: Callable[
-        [common.CanHash],
-        aas_types.LangStringDefinitionTypeIEC61360
+        [common.CanHash], aas_types.LangStringDefinitionTypeIEC61360
     ]
 ) -> Tuple[
-    aas_types.Environment, 
-    aas_types.LangStringDefinitionTypeIEC61360, 
-    List[Union[str, int]]
+    aas_types.Environment,
+    aas_types.LangStringDefinitionTypeIEC61360,
+    List[Union[str, int]],
 ]:
     """
     Generate an instance wrapped in an Environment.
@@ -2291,35 +1255,21 @@ def _lang_string_definition_type_iec_61360_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.extend(
-        ['embedded_data_specifications', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['embedded_data_specifications', 0]
-    )
+    path.extend(["embedded_data_specifications", 0])
+    path_hash = common.hash_path(path_hash, ["embedded_data_specifications", 0])
     the_embedded_data_specification = creation.minimal_embedded_data_specification(
         path_hash
     )
@@ -2327,48 +1277,29 @@ def _lang_string_definition_type_iec_61360_in_environment(
         the_embedded_data_specification
     ]
 
-    path.append(
-        'data_specification_content'
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        'data_specification_content'
-    )
+    path.append("data_specification_content")
+    path_hash = common.hash_path(path_hash, "data_specification_content")
     the_data_specification_iec_61360 = creation.minimal_data_specification_iec_61360(
         path_hash
     )
-    the_embedded_data_specification.data_specification_content = the_data_specification_iec_61360
+    the_embedded_data_specification.data_specification_content = (
+        the_data_specification_iec_61360
+    )
 
-    path.extend(
-        ['definition', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['definition', 0]
-    )
-    the_lang_string_definition_type_iec_61360 = creation_function(
-        path_hash
-    )
+    path.extend(["definition", 0])
+    path_hash = common.hash_path(path_hash, ["definition", 0])
+    the_lang_string_definition_type_iec_61360 = creation_function(path_hash)
     the_data_specification_iec_61360.definition = [
         the_lang_string_definition_type_iec_61360
     ]
 
-    return (
-        the_environment,
-        the_lang_string_definition_type_iec_61360,
-        path
-    )
+    return (the_environment, the_lang_string_definition_type_iec_61360, path)
 
 
 def _data_specification_iec_61360_in_environment(
-    creation_function: Callable[
-        [common.CanHash],
-        aas_types.DataSpecificationIEC61360
-    ]
+    creation_function: Callable[[common.CanHash], aas_types.DataSpecificationIEC61360]
 ) -> Tuple[
-    aas_types.Environment, 
-    aas_types.DataSpecificationIEC61360, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.DataSpecificationIEC61360, List[Union[str, int]]
 ]:
     """
     Generate an instance wrapped in an Environment.
@@ -2379,35 +1310,21 @@ def _data_specification_iec_61360_in_environment(
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    path_hash = common.hash_path([])
+    path_hash = common.hash_path(None, [])
 
     path = []  # type: List[Union[int, str]]
 
-    the_environment = creation.minimal_environment(
-        path_hash
-    )
+    the_environment = creation.minimal_environment(path_hash)
 
-    path.extend(
-        ['asset_administration_shells', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['asset_administration_shells', 0]
-    )
+    path.extend(["asset_administration_shells", 0])
+    path_hash = common.hash_path(path_hash, ["asset_administration_shells", 0])
     the_asset_administration_shell = creation.minimal_asset_administration_shell(
         path_hash
     )
-    the_environment.asset_administration_shells = [
-        the_asset_administration_shell
-    ]
+    the_environment.asset_administration_shells = [the_asset_administration_shell]
 
-    path.extend(
-        ['embedded_data_specifications', 0]
-    )
-    path_hash = common.hash_path(
-        path_hash,
-        ['embedded_data_specifications', 0]
-    )
+    path.extend(["embedded_data_specifications", 0])
+    path_hash = common.hash_path(path_hash, ["embedded_data_specifications", 0])
     the_embedded_data_specification = creation.minimal_embedded_data_specification(
         path_hash
     )
@@ -2415,29 +1332,18 @@ def _data_specification_iec_61360_in_environment(
         the_embedded_data_specification
     ]
 
-    path.append(
-        'data_specification_content'
+    path.append("data_specification_content")
+    path_hash = common.hash_path(path_hash, "data_specification_content")
+    the_data_specification_iec_61360 = creation_function(path_hash)
+    the_embedded_data_specification.data_specification_content = (
+        the_data_specification_iec_61360
     )
-    path_hash = common.hash_path(
-        path_hash,
-        'data_specification_content'
-    )
-    the_data_specification_iec_61360 = creation_function(
-        path_hash
-    )
-    the_embedded_data_specification.data_specification_content = the_data_specification_iec_61360
 
-    return (
-        the_environment,
-        the_data_specification_iec_61360,
-        path
-    )
+    return (the_environment, the_data_specification_iec_61360, path)
 
 
 def minimal_extension_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Extension, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Extension, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2448,15 +1354,11 @@ def minimal_extension_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _extension_in_environment(
-        creation_function=creation.minimal_extension
-    )
+    return _extension_in_environment(creation_function=creation.minimal_extension)
 
 
 def minimal_administrative_information_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.AdministrativeInformation, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.AdministrativeInformation, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2473,9 +1375,7 @@ def minimal_administrative_information_in_environment() -> Tuple[
 
 
 def minimal_qualifier_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Qualifier, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Qualifier, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2486,15 +1386,11 @@ def minimal_qualifier_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _qualifier_in_environment(
-        creation_function=creation.minimal_qualifier
-    )
+    return _qualifier_in_environment(creation_function=creation.minimal_qualifier)
 
 
 def minimal_asset_administration_shell_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.AssetAdministrationShell, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.AssetAdministrationShell, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2511,9 +1407,7 @@ def minimal_asset_administration_shell_in_environment() -> Tuple[
 
 
 def minimal_asset_information_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.AssetInformation, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.AssetInformation, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2530,9 +1424,7 @@ def minimal_asset_information_in_environment() -> Tuple[
 
 
 def minimal_resource_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Resource, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Resource, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2543,15 +1435,11 @@ def minimal_resource_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _resource_in_environment(
-        creation_function=creation.minimal_resource
-    )
+    return _resource_in_environment(creation_function=creation.minimal_resource)
 
 
 def minimal_specific_asset_id_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.SpecificAssetID, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.SpecificAssetID, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2568,9 +1456,7 @@ def minimal_specific_asset_id_in_environment() -> Tuple[
 
 
 def minimal_submodel_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Submodel, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Submodel, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2581,15 +1467,11 @@ def minimal_submodel_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _submodel_in_environment(
-        creation_function=creation.minimal_submodel
-    )
+    return _submodel_in_environment(creation_function=creation.minimal_submodel)
 
 
 def minimal_relationship_element_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.RelationshipElement, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.RelationshipElement, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2606,9 +1488,7 @@ def minimal_relationship_element_in_environment() -> Tuple[
 
 
 def minimal_submodel_element_list_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.SubmodelElementList, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.SubmodelElementList, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2625,9 +1505,7 @@ def minimal_submodel_element_list_in_environment() -> Tuple[
 
 
 def minimal_submodel_element_collection_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.SubmodelElementCollection, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.SubmodelElementCollection, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2644,9 +1522,7 @@ def minimal_submodel_element_collection_in_environment() -> Tuple[
 
 
 def minimal_property_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Property, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Property, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2657,15 +1533,11 @@ def minimal_property_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _property_in_environment(
-        creation_function=creation.minimal_property
-    )
+    return _property_in_environment(creation_function=creation.minimal_property)
 
 
 def minimal_multi_language_property_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.MultiLanguageProperty, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.MultiLanguageProperty, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2682,9 +1554,7 @@ def minimal_multi_language_property_in_environment() -> Tuple[
 
 
 def minimal_range_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Range, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Range, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2695,15 +1565,11 @@ def minimal_range_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _range_in_environment(
-        creation_function=creation.minimal_range
-    )
+    return _range_in_environment(creation_function=creation.minimal_range)
 
 
 def minimal_reference_element_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.ReferenceElement, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.ReferenceElement, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2720,9 +1586,7 @@ def minimal_reference_element_in_environment() -> Tuple[
 
 
 def minimal_blob_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Blob, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Blob, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2733,15 +1597,11 @@ def minimal_blob_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _blob_in_environment(
-        creation_function=creation.minimal_blob
-    )
+    return _blob_in_environment(creation_function=creation.minimal_blob)
 
 
 def minimal_file_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.File, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.File, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2752,15 +1612,11 @@ def minimal_file_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _file_in_environment(
-        creation_function=creation.minimal_file
-    )
+    return _file_in_environment(creation_function=creation.minimal_file)
 
 
 def minimal_annotated_relationship_element_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.AnnotatedRelationshipElement, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.AnnotatedRelationshipElement, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2777,9 +1633,7 @@ def minimal_annotated_relationship_element_in_environment() -> Tuple[
 
 
 def minimal_entity_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Entity, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Entity, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2790,15 +1644,11 @@ def minimal_entity_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _entity_in_environment(
-        creation_function=creation.minimal_entity
-    )
+    return _entity_in_environment(creation_function=creation.minimal_entity)
 
 
 def minimal_basic_event_element_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.BasicEventElement, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.BasicEventElement, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2815,9 +1665,7 @@ def minimal_basic_event_element_in_environment() -> Tuple[
 
 
 def minimal_operation_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Operation, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Operation, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2828,15 +1676,11 @@ def minimal_operation_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _operation_in_environment(
-        creation_function=creation.minimal_operation
-    )
+    return _operation_in_environment(creation_function=creation.minimal_operation)
 
 
 def minimal_operation_variable_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.OperationVariable, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.OperationVariable, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2853,9 +1697,7 @@ def minimal_operation_variable_in_environment() -> Tuple[
 
 
 def minimal_capability_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Capability, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Capability, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2866,15 +1708,11 @@ def minimal_capability_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _capability_in_environment(
-        creation_function=creation.minimal_capability
-    )
+    return _capability_in_environment(creation_function=creation.minimal_capability)
 
 
 def minimal_concept_description_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.ConceptDescription, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.ConceptDescription, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2891,9 +1729,7 @@ def minimal_concept_description_in_environment() -> Tuple[
 
 
 def minimal_reference_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Reference, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Reference, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2904,15 +1740,11 @@ def minimal_reference_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _reference_in_environment(
-        creation_function=creation.minimal_reference
-    )
+    return _reference_in_environment(creation_function=creation.minimal_reference)
 
 
 def minimal_key_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Key, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Key, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2923,15 +1755,11 @@ def minimal_key_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _key_in_environment(
-        creation_function=creation.minimal_key
-    )
+    return _key_in_environment(creation_function=creation.minimal_key)
 
 
 def minimal_lang_string_name_type_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.LangStringNameType, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.LangStringNameType, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2948,9 +1776,7 @@ def minimal_lang_string_name_type_in_environment() -> Tuple[
 
 
 def minimal_lang_string_text_type_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.LangStringTextType, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.LangStringTextType, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2967,9 +1793,7 @@ def minimal_lang_string_text_type_in_environment() -> Tuple[
 
 
 def minimal_embedded_data_specification_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.EmbeddedDataSpecification, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.EmbeddedDataSpecification, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2986,9 +1810,7 @@ def minimal_embedded_data_specification_in_environment() -> Tuple[
 
 
 def minimal_level_type_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.LevelType, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.LevelType, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -2999,15 +1821,11 @@ def minimal_level_type_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _level_type_in_environment(
-        creation_function=creation.minimal_level_type
-    )
+    return _level_type_in_environment(creation_function=creation.minimal_level_type)
 
 
 def minimal_value_reference_pair_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.ValueReferencePair, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.ValueReferencePair, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -3024,9 +1842,7 @@ def minimal_value_reference_pair_in_environment() -> Tuple[
 
 
 def minimal_value_list_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.ValueList, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.ValueList, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -3037,15 +1853,13 @@ def minimal_value_list_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _value_list_in_environment(
-        creation_function=creation.minimal_value_list
-    )
+    return _value_list_in_environment(creation_function=creation.minimal_value_list)
 
 
 def minimal_lang_string_preferred_name_type_iec_61360_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.LangStringPreferredNameTypeIEC61360, 
-    List[Union[str, int]]
+    aas_types.Environment,
+    aas_types.LangStringPreferredNameTypeIEC61360,
+    List[Union[str, int]],
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -3062,9 +1876,9 @@ def minimal_lang_string_preferred_name_type_iec_61360_in_environment() -> Tuple[
 
 
 def minimal_lang_string_short_name_type_iec_61360_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.LangStringShortNameTypeIEC61360, 
-    List[Union[str, int]]
+    aas_types.Environment,
+    aas_types.LangStringShortNameTypeIEC61360,
+    List[Union[str, int]],
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -3081,9 +1895,9 @@ def minimal_lang_string_short_name_type_iec_61360_in_environment() -> Tuple[
 
 
 def minimal_lang_string_definition_type_iec_61360_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.LangStringDefinitionTypeIEC61360, 
-    List[Union[str, int]]
+    aas_types.Environment,
+    aas_types.LangStringDefinitionTypeIEC61360,
+    List[Union[str, int]],
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -3100,9 +1914,7 @@ def minimal_lang_string_definition_type_iec_61360_in_environment() -> Tuple[
 
 
 def minimal_data_specification_iec_61360_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.DataSpecificationIEC61360, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.DataSpecificationIEC61360, List[Union[str, int]]
 ]:
     """
     Generate a minimal instance wrapped in an Environment.
@@ -3119,88 +1931,48 @@ def minimal_data_specification_iec_61360_in_environment() -> Tuple[
 
 
 _CLASS_NAME_TO_MINIMAL_IN_ENVIRONMENT = {
-    'Extension':
-    minimal_extension_in_environment,
-    'Administrative_information':
-    minimal_administrative_information_in_environment,
-    'Qualifier':
-    minimal_qualifier_in_environment,
-    'Asset_administration_shell':
-    minimal_asset_administration_shell_in_environment,
-    'Asset_information':
-    minimal_asset_information_in_environment,
-    'Resource':
-    minimal_resource_in_environment,
-    'Specific_asset_ID':
-    minimal_specific_asset_id_in_environment,
-    'Submodel':
-    minimal_submodel_in_environment,
-    'Relationship_element':
-    minimal_relationship_element_in_environment,
-    'Submodel_element_list':
-    minimal_submodel_element_list_in_environment,
-    'Submodel_element_collection':
-    minimal_submodel_element_collection_in_environment,
-    'Property':
-    minimal_property_in_environment,
-    'Multi_language_property':
-    minimal_multi_language_property_in_environment,
-    'Range':
-    minimal_range_in_environment,
-    'Reference_element':
-    minimal_reference_element_in_environment,
-    'Blob':
-    minimal_blob_in_environment,
-    'File':
-    minimal_file_in_environment,
-    'Annotated_relationship_element':
-    minimal_annotated_relationship_element_in_environment,
-    'Entity':
-    minimal_entity_in_environment,
-    'Basic_event_element':
-    minimal_basic_event_element_in_environment,
-    'Operation':
-    minimal_operation_in_environment,
-    'Operation_variable':
-    minimal_operation_variable_in_environment,
-    'Capability':
-    minimal_capability_in_environment,
-    'Concept_description':
-    minimal_concept_description_in_environment,
-    'Reference':
-    minimal_reference_in_environment,
-    'Key':
-    minimal_key_in_environment,
-    'Lang_string_name_type':
-    minimal_lang_string_name_type_in_environment,
-    'Lang_string_text_type':
-    minimal_lang_string_text_type_in_environment,
-    'Embedded_data_specification':
-    minimal_embedded_data_specification_in_environment,
-    'Level_type':
-    minimal_level_type_in_environment,
-    'Value_reference_pair':
-    minimal_value_reference_pair_in_environment,
-    'Value_list':
-    minimal_value_list_in_environment,
-    'Lang_string_preferred_name_type_IEC_61360':
-    minimal_lang_string_preferred_name_type_iec_61360_in_environment,
-    'Lang_string_short_name_type_IEC_61360':
-    minimal_lang_string_short_name_type_iec_61360_in_environment,
-    'Lang_string_definition_type_IEC_61360':
-    minimal_lang_string_definition_type_iec_61360_in_environment,
-    'Data_specification_IEC_61360':
-    minimal_data_specification_iec_61360_in_environment
+    "Extension": minimal_extension_in_environment,
+    "Administrative_information": minimal_administrative_information_in_environment,
+    "Qualifier": minimal_qualifier_in_environment,
+    "Asset_administration_shell": minimal_asset_administration_shell_in_environment,
+    "Asset_information": minimal_asset_information_in_environment,
+    "Resource": minimal_resource_in_environment,
+    "Specific_asset_ID": minimal_specific_asset_id_in_environment,
+    "Submodel": minimal_submodel_in_environment,
+    "Relationship_element": minimal_relationship_element_in_environment,
+    "Submodel_element_list": minimal_submodel_element_list_in_environment,
+    "Submodel_element_collection": minimal_submodel_element_collection_in_environment,
+    "Property": minimal_property_in_environment,
+    "Multi_language_property": minimal_multi_language_property_in_environment,
+    "Range": minimal_range_in_environment,
+    "Reference_element": minimal_reference_element_in_environment,
+    "Blob": minimal_blob_in_environment,
+    "File": minimal_file_in_environment,
+    "Annotated_relationship_element": minimal_annotated_relationship_element_in_environment,
+    "Entity": minimal_entity_in_environment,
+    "Basic_event_element": minimal_basic_event_element_in_environment,
+    "Operation": minimal_operation_in_environment,
+    "Operation_variable": minimal_operation_variable_in_environment,
+    "Capability": minimal_capability_in_environment,
+    "Concept_description": minimal_concept_description_in_environment,
+    "Reference": minimal_reference_in_environment,
+    "Key": minimal_key_in_environment,
+    "Lang_string_name_type": minimal_lang_string_name_type_in_environment,
+    "Lang_string_text_type": minimal_lang_string_text_type_in_environment,
+    "Embedded_data_specification": minimal_embedded_data_specification_in_environment,
+    "Level_type": minimal_level_type_in_environment,
+    "Value_reference_pair": minimal_value_reference_pair_in_environment,
+    "Value_list": minimal_value_list_in_environment,
+    "Lang_string_preferred_name_type_IEC_61360": minimal_lang_string_preferred_name_type_iec_61360_in_environment,
+    "Lang_string_short_name_type_IEC_61360": minimal_lang_string_short_name_type_iec_61360_in_environment,
+    "Lang_string_definition_type_IEC_61360": minimal_lang_string_definition_type_iec_61360_in_environment,
+    "Data_specification_IEC_61360": minimal_data_specification_iec_61360_in_environment,
 }
 
 
 def minimal_in_environment(
-    class_name: str
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.Class, 
-    List[Union[str, int]]
-]:
+    class_name: str,
+) -> Tuple[aas_types.Environment, aas_types.Class, List[Union[str, int]]]:
     """
     Generate a minimal instance wrapped in an Environment based on ``class_name``.
 
@@ -3221,9 +1993,7 @@ def minimal_in_environment(
 
 
 def maximal_extension_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Extension, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Extension, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3234,15 +2004,11 @@ def maximal_extension_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _extension_in_environment(
-        creation_function=creation.maximal_extension
-    )
+    return _extension_in_environment(creation_function=creation.maximal_extension)
 
 
 def maximal_administrative_information_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.AdministrativeInformation, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.AdministrativeInformation, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3259,9 +2025,7 @@ def maximal_administrative_information_in_environment() -> Tuple[
 
 
 def maximal_qualifier_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Qualifier, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Qualifier, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3272,15 +2036,11 @@ def maximal_qualifier_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _qualifier_in_environment(
-        creation_function=creation.maximal_qualifier
-    )
+    return _qualifier_in_environment(creation_function=creation.maximal_qualifier)
 
 
 def maximal_asset_administration_shell_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.AssetAdministrationShell, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.AssetAdministrationShell, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3297,9 +2057,7 @@ def maximal_asset_administration_shell_in_environment() -> Tuple[
 
 
 def maximal_asset_information_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.AssetInformation, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.AssetInformation, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3316,9 +2074,7 @@ def maximal_asset_information_in_environment() -> Tuple[
 
 
 def maximal_resource_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Resource, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Resource, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3329,15 +2085,11 @@ def maximal_resource_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _resource_in_environment(
-        creation_function=creation.maximal_resource
-    )
+    return _resource_in_environment(creation_function=creation.maximal_resource)
 
 
 def maximal_specific_asset_id_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.SpecificAssetID, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.SpecificAssetID, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3354,9 +2106,7 @@ def maximal_specific_asset_id_in_environment() -> Tuple[
 
 
 def maximal_submodel_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Submodel, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Submodel, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3367,15 +2117,11 @@ def maximal_submodel_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _submodel_in_environment(
-        creation_function=creation.maximal_submodel
-    )
+    return _submodel_in_environment(creation_function=creation.maximal_submodel)
 
 
 def maximal_relationship_element_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.RelationshipElement, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.RelationshipElement, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3392,9 +2138,7 @@ def maximal_relationship_element_in_environment() -> Tuple[
 
 
 def maximal_submodel_element_list_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.SubmodelElementList, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.SubmodelElementList, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3411,9 +2155,7 @@ def maximal_submodel_element_list_in_environment() -> Tuple[
 
 
 def maximal_submodel_element_collection_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.SubmodelElementCollection, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.SubmodelElementCollection, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3430,9 +2172,7 @@ def maximal_submodel_element_collection_in_environment() -> Tuple[
 
 
 def maximal_property_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Property, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Property, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3443,15 +2183,11 @@ def maximal_property_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _property_in_environment(
-        creation_function=creation.maximal_property
-    )
+    return _property_in_environment(creation_function=creation.maximal_property)
 
 
 def maximal_multi_language_property_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.MultiLanguageProperty, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.MultiLanguageProperty, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3468,9 +2204,7 @@ def maximal_multi_language_property_in_environment() -> Tuple[
 
 
 def maximal_range_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Range, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Range, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3481,15 +2215,11 @@ def maximal_range_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _range_in_environment(
-        creation_function=creation.maximal_range
-    )
+    return _range_in_environment(creation_function=creation.maximal_range)
 
 
 def maximal_reference_element_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.ReferenceElement, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.ReferenceElement, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3506,9 +2236,7 @@ def maximal_reference_element_in_environment() -> Tuple[
 
 
 def maximal_blob_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Blob, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Blob, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3519,15 +2247,11 @@ def maximal_blob_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _blob_in_environment(
-        creation_function=creation.maximal_blob
-    )
+    return _blob_in_environment(creation_function=creation.maximal_blob)
 
 
 def maximal_file_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.File, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.File, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3538,15 +2262,11 @@ def maximal_file_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _file_in_environment(
-        creation_function=creation.maximal_file
-    )
+    return _file_in_environment(creation_function=creation.maximal_file)
 
 
 def maximal_annotated_relationship_element_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.AnnotatedRelationshipElement, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.AnnotatedRelationshipElement, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3563,9 +2283,7 @@ def maximal_annotated_relationship_element_in_environment() -> Tuple[
 
 
 def maximal_entity_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Entity, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Entity, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3576,15 +2294,11 @@ def maximal_entity_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _entity_in_environment(
-        creation_function=creation.maximal_entity
-    )
+    return _entity_in_environment(creation_function=creation.maximal_entity)
 
 
 def maximal_basic_event_element_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.BasicEventElement, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.BasicEventElement, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3601,9 +2315,7 @@ def maximal_basic_event_element_in_environment() -> Tuple[
 
 
 def maximal_operation_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Operation, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Operation, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3614,15 +2326,11 @@ def maximal_operation_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _operation_in_environment(
-        creation_function=creation.maximal_operation
-    )
+    return _operation_in_environment(creation_function=creation.maximal_operation)
 
 
 def maximal_operation_variable_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.OperationVariable, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.OperationVariable, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3639,9 +2347,7 @@ def maximal_operation_variable_in_environment() -> Tuple[
 
 
 def maximal_capability_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Capability, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Capability, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3652,15 +2358,11 @@ def maximal_capability_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _capability_in_environment(
-        creation_function=creation.maximal_capability
-    )
+    return _capability_in_environment(creation_function=creation.maximal_capability)
 
 
 def maximal_concept_description_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.ConceptDescription, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.ConceptDescription, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3677,9 +2379,7 @@ def maximal_concept_description_in_environment() -> Tuple[
 
 
 def maximal_reference_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Reference, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Reference, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3690,15 +2390,11 @@ def maximal_reference_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _reference_in_environment(
-        creation_function=creation.maximal_reference
-    )
+    return _reference_in_environment(creation_function=creation.maximal_reference)
 
 
 def maximal_key_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.Key, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.Key, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3709,15 +2405,11 @@ def maximal_key_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _key_in_environment(
-        creation_function=creation.maximal_key
-    )
+    return _key_in_environment(creation_function=creation.maximal_key)
 
 
 def maximal_lang_string_name_type_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.LangStringNameType, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.LangStringNameType, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3734,9 +2426,7 @@ def maximal_lang_string_name_type_in_environment() -> Tuple[
 
 
 def maximal_lang_string_text_type_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.LangStringTextType, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.LangStringTextType, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3753,9 +2443,7 @@ def maximal_lang_string_text_type_in_environment() -> Tuple[
 
 
 def maximal_embedded_data_specification_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.EmbeddedDataSpecification, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.EmbeddedDataSpecification, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3772,9 +2460,7 @@ def maximal_embedded_data_specification_in_environment() -> Tuple[
 
 
 def maximal_level_type_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.LevelType, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.LevelType, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3785,15 +2471,11 @@ def maximal_level_type_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _level_type_in_environment(
-        creation_function=creation.maximal_level_type
-    )
+    return _level_type_in_environment(creation_function=creation.maximal_level_type)
 
 
 def maximal_value_reference_pair_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.ValueReferencePair, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.ValueReferencePair, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3810,9 +2492,7 @@ def maximal_value_reference_pair_in_environment() -> Tuple[
 
 
 def maximal_value_list_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.ValueList, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.ValueList, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3823,15 +2503,13 @@ def maximal_value_list_in_environment() -> Tuple[
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    return _value_list_in_environment(
-        creation_function=creation.maximal_value_list
-    )
+    return _value_list_in_environment(creation_function=creation.maximal_value_list)
 
 
 def maximal_lang_string_preferred_name_type_iec_61360_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.LangStringPreferredNameTypeIEC61360, 
-    List[Union[str, int]]
+    aas_types.Environment,
+    aas_types.LangStringPreferredNameTypeIEC61360,
+    List[Union[str, int]],
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3848,9 +2526,9 @@ def maximal_lang_string_preferred_name_type_iec_61360_in_environment() -> Tuple[
 
 
 def maximal_lang_string_short_name_type_iec_61360_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.LangStringShortNameTypeIEC61360, 
-    List[Union[str, int]]
+    aas_types.Environment,
+    aas_types.LangStringShortNameTypeIEC61360,
+    List[Union[str, int]],
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3867,9 +2545,9 @@ def maximal_lang_string_short_name_type_iec_61360_in_environment() -> Tuple[
 
 
 def maximal_lang_string_definition_type_iec_61360_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.LangStringDefinitionTypeIEC61360, 
-    List[Union[str, int]]
+    aas_types.Environment,
+    aas_types.LangStringDefinitionTypeIEC61360,
+    List[Union[str, int]],
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3886,9 +2564,7 @@ def maximal_lang_string_definition_type_iec_61360_in_environment() -> Tuple[
 
 
 def maximal_data_specification_iec_61360_in_environment() -> Tuple[
-    aas_types.Environment, 
-    aas_types.DataSpecificationIEC61360, 
-    List[Union[str, int]]
+    aas_types.Environment, aas_types.DataSpecificationIEC61360, List[Union[str, int]]
 ]:
     """
     Generate a maximal instance wrapped in an Environment.
@@ -3905,88 +2581,48 @@ def maximal_data_specification_iec_61360_in_environment() -> Tuple[
 
 
 _CLASS_NAME_TO_MAXIMAL_IN_ENVIRONMENT = {
-    'Extension':
-    maximal_extension_in_environment,
-    'Administrative_information':
-    maximal_administrative_information_in_environment,
-    'Qualifier':
-    maximal_qualifier_in_environment,
-    'Asset_administration_shell':
-    maximal_asset_administration_shell_in_environment,
-    'Asset_information':
-    maximal_asset_information_in_environment,
-    'Resource':
-    maximal_resource_in_environment,
-    'Specific_asset_ID':
-    maximal_specific_asset_id_in_environment,
-    'Submodel':
-    maximal_submodel_in_environment,
-    'Relationship_element':
-    maximal_relationship_element_in_environment,
-    'Submodel_element_list':
-    maximal_submodel_element_list_in_environment,
-    'Submodel_element_collection':
-    maximal_submodel_element_collection_in_environment,
-    'Property':
-    maximal_property_in_environment,
-    'Multi_language_property':
-    maximal_multi_language_property_in_environment,
-    'Range':
-    maximal_range_in_environment,
-    'Reference_element':
-    maximal_reference_element_in_environment,
-    'Blob':
-    maximal_blob_in_environment,
-    'File':
-    maximal_file_in_environment,
-    'Annotated_relationship_element':
-    maximal_annotated_relationship_element_in_environment,
-    'Entity':
-    maximal_entity_in_environment,
-    'Basic_event_element':
-    maximal_basic_event_element_in_environment,
-    'Operation':
-    maximal_operation_in_environment,
-    'Operation_variable':
-    maximal_operation_variable_in_environment,
-    'Capability':
-    maximal_capability_in_environment,
-    'Concept_description':
-    maximal_concept_description_in_environment,
-    'Reference':
-    maximal_reference_in_environment,
-    'Key':
-    maximal_key_in_environment,
-    'Lang_string_name_type':
-    maximal_lang_string_name_type_in_environment,
-    'Lang_string_text_type':
-    maximal_lang_string_text_type_in_environment,
-    'Embedded_data_specification':
-    maximal_embedded_data_specification_in_environment,
-    'Level_type':
-    maximal_level_type_in_environment,
-    'Value_reference_pair':
-    maximal_value_reference_pair_in_environment,
-    'Value_list':
-    maximal_value_list_in_environment,
-    'Lang_string_preferred_name_type_IEC_61360':
-    maximal_lang_string_preferred_name_type_iec_61360_in_environment,
-    'Lang_string_short_name_type_IEC_61360':
-    maximal_lang_string_short_name_type_iec_61360_in_environment,
-    'Lang_string_definition_type_IEC_61360':
-    maximal_lang_string_definition_type_iec_61360_in_environment,
-    'Data_specification_IEC_61360':
-    maximal_data_specification_iec_61360_in_environment
+    "Extension": maximal_extension_in_environment,
+    "Administrative_information": maximal_administrative_information_in_environment,
+    "Qualifier": maximal_qualifier_in_environment,
+    "Asset_administration_shell": maximal_asset_administration_shell_in_environment,
+    "Asset_information": maximal_asset_information_in_environment,
+    "Resource": maximal_resource_in_environment,
+    "Specific_asset_ID": maximal_specific_asset_id_in_environment,
+    "Submodel": maximal_submodel_in_environment,
+    "Relationship_element": maximal_relationship_element_in_environment,
+    "Submodel_element_list": maximal_submodel_element_list_in_environment,
+    "Submodel_element_collection": maximal_submodel_element_collection_in_environment,
+    "Property": maximal_property_in_environment,
+    "Multi_language_property": maximal_multi_language_property_in_environment,
+    "Range": maximal_range_in_environment,
+    "Reference_element": maximal_reference_element_in_environment,
+    "Blob": maximal_blob_in_environment,
+    "File": maximal_file_in_environment,
+    "Annotated_relationship_element": maximal_annotated_relationship_element_in_environment,
+    "Entity": maximal_entity_in_environment,
+    "Basic_event_element": maximal_basic_event_element_in_environment,
+    "Operation": maximal_operation_in_environment,
+    "Operation_variable": maximal_operation_variable_in_environment,
+    "Capability": maximal_capability_in_environment,
+    "Concept_description": maximal_concept_description_in_environment,
+    "Reference": maximal_reference_in_environment,
+    "Key": maximal_key_in_environment,
+    "Lang_string_name_type": maximal_lang_string_name_type_in_environment,
+    "Lang_string_text_type": maximal_lang_string_text_type_in_environment,
+    "Embedded_data_specification": maximal_embedded_data_specification_in_environment,
+    "Level_type": maximal_level_type_in_environment,
+    "Value_reference_pair": maximal_value_reference_pair_in_environment,
+    "Value_list": maximal_value_list_in_environment,
+    "Lang_string_preferred_name_type_IEC_61360": maximal_lang_string_preferred_name_type_iec_61360_in_environment,
+    "Lang_string_short_name_type_IEC_61360": maximal_lang_string_short_name_type_iec_61360_in_environment,
+    "Lang_string_definition_type_IEC_61360": maximal_lang_string_definition_type_iec_61360_in_environment,
+    "Data_specification_IEC_61360": maximal_data_specification_iec_61360_in_environment,
 }
 
 
 def maximal_in_environment(
-    class_name: str
-) -> Tuple[
-    aas_types.Environment, 
-    aas_types.Class, 
-    List[Union[str, int]]
-]:
+    class_name: str,
+) -> Tuple[aas_types.Environment, aas_types.Class, List[Union[str, int]]]:
     """
     Generate a maximal instance wrapped in an Environment based on ``class_name``.
 
@@ -4004,6 +2640,11 @@ def maximal_in_environment(
             f"and *not* the Python class names."
         )
     return dispatch()
+
+
+def lives_in_environment(class_name: str) -> bool:
+    """Check if the instance of the class lives in the Environment."""
+    return class_name in _CLASS_NAME_TO_MINIMAL_IN_ENVIRONMENT
 
 
 # Automatically generated by dev_scripts/codegen/generate_wrapping.py.

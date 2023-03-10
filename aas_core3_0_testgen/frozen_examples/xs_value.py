@@ -1359,17 +1359,12 @@ BY_VALUE_TYPE: Mapping[str, Examples] = collections.OrderedDict(
     ],
 )
 
+
 def _assert_all_covered_and_not_more() -> None:
     """Assert that we covered all the XSD data types."""
-    covered = {
-        key
-        for key in BY_VALUE_TYPE.keys()
-    }
+    covered = {key for key in BY_VALUE_TYPE.keys()}
 
-    literal_values = {
-        literal.value
-        for literal in aas_core_meta.v3.Data_type_def_XSD
-    }
+    literal_values = {literal.value for literal in aas_core_meta.v3.Data_type_def_XSD}
 
     not_covered = sorted(literal_values.difference(covered))
     surplus = sorted(covered.difference(literal_values))

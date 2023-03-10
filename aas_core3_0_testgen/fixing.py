@@ -6,13 +6,12 @@ Fix instances in place to conform to the meta-model constraints.
     We fix instances on the best-effort basis. It might be that something goes wrong.
     Please always verify the results.
 """
-from typing import TypeVar, List, Type, Generic, Protocol, Sequence, Union
+from typing import TypeVar, List, Type, Sequence, Union
 
-import typing_extensions
-
-import aas_core3.types as aas_types
 import aas_core3.constants as aas_constants
+import aas_core3.types as aas_types
 import aas_core3.verification as aas_verification
+import typing_extensions
 
 from aas_core3_0_testgen import common, primitiving
 from aas_core3_0_testgen.codegened import abstract_fixing
@@ -21,9 +20,9 @@ LangStringT = TypeVar("LangStringT", bound=aas_types.AbstractLangString)
 
 
 def _extend_lang_string_set_to_have_an_entry_at_least_in_english(
-        path_hash: common.CanHash,
-        lang_string_set: List[LangStringT],
-        lang_string_class: Type[LangStringT]
+    path_hash: common.CanHash,
+    lang_string_set: List[LangStringT],
+    lang_string_class: Type[LangStringT],
 ) -> None:
     """Extend ``lang_string_set`` to contain at least one entry in English."""
     has_english = False
@@ -34,22 +33,17 @@ def _extend_lang_string_set_to_have_an_entry_at_least_in_english(
             break
 
     if not has_english:
-        text_path_hash = common.hash_path(
-            path_hash,
-            [len(lang_string_set), "text"]
-        )
+        text_path_hash = common.hash_path(path_hash, [len(lang_string_set), "text"])
 
         lang_string_set.append(
             lang_string_class(
                 language="en-UK",
-                text=f"Something random in English {text_path_hash.hexdigest()[:8]}"
+                text=f"Something random in English {text_path_hash.hexdigest()[:8]}",
             )
         )
 
 
-def generate_url(
-        path_hash: common.CanHash
-) -> str:
+def generate_url(path_hash: common.CanHash) -> str:
     """Generate a semi-random URL based on ``path_hash``."""
     domain = primitiving.choose_value(
         path_hash,
@@ -60,16 +54,14 @@ def generate_url(
             "another-example.com",
             "some-company.com",
             "another-company.com",
-            "yet-another-company.com"
-        ]
+            "yet-another-company.com",
+        ],
     )
 
     return f"https://{domain}/{path_hash.hexdigest()[:8]}"
 
 
-def generate_urn(
-        path_hash: common.CanHash
-) -> str:
+def generate_urn(path_hash: common.CanHash) -> str:
     """Generate a semi-random URL based on ``path_hash``."""
     prefix = primitiving.choose_value(
         path_hash,
@@ -80,8 +72,8 @@ def generate_urn(
             "urn:another-example",
             "urn:some-company",
             "urn:another-company",
-            "urn:yet-another-company"
-        ]
+            "urn:yet-another-company",
+        ],
     )
     number = int(path_hash.hexdigest()[:8], base=16)
     random_id = f"{number % 20:02d}"
@@ -89,37 +81,35 @@ def generate_urn(
     return f"{prefix}{random_id}:{path_hash.hexdigest()[:8]}"
 
 
-def generate_id_short(
-        path_hash: common.CanHash
-) -> str:
+def generate_id_short(path_hash: common.CanHash) -> str:
     """Generate a semi-random ID-short based on ``path_hash``."""
     return f"something{path_hash.hexdigest()[:8]}"
 
 
 def generate_model_reference(
-        path_hash: common.CanHash,
-        expected_type: aas_types.KeyTypes,
+    path_hash: common.CanHash,
+    expected_type: aas_types.KeyTypes,
 ) -> aas_types.Reference:
     """Generate a model reference to something semi-random of ``expected_type``."""
     if expected_type in aas_constants.AAS_IDENTIFIABLES:
         keys = [
             aas_types.Key(
                 type=expected_type,
-                value=generate_urn(common.hash_path(path_hash, ["keys", 0, "value"]))
+                value=generate_urn(common.hash_path(path_hash, ["keys", 0, "value"])),
             )
         ]
     elif expected_type in aas_constants.AAS_SUBMODEL_ELEMENTS_AS_KEYS:
         keys = [
             aas_types.Key(
                 type=aas_types.KeyTypes.SUBMODEL,
-                value=generate_urn(common.hash_path(path_hash, ["keys", 0, "value"]))
+                value=generate_urn(common.hash_path(path_hash, ["keys", 0, "value"])),
             ),
             aas_types.Key(
                 type=expected_type,
                 value=generate_id_short(
                     common.hash_path(path_hash, ["keys", 1, "value"])
-                )
-            )
+                ),
+            ),
         ]
     else:
         raise NotImplementedError(
@@ -128,10 +118,7 @@ def generate_model_reference(
             f"but this has obviously changed. Please contact the developers."
         )
 
-    return aas_types.Reference(
-        type=aas_types.ReferenceTypes.MODEL_REFERENCE,
-        keys=keys
-    )
+    return aas_types.Reference(type=aas_types.ReferenceTypes.MODEL_REFERENCE, keys=keys)
 
 
 def generate_external_reference(path_hash: common.CanHash) -> aas_types.Reference:
@@ -139,30 +126,27 @@ def generate_external_reference(path_hash: common.CanHash) -> aas_types.Referenc
     keys = [
         aas_types.Key(
             type=aas_types.KeyTypes.GLOBAL_REFERENCE,
-            value=generate_urn(common.hash_path(path_hash, ["keys", 0, "value"]))
+            value=generate_urn(common.hash_path(path_hash, ["keys", 0, "value"])),
         )
     ]
 
     return aas_types.Reference(
-        type=aas_types.ReferenceTypes.EXTERNAL_REFERENCE,
-        keys=keys
+        type=aas_types.ReferenceTypes.EXTERNAL_REFERENCE, keys=keys
     )
 
 
-class _Handyman(abstract_fixing):
+class _Handyman(abstract_fixing.AbstractHandyman):
     """Fix the instances recursively on the best-effort basis."""
 
     @typing_extensions.override
     def _fix_basic_event_element(
-            self,
-            that: aas_types.BasicEventElement,
-            path_hash: common.CanHash
+        self, that: aas_types.BasicEventElement, path_hash: common.CanHash
     ) -> None:
         # Fix that the observed is a proper model reference
         if that.observed is not None:
             that.observed = generate_model_reference(
                 common.hash_path(path_hash, "observed"),
-                expected_type=aas_types.KeyTypes.REFERABLE
+                expected_type=aas_types.KeyTypes.REFERABLE,
             )
 
         # Override that the direction is output so that we can always set
@@ -174,22 +158,20 @@ class _Handyman(abstract_fixing):
         if that.message_broker is not None:
             that.message_broker = generate_model_reference(
                 common.hash_path(path_hash, "message_broker"),
-                expected_type=aas_types.KeyTypes.REFERABLE
+                expected_type=aas_types.KeyTypes.REFERABLE,
             )
-    # TODO (mristin, 2023-03-10): continue here, finish the loop
-    # TODO (mristin, 2023-03-10): fix this once the loop is running.
+
+    # TODO (mristin, 2023-03-10): continue here, make sure minimal and maximal work.
 
 
 def assert_instance_at_path_in_environment(
-        environment: aas_types.Environment,
-        instance: aas_types.Class,
-        path: Sequence[Union[str, int]]
+    environment: aas_types.Environment,
+    instance: aas_types.Class,
+    path: Sequence[Union[str, int]],
 ) -> None:
     """Assert that the ``instance`` still resides in ``environment`` at ``path``."""
     something, error = common.dereference_instance(
-        container=environment,
-        path=path,
-        expected_type=aas_types.Class
+        container=environment, path=path, expected_type=aas_types.Class
     )
 
     if error is not None:
@@ -223,13 +205,10 @@ def fix(root: aas_types.Class) -> None:
 
     errors = list(aas_verification.verify(root))
     if len(errors) > 0:
-        errors_joined = "\n".join(
-            f"* {error.path}: {error.cause}"
-            for error in errors
-        )
+        errors_joined = "\n".join(f"* {error.path}: {error.cause}" for error in errors)
 
         raise AssertionError(
-            f"Expected no errors after fixing the self-contained instance {root}, "
+            f"Expected no errors after fixing the instance {root}, "
             f"but got errors:\n"
             f"{errors_joined}"
         )

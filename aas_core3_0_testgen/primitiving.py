@@ -5,9 +5,7 @@ from typing import Optional, TypeVar, Sequence, List
 from icontract import ensure
 
 from aas_core3_0_testgen import common
-from aas_core3_0_testgen.frozen_examples import (
-    pattern as frozen_examples_pattern
-)
+from aas_core3_0_testgen.frozen_examples import pattern as frozen_examples_pattern
 
 
 def generate_bool(path_hash: common.CanHash) -> bool:
@@ -23,7 +21,7 @@ def generate_int(path_hash: common.CanHash) -> int:
 
 def generate_int64(path_hash: common.CanHash) -> int:
     """Return the hexadecimal digest parsed as integer."""
-    return int(path_hash.hexdigest()[:8], base=16) % (2 ** 63 - 1)
+    return int(path_hash.hexdigest()[:8], base=16) % (2**63 - 1)
 
 
 def generate_float(path_hash: common.CanHash) -> float:
@@ -38,10 +36,7 @@ def generate_float(path_hash: common.CanHash) -> float:
     len(result) == length
 )
 # fmt: on
-def generate_str_of_exact_len(
-    hexdigest: str,
-    length: int
-) -> str:
+def generate_str_of_exact_len(hexdigest: str, length: int) -> str:
     """Generate a semi-random string of the exact given ``length``."""
     if length < 12:
         # NOTE (mristin, 2023-03-08):
@@ -51,7 +46,7 @@ def generate_str_of_exact_len(
     if length <= 10 + len(hexdigest):
         len_hexdigest_part = length - 10
         return f"something_{hexdigest[:len_hexdigest_part]}"
-    
+
     prefix = f"something_{hexdigest}"
 
     ruler = "1234567890"
@@ -59,12 +54,7 @@ def generate_str_of_exact_len(
     tens = length // 10
     remainder = length % 10
     return "".join(
-        [
-            prefix,
-            ruler[len(prefix): 10],
-            ruler * (tens - 1),
-            ruler[:remainder]
-        ]
+        [prefix, ruler[len(prefix) : 10], ruler * (tens - 1), ruler[:remainder]]
     )
 
 
@@ -81,9 +71,9 @@ def generate_str_of_exact_len(
 )
 # fmt: on
 def generate_str(
-        path_hash: common.CanHash,
-        min_len: Optional[int] = None,
-        max_len: Optional[int] = None
+    path_hash: common.CanHash,
+    min_len: Optional[int] = None,
+    max_len: Optional[int] = None,
 ) -> str:
     """Transform the digest to a semi-meaningful string value."""
     hexdigest = path_hash.hexdigest()
@@ -92,19 +82,19 @@ def generate_str(
 
     if min_len is None and max_len is None:
         return default
-    
+
     elif min_len is not None and max_len is None:
         if min_len <= len(default):
             return default
 
         return generate_str_of_exact_len(hexdigest, min_len)
-            
+
     elif min_len is None and max_len is not None:
         if len(default) < max_len:
             return default
 
         return generate_str_of_exact_len(hexdigest, max_len)
-    
+
     elif min_len is not None and max_len is not None:
         if min_len <= len(default) <= max_len:
             return default
@@ -122,10 +112,7 @@ def generate_str(
     or (len(result) == count)
 )
 # fmt: on
-def generate_str_satisfying_pattern(
-        path_hash: common.CanHash,
-        pattern: str
-) -> str:
+def generate_str_satisfying_pattern(path_hash: common.CanHash, pattern: str) -> str:
     """Transform the digest to one of the pattern examples."""
     examples = frozen_examples_pattern.BY_PATTERN.get(pattern, None)
     if examples is None:
@@ -149,9 +136,9 @@ def generate_str_satisfying_pattern(
 )
 # fmt: on
 def generate_bytes(
-        path_hash: common.CanHash,
-        min_len: Optional[int] = None,
-        max_len: Optional[int] = None
+    path_hash: common.CanHash,
+    min_len: Optional[int] = None,
+    max_len: Optional[int] = None,
 ) -> bytes:
     """Transform the digest to a meaningless byte array."""
     digest = path_hash.digest()
@@ -170,10 +157,7 @@ def generate_bytes(
         count = min_len
     elif min_len is None and max_len is not None:
         count = min(max_len, default_len)
-    elif (
-            min_len is not None
-            and max_len is not None
-    ):
+    elif min_len is not None and max_len is not None:
         count = min_len
     else:
         raise AssertionError("Unhandled case")
@@ -213,19 +197,14 @@ def generate_bytes(
 T = TypeVar("T")
 
 
-def choose_value(
-        path_hash: common.CanHash,
-        choice: Sequence[T]
-) -> T:
+def choose_value(path_hash: common.CanHash, choice: Sequence[T]) -> T:
     """Choose the value among ``choice`` based on the ``path_hash``."""
     number = int(path_hash.hexdigest()[:8], base=16)
 
     return choice[number % len(choice)]
 
 
-def generate_time_of_day(
-        path_hash: common.CanHash
-) -> str:
+def generate_time_of_day(path_hash: common.CanHash) -> str:
     """Generate a semi-random time of the day based on the ``path_hash``."""
     number = int(path_hash.hexdigest()[:8], base=16)
 

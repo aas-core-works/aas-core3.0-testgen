@@ -14,9 +14,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
     """Fix instances recursively on best-effort basis."""
 
     def _fix_extension(
-        self,
-        that: aas_types.Extension,
-        path_hash: common.CanHash
+        self, that: aas_types.Extension, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -28,9 +26,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_administrative_information(
-        self,
-        that: aas_types.AdministrativeInformation,
-        path_hash: common.CanHash
+        self, that: aas_types.AdministrativeInformation, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -42,9 +38,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_qualifier(
-        self,
-        that: aas_types.Qualifier,
-        path_hash: common.CanHash
+        self, that: aas_types.Qualifier, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -56,9 +50,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_asset_administration_shell(
-        self,
-        that: aas_types.AssetAdministrationShell,
-        path_hash: common.CanHash
+        self, that: aas_types.AssetAdministrationShell, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -70,9 +62,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_asset_information(
-        self,
-        that: aas_types.AssetInformation,
-        path_hash: common.CanHash
+        self, that: aas_types.AssetInformation, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -84,9 +74,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_resource(
-        self,
-        that: aas_types.Resource,
-        path_hash: common.CanHash
+        self, that: aas_types.Resource, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -98,9 +86,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_specific_asset_id(
-        self,
-        that: aas_types.SpecificAssetID,
-        path_hash: common.CanHash
+        self, that: aas_types.SpecificAssetID, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -112,9 +98,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_submodel(
-        self,
-        that: aas_types.Submodel,
-        path_hash: common.CanHash
+        self, that: aas_types.Submodel, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -126,9 +110,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_relationship_element(
-        self,
-        that: aas_types.RelationshipElement,
-        path_hash: common.CanHash
+        self, that: aas_types.RelationshipElement, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -140,9 +122,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_submodel_element_list(
-        self,
-        that: aas_types.SubmodelElementList,
-        path_hash: common.CanHash
+        self, that: aas_types.SubmodelElementList, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -154,9 +134,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_submodel_element_collection(
-        self,
-        that: aas_types.SubmodelElementCollection,
-        path_hash: common.CanHash
+        self, that: aas_types.SubmodelElementCollection, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -168,9 +146,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_property(
-        self,
-        that: aas_types.Property,
-        path_hash: common.CanHash
+        self, that: aas_types.Property, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -182,9 +158,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_multi_language_property(
-        self,
-        that: aas_types.MultiLanguageProperty,
-        path_hash: common.CanHash
+        self, that: aas_types.MultiLanguageProperty, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -195,11 +169,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         # Intentionally empty, to be overridden
         return
 
-    def _fix_range(
-        self,
-        that: aas_types.Range,
-        path_hash: common.CanHash
-    ) -> None:
+    def _fix_range(self, that: aas_types.Range, path_hash: common.CanHash) -> None:
         """
         Fix ``that`` instance in-place.
 
@@ -210,9 +180,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_reference_element(
-        self,
-        that: aas_types.ReferenceElement,
-        path_hash: common.CanHash
+        self, that: aas_types.ReferenceElement, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -223,11 +191,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         # Intentionally empty, to be overridden
         return
 
-    def _fix_blob(
-        self,
-        that: aas_types.Blob,
-        path_hash: common.CanHash
-    ) -> None:
+    def _fix_blob(self, that: aas_types.Blob, path_hash: common.CanHash) -> None:
         """
         Fix ``that`` instance in-place.
 
@@ -237,11 +201,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         # Intentionally empty, to be overridden
         return
 
-    def _fix_file(
-        self,
-        that: aas_types.File,
-        path_hash: common.CanHash
-    ) -> None:
+    def _fix_file(self, that: aas_types.File, path_hash: common.CanHash) -> None:
         """
         Fix ``that`` instance in-place.
 
@@ -252,9 +212,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_annotated_relationship_element(
-        self,
-        that: aas_types.AnnotatedRelationshipElement,
-        path_hash: common.CanHash
+        self, that: aas_types.AnnotatedRelationshipElement, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -265,11 +223,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         # Intentionally empty, to be overridden
         return
 
-    def _fix_entity(
-        self,
-        that: aas_types.Entity,
-        path_hash: common.CanHash
-    ) -> None:
+    def _fix_entity(self, that: aas_types.Entity, path_hash: common.CanHash) -> None:
         """
         Fix ``that`` instance in-place.
 
@@ -280,9 +234,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_event_payload(
-        self,
-        that: aas_types.EventPayload,
-        path_hash: common.CanHash
+        self, that: aas_types.EventPayload, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -294,9 +246,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_basic_event_element(
-        self,
-        that: aas_types.BasicEventElement,
-        path_hash: common.CanHash
+        self, that: aas_types.BasicEventElement, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -308,9 +258,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_operation(
-        self,
-        that: aas_types.Operation,
-        path_hash: common.CanHash
+        self, that: aas_types.Operation, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -322,9 +270,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_operation_variable(
-        self,
-        that: aas_types.OperationVariable,
-        path_hash: common.CanHash
+        self, that: aas_types.OperationVariable, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -336,9 +282,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_capability(
-        self,
-        that: aas_types.Capability,
-        path_hash: common.CanHash
+        self, that: aas_types.Capability, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -350,9 +294,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_concept_description(
-        self,
-        that: aas_types.ConceptDescription,
-        path_hash: common.CanHash
+        self, that: aas_types.ConceptDescription, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -364,9 +306,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_reference(
-        self,
-        that: aas_types.Reference,
-        path_hash: common.CanHash
+        self, that: aas_types.Reference, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -377,11 +317,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         # Intentionally empty, to be overridden
         return
 
-    def _fix_key(
-        self,
-        that: aas_types.Key,
-        path_hash: common.CanHash
-    ) -> None:
+    def _fix_key(self, that: aas_types.Key, path_hash: common.CanHash) -> None:
         """
         Fix ``that`` instance in-place.
 
@@ -392,9 +328,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_lang_string_name_type(
-        self,
-        that: aas_types.LangStringNameType,
-        path_hash: common.CanHash
+        self, that: aas_types.LangStringNameType, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -406,9 +340,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_lang_string_text_type(
-        self,
-        that: aas_types.LangStringTextType,
-        path_hash: common.CanHash
+        self, that: aas_types.LangStringTextType, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -420,9 +352,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_environment(
-        self,
-        that: aas_types.Environment,
-        path_hash: common.CanHash
+        self, that: aas_types.Environment, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -434,9 +364,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_embedded_data_specification(
-        self,
-        that: aas_types.EmbeddedDataSpecification,
-        path_hash: common.CanHash
+        self, that: aas_types.EmbeddedDataSpecification, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -448,9 +376,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_level_type(
-        self,
-        that: aas_types.LevelType,
-        path_hash: common.CanHash
+        self, that: aas_types.LevelType, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -462,9 +388,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_value_reference_pair(
-        self,
-        that: aas_types.ValueReferencePair,
-        path_hash: common.CanHash
+        self, that: aas_types.ValueReferencePair, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -476,9 +400,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_value_list(
-        self,
-        that: aas_types.ValueList,
-        path_hash: common.CanHash
+        self, that: aas_types.ValueList, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -492,7 +414,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
     def _fix_lang_string_preferred_name_type_iec_61360(
         self,
         that: aas_types.LangStringPreferredNameTypeIEC61360,
-        path_hash: common.CanHash
+        path_hash: common.CanHash,
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -504,9 +426,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_lang_string_short_name_type_iec_61360(
-        self,
-        that: aas_types.LangStringShortNameTypeIEC61360,
-        path_hash: common.CanHash
+        self, that: aas_types.LangStringShortNameTypeIEC61360, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -520,7 +440,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
     def _fix_lang_string_definition_type_iec_61360(
         self,
         that: aas_types.LangStringDefinitionTypeIEC61360,
-        path_hash: common.CanHash
+        path_hash: common.CanHash,
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -532,9 +452,7 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def _fix_data_specification_iec_61360(
-        self,
-        that: aas_types.DataSpecificationIEC61360,
-        path_hash: common.CanHash
+        self, that: aas_types.DataSpecificationIEC61360, path_hash: common.CanHash
     ) -> None:
         """
         Fix ``that`` instance in-place.
@@ -546,2440 +464,1241 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         return
 
     def visit_extension_with_context(
-        self,
-        that: aas_types.Extension,
-        context: common.CanHash
+        self, that: aas_types.Extension, context: common.CanHash
     ) -> None:
         self._fix_extension(that, context)
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.refers_to is not None:
-            hash_for_refers_to = common.hash_path(
-                context,
-                'refers_to'
-            ) 
+            hash_for_refers_to = common.hash_path(context, "refers_to")
             for i, item in enumerate(that.refers_to):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_refers_to,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_refers_to, i))
 
     def visit_administrative_information_with_context(
-        self,
-        that: aas_types.AdministrativeInformation,
-        context: common.CanHash
+        self, that: aas_types.AdministrativeInformation, context: common.CanHash
     ) -> None:
         self._fix_administrative_information(that, context)
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
         if that.creator is not None:
-            self.visit_with_context(
-                that.creator,
-                common.hash_path(
-                    context,
-                    'creator'
-                )
-            )
+            self.visit_with_context(that.creator, common.hash_path(context, "creator"))
 
     def visit_qualifier_with_context(
-        self,
-        that: aas_types.Qualifier,
-        context: common.CanHash
+        self, that: aas_types.Qualifier, context: common.CanHash
     ) -> None:
         self._fix_qualifier(that, context)
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.value_id is not None:
             self.visit_with_context(
-                that.value_id,
-                common.hash_path(
-                    context,
-                    'value_id'
-                )
+                that.value_id, common.hash_path(context, "value_id")
             )
 
     def visit_asset_administration_shell_with_context(
-        self,
-        that: aas_types.AssetAdministrationShell,
-        context: common.CanHash
+        self, that: aas_types.AssetAdministrationShell, context: common.CanHash
     ) -> None:
         self._fix_asset_administration_shell(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.administration is not None:
             self.visit_with_context(
-                that.administration,
-                common.hash_path(
-                    context,
-                    'administration'
-                )
+                that.administration, common.hash_path(context, "administration")
             )
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
         if that.derived_from is not None:
             self.visit_with_context(
-                that.derived_from,
-                common.hash_path(
-                    context,
-                    'derived_from'
-                )
+                that.derived_from, common.hash_path(context, "derived_from")
             )
 
         self.visit_with_context(
-            that.asset_information,
-            common.hash_path(
-                context,
-                'asset_information'
-            )
+            that.asset_information, common.hash_path(context, "asset_information")
         )
 
         if that.submodels is not None:
-            hash_for_submodels = common.hash_path(
-                context,
-                'submodels'
-            ) 
+            hash_for_submodels = common.hash_path(context, "submodels")
             for i, item in enumerate(that.submodels):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_submodels,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_submodels, i))
 
     def visit_asset_information_with_context(
-        self,
-        that: aas_types.AssetInformation,
-        context: common.CanHash
+        self, that: aas_types.AssetInformation, context: common.CanHash
     ) -> None:
         self._fix_asset_information(that, context)
 
         if that.specific_asset_ids is not None:
             hash_for_specific_asset_ids = common.hash_path(
-                context,
-                'specific_asset_ids'
-            ) 
+                context, "specific_asset_ids"
+            )
             for i, item in enumerate(that.specific_asset_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_specific_asset_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_specific_asset_ids, i)
                 )
 
         if that.default_thumbnail is not None:
             self.visit_with_context(
-                that.default_thumbnail,
-                common.hash_path(
-                    context,
-                    'default_thumbnail'
-                )
+                that.default_thumbnail, common.hash_path(context, "default_thumbnail")
             )
 
     def visit_resource_with_context(
-        self,
-        that: aas_types.Resource,
-        context: common.CanHash
+        self, that: aas_types.Resource, context: common.CanHash
     ) -> None:
         self._fix_resource(that, context)
 
     def visit_specific_asset_id_with_context(
-        self,
-        that: aas_types.SpecificAssetID,
-        context: common.CanHash
+        self, that: aas_types.SpecificAssetID, context: common.CanHash
     ) -> None:
         self._fix_specific_asset_id(that, context)
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.external_subject_id is not None:
             self.visit_with_context(
                 that.external_subject_id,
-                common.hash_path(
-                    context,
-                    'external_subject_id'
-                )
+                common.hash_path(context, "external_subject_id"),
             )
 
     def visit_submodel_with_context(
-        self,
-        that: aas_types.Submodel,
-        context: common.CanHash
+        self, that: aas_types.Submodel, context: common.CanHash
     ) -> None:
         self._fix_submodel(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.administration is not None:
             self.visit_with_context(
-                that.administration,
-                common.hash_path(
-                    context,
-                    'administration'
-                )
+                that.administration, common.hash_path(context, "administration")
             )
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.qualifiers is not None:
-            hash_for_qualifiers = common.hash_path(
-                context,
-                'qualifiers'
-            ) 
+            hash_for_qualifiers = common.hash_path(context, "qualifiers")
             for i, item in enumerate(that.qualifiers):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_qualifiers,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_qualifiers, i))
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
         if that.submodel_elements is not None:
-            hash_for_submodel_elements = common.hash_path(
-                context,
-                'submodel_elements'
-            ) 
+            hash_for_submodel_elements = common.hash_path(context, "submodel_elements")
             for i, item in enumerate(that.submodel_elements):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_submodel_elements,
-                        i
-                    )
+                    item, common.hash_path(hash_for_submodel_elements, i)
                 )
 
     def visit_relationship_element_with_context(
-        self,
-        that: aas_types.RelationshipElement,
-        context: common.CanHash
+        self, that: aas_types.RelationshipElement, context: common.CanHash
     ) -> None:
         self._fix_relationship_element(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.qualifiers is not None:
-            hash_for_qualifiers = common.hash_path(
-                context,
-                'qualifiers'
-            ) 
+            hash_for_qualifiers = common.hash_path(context, "qualifiers")
             for i, item in enumerate(that.qualifiers):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_qualifiers,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_qualifiers, i))
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
-        self.visit_with_context(
-            that.first,
-            common.hash_path(
-                context,
-                'first'
-            )
-        )
+        self.visit_with_context(that.first, common.hash_path(context, "first"))
 
-        self.visit_with_context(
-            that.second,
-            common.hash_path(
-                context,
-                'second'
-            )
-        )
+        self.visit_with_context(that.second, common.hash_path(context, "second"))
 
     def visit_submodel_element_list_with_context(
-        self,
-        that: aas_types.SubmodelElementList,
-        context: common.CanHash
+        self, that: aas_types.SubmodelElementList, context: common.CanHash
     ) -> None:
         self._fix_submodel_element_list(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.qualifiers is not None:
-            hash_for_qualifiers = common.hash_path(
-                context,
-                'qualifiers'
-            ) 
+            hash_for_qualifiers = common.hash_path(context, "qualifiers")
             for i, item in enumerate(that.qualifiers):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_qualifiers,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_qualifiers, i))
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
         if that.semantic_id_list_element is not None:
             self.visit_with_context(
                 that.semantic_id_list_element,
-                common.hash_path(
-                    context,
-                    'semantic_id_list_element'
-                )
+                common.hash_path(context, "semantic_id_list_element"),
             )
 
         if that.value is not None:
-            hash_for_value = common.hash_path(
-                context,
-                'value'
-            ) 
+            hash_for_value = common.hash_path(context, "value")
             for i, item in enumerate(that.value):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_value,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_value, i))
 
     def visit_submodel_element_collection_with_context(
-        self,
-        that: aas_types.SubmodelElementCollection,
-        context: common.CanHash
+        self, that: aas_types.SubmodelElementCollection, context: common.CanHash
     ) -> None:
         self._fix_submodel_element_collection(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.qualifiers is not None:
-            hash_for_qualifiers = common.hash_path(
-                context,
-                'qualifiers'
-            ) 
+            hash_for_qualifiers = common.hash_path(context, "qualifiers")
             for i, item in enumerate(that.qualifiers):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_qualifiers,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_qualifiers, i))
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
         if that.value is not None:
-            hash_for_value = common.hash_path(
-                context,
-                'value'
-            ) 
+            hash_for_value = common.hash_path(context, "value")
             for i, item in enumerate(that.value):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_value,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_value, i))
 
     def visit_property_with_context(
-        self,
-        that: aas_types.Property,
-        context: common.CanHash
+        self, that: aas_types.Property, context: common.CanHash
     ) -> None:
         self._fix_property(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.qualifiers is not None:
-            hash_for_qualifiers = common.hash_path(
-                context,
-                'qualifiers'
-            ) 
+            hash_for_qualifiers = common.hash_path(context, "qualifiers")
             for i, item in enumerate(that.qualifiers):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_qualifiers,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_qualifiers, i))
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
         if that.value_id is not None:
             self.visit_with_context(
-                that.value_id,
-                common.hash_path(
-                    context,
-                    'value_id'
-                )
+                that.value_id, common.hash_path(context, "value_id")
             )
 
     def visit_multi_language_property_with_context(
-        self,
-        that: aas_types.MultiLanguageProperty,
-        context: common.CanHash
+        self, that: aas_types.MultiLanguageProperty, context: common.CanHash
     ) -> None:
         self._fix_multi_language_property(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.qualifiers is not None:
-            hash_for_qualifiers = common.hash_path(
-                context,
-                'qualifiers'
-            ) 
+            hash_for_qualifiers = common.hash_path(context, "qualifiers")
             for i, item in enumerate(that.qualifiers):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_qualifiers,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_qualifiers, i))
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
         if that.value is not None:
-            hash_for_value = common.hash_path(
-                context,
-                'value'
-            ) 
+            hash_for_value = common.hash_path(context, "value")
             for i, item in enumerate(that.value):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_value,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_value, i))
 
         if that.value_id is not None:
             self.visit_with_context(
-                that.value_id,
-                common.hash_path(
-                    context,
-                    'value_id'
-                )
+                that.value_id, common.hash_path(context, "value_id")
             )
 
     def visit_range_with_context(
-        self,
-        that: aas_types.Range,
-        context: common.CanHash
+        self, that: aas_types.Range, context: common.CanHash
     ) -> None:
         self._fix_range(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.qualifiers is not None:
-            hash_for_qualifiers = common.hash_path(
-                context,
-                'qualifiers'
-            ) 
+            hash_for_qualifiers = common.hash_path(context, "qualifiers")
             for i, item in enumerate(that.qualifiers):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_qualifiers,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_qualifiers, i))
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
     def visit_reference_element_with_context(
-        self,
-        that: aas_types.ReferenceElement,
-        context: common.CanHash
+        self, that: aas_types.ReferenceElement, context: common.CanHash
     ) -> None:
         self._fix_reference_element(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.qualifiers is not None:
-            hash_for_qualifiers = common.hash_path(
-                context,
-                'qualifiers'
-            ) 
+            hash_for_qualifiers = common.hash_path(context, "qualifiers")
             for i, item in enumerate(that.qualifiers):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_qualifiers,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_qualifiers, i))
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
         if that.value is not None:
-            self.visit_with_context(
-                that.value,
-                common.hash_path(
-                    context,
-                    'value'
-                )
-            )
+            self.visit_with_context(that.value, common.hash_path(context, "value"))
 
     def visit_blob_with_context(
-        self,
-        that: aas_types.Blob,
-        context: common.CanHash
+        self, that: aas_types.Blob, context: common.CanHash
     ) -> None:
         self._fix_blob(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.qualifiers is not None:
-            hash_for_qualifiers = common.hash_path(
-                context,
-                'qualifiers'
-            ) 
+            hash_for_qualifiers = common.hash_path(context, "qualifiers")
             for i, item in enumerate(that.qualifiers):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_qualifiers,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_qualifiers, i))
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
     def visit_file_with_context(
-        self,
-        that: aas_types.File,
-        context: common.CanHash
+        self, that: aas_types.File, context: common.CanHash
     ) -> None:
         self._fix_file(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.qualifiers is not None:
-            hash_for_qualifiers = common.hash_path(
-                context,
-                'qualifiers'
-            ) 
+            hash_for_qualifiers = common.hash_path(context, "qualifiers")
             for i, item in enumerate(that.qualifiers):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_qualifiers,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_qualifiers, i))
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
     def visit_annotated_relationship_element_with_context(
-        self,
-        that: aas_types.AnnotatedRelationshipElement,
-        context: common.CanHash
+        self, that: aas_types.AnnotatedRelationshipElement, context: common.CanHash
     ) -> None:
         self._fix_annotated_relationship_element(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.qualifiers is not None:
-            hash_for_qualifiers = common.hash_path(
-                context,
-                'qualifiers'
-            ) 
+            hash_for_qualifiers = common.hash_path(context, "qualifiers")
             for i, item in enumerate(that.qualifiers):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_qualifiers,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_qualifiers, i))
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
-        self.visit_with_context(
-            that.first,
-            common.hash_path(
-                context,
-                'first'
-            )
-        )
+        self.visit_with_context(that.first, common.hash_path(context, "first"))
 
-        self.visit_with_context(
-            that.second,
-            common.hash_path(
-                context,
-                'second'
-            )
-        )
+        self.visit_with_context(that.second, common.hash_path(context, "second"))
 
         if that.annotations is not None:
-            hash_for_annotations = common.hash_path(
-                context,
-                'annotations'
-            ) 
+            hash_for_annotations = common.hash_path(context, "annotations")
             for i, item in enumerate(that.annotations):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_annotations,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_annotations, i))
 
     def visit_entity_with_context(
-        self,
-        that: aas_types.Entity,
-        context: common.CanHash
+        self, that: aas_types.Entity, context: common.CanHash
     ) -> None:
         self._fix_entity(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.qualifiers is not None:
-            hash_for_qualifiers = common.hash_path(
-                context,
-                'qualifiers'
-            ) 
+            hash_for_qualifiers = common.hash_path(context, "qualifiers")
             for i, item in enumerate(that.qualifiers):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_qualifiers,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_qualifiers, i))
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
         if that.statements is not None:
-            hash_for_statements = common.hash_path(
-                context,
-                'statements'
-            ) 
+            hash_for_statements = common.hash_path(context, "statements")
             for i, item in enumerate(that.statements):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_statements,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_statements, i))
 
         if that.specific_asset_ids is not None:
             hash_for_specific_asset_ids = common.hash_path(
-                context,
-                'specific_asset_ids'
-            ) 
+                context, "specific_asset_ids"
+            )
             for i, item in enumerate(that.specific_asset_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_specific_asset_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_specific_asset_ids, i)
                 )
 
     def visit_event_payload_with_context(
-        self,
-        that: aas_types.EventPayload,
-        context: common.CanHash
+        self, that: aas_types.EventPayload, context: common.CanHash
     ) -> None:
         self._fix_event_payload(that, context)
 
-        self.visit_with_context(
-            that.source,
-            common.hash_path(
-                context,
-                'source'
-            )
-        )
+        self.visit_with_context(that.source, common.hash_path(context, "source"))
 
         if that.source_semantic_id is not None:
             self.visit_with_context(
-                that.source_semantic_id,
-                common.hash_path(
-                    context,
-                    'source_semantic_id'
-                )
+                that.source_semantic_id, common.hash_path(context, "source_semantic_id")
             )
 
         self.visit_with_context(
-            that.observable_reference,
-            common.hash_path(
-                context,
-                'observable_reference'
-            )
+            that.observable_reference, common.hash_path(context, "observable_reference")
         )
 
         if that.observable_semantic_id is not None:
             self.visit_with_context(
                 that.observable_semantic_id,
-                common.hash_path(
-                    context,
-                    'observable_semantic_id'
-                )
+                common.hash_path(context, "observable_semantic_id"),
             )
 
         if that.subject_id is not None:
             self.visit_with_context(
-                that.subject_id,
-                common.hash_path(
-                    context,
-                    'subject_id'
-                )
+                that.subject_id, common.hash_path(context, "subject_id")
             )
 
     def visit_basic_event_element_with_context(
-        self,
-        that: aas_types.BasicEventElement,
-        context: common.CanHash
+        self, that: aas_types.BasicEventElement, context: common.CanHash
     ) -> None:
         self._fix_basic_event_element(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.qualifiers is not None:
-            hash_for_qualifiers = common.hash_path(
-                context,
-                'qualifiers'
-            ) 
+            hash_for_qualifiers = common.hash_path(context, "qualifiers")
             for i, item in enumerate(that.qualifiers):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_qualifiers,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_qualifiers, i))
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
-        self.visit_with_context(
-            that.observed,
-            common.hash_path(
-                context,
-                'observed'
-            )
-        )
+        self.visit_with_context(that.observed, common.hash_path(context, "observed"))
 
         if that.message_broker is not None:
             self.visit_with_context(
-                that.message_broker,
-                common.hash_path(
-                    context,
-                    'message_broker'
-                )
+                that.message_broker, common.hash_path(context, "message_broker")
             )
 
     def visit_operation_with_context(
-        self,
-        that: aas_types.Operation,
-        context: common.CanHash
+        self, that: aas_types.Operation, context: common.CanHash
     ) -> None:
         self._fix_operation(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.qualifiers is not None:
-            hash_for_qualifiers = common.hash_path(
-                context,
-                'qualifiers'
-            ) 
+            hash_for_qualifiers = common.hash_path(context, "qualifiers")
             for i, item in enumerate(that.qualifiers):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_qualifiers,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_qualifiers, i))
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
         if that.input_variables is not None:
-            hash_for_input_variables = common.hash_path(
-                context,
-                'input_variables'
-            ) 
+            hash_for_input_variables = common.hash_path(context, "input_variables")
             for i, item in enumerate(that.input_variables):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_input_variables,
-                        i
-                    )
+                    item, common.hash_path(hash_for_input_variables, i)
                 )
 
         if that.output_variables is not None:
-            hash_for_output_variables = common.hash_path(
-                context,
-                'output_variables'
-            ) 
+            hash_for_output_variables = common.hash_path(context, "output_variables")
             for i, item in enumerate(that.output_variables):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_output_variables,
-                        i
-                    )
+                    item, common.hash_path(hash_for_output_variables, i)
                 )
 
         if that.inoutput_variables is not None:
             hash_for_inoutput_variables = common.hash_path(
-                context,
-                'inoutput_variables'
-            ) 
+                context, "inoutput_variables"
+            )
             for i, item in enumerate(that.inoutput_variables):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_inoutput_variables,
-                        i
-                    )
+                    item, common.hash_path(hash_for_inoutput_variables, i)
                 )
 
     def visit_operation_variable_with_context(
-        self,
-        that: aas_types.OperationVariable,
-        context: common.CanHash
+        self, that: aas_types.OperationVariable, context: common.CanHash
     ) -> None:
         self._fix_operation_variable(that, context)
 
-        self.visit_with_context(
-            that.value,
-            common.hash_path(
-                context,
-                'value'
-            )
-        )
+        self.visit_with_context(that.value, common.hash_path(context, "value"))
 
     def visit_capability_with_context(
-        self,
-        that: aas_types.Capability,
-        context: common.CanHash
+        self, that: aas_types.Capability, context: common.CanHash
     ) -> None:
         self._fix_capability(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.semantic_id is not None:
             self.visit_with_context(
-                that.semantic_id,
-                common.hash_path(
-                    context,
-                    'semantic_id'
-                )
+                that.semantic_id, common.hash_path(context, "semantic_id")
             )
 
         if that.supplemental_semantic_ids is not None:
             hash_for_supplemental_semantic_ids = common.hash_path(
-                context,
-                'supplemental_semantic_ids'
-            ) 
+                context, "supplemental_semantic_ids"
+            )
             for i, item in enumerate(that.supplemental_semantic_ids):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_supplemental_semantic_ids,
-                        i
-                    )
+                    item, common.hash_path(hash_for_supplemental_semantic_ids, i)
                 )
 
         if that.qualifiers is not None:
-            hash_for_qualifiers = common.hash_path(
-                context,
-                'qualifiers'
-            ) 
+            hash_for_qualifiers = common.hash_path(context, "qualifiers")
             for i, item in enumerate(that.qualifiers):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_qualifiers,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_qualifiers, i))
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
     def visit_concept_description_with_context(
-        self,
-        that: aas_types.ConceptDescription,
-        context: common.CanHash
+        self, that: aas_types.ConceptDescription, context: common.CanHash
     ) -> None:
         self._fix_concept_description(that, context)
 
         if that.extensions is not None:
-            hash_for_extensions = common.hash_path(
-                context,
-                'extensions'
-            ) 
+            hash_for_extensions = common.hash_path(context, "extensions")
             for i, item in enumerate(that.extensions):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_extensions,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_extensions, i))
 
         if that.display_name is not None:
-            hash_for_display_name = common.hash_path(
-                context,
-                'display_name'
-            ) 
+            hash_for_display_name = common.hash_path(context, "display_name")
             for i, item in enumerate(that.display_name):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_display_name,
-                        i
-                    )
+                    item, common.hash_path(hash_for_display_name, i)
                 )
 
         if that.description is not None:
-            hash_for_description = common.hash_path(
-                context,
-                'description'
-            ) 
+            hash_for_description = common.hash_path(context, "description")
             for i, item in enumerate(that.description):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_description,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_description, i))
 
         if that.administration is not None:
             self.visit_with_context(
-                that.administration,
-                common.hash_path(
-                    context,
-                    'administration'
-                )
+                that.administration, common.hash_path(context, "administration")
             )
 
         if that.embedded_data_specifications is not None:
             hash_for_embedded_data_specifications = common.hash_path(
-                context,
-                'embedded_data_specifications'
-            ) 
+                context, "embedded_data_specifications"
+            )
             for i, item in enumerate(that.embedded_data_specifications):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_embedded_data_specifications,
-                        i
-                    )
+                    item, common.hash_path(hash_for_embedded_data_specifications, i)
                 )
 
         if that.is_case_of is not None:
-            hash_for_is_case_of = common.hash_path(
-                context,
-                'is_case_of'
-            ) 
+            hash_for_is_case_of = common.hash_path(context, "is_case_of")
             for i, item in enumerate(that.is_case_of):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_is_case_of,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_is_case_of, i))
 
     def visit_reference_with_context(
-        self,
-        that: aas_types.Reference,
-        context: common.CanHash
+        self, that: aas_types.Reference, context: common.CanHash
     ) -> None:
         self._fix_reference(that, context)
 
         if that.referred_semantic_id is not None:
             self.visit_with_context(
                 that.referred_semantic_id,
-                common.hash_path(
-                    context,
-                    'referred_semantic_id'
-                )
+                common.hash_path(context, "referred_semantic_id"),
             )
 
-        hash_for_keys = common.hash_path(
-            context,
-            'keys'
-        ) 
+        hash_for_keys = common.hash_path(context, "keys")
         for i, item in enumerate(that.keys):
-            self.visit_with_context(
-                item,
-                common.hash_path(
-                    hash_for_keys,
-                    i
-                )
-            )
+            self.visit_with_context(item, common.hash_path(hash_for_keys, i))
 
     def visit_key_with_context(
-        self,
-        that: aas_types.Key,
-        context: common.CanHash
+        self, that: aas_types.Key, context: common.CanHash
     ) -> None:
         self._fix_key(that, context)
 
     def visit_lang_string_name_type_with_context(
-        self,
-        that: aas_types.LangStringNameType,
-        context: common.CanHash
+        self, that: aas_types.LangStringNameType, context: common.CanHash
     ) -> None:
         self._fix_lang_string_name_type(that, context)
 
     def visit_lang_string_text_type_with_context(
-        self,
-        that: aas_types.LangStringTextType,
-        context: common.CanHash
+        self, that: aas_types.LangStringTextType, context: common.CanHash
     ) -> None:
         self._fix_lang_string_text_type(that, context)
 
     def visit_environment_with_context(
-        self,
-        that: aas_types.Environment,
-        context: common.CanHash
+        self, that: aas_types.Environment, context: common.CanHash
     ) -> None:
         self._fix_environment(that, context)
 
         if that.asset_administration_shells is not None:
             hash_for_asset_administration_shells = common.hash_path(
-                context,
-                'asset_administration_shells'
-            ) 
+                context, "asset_administration_shells"
+            )
             for i, item in enumerate(that.asset_administration_shells):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_asset_administration_shells,
-                        i
-                    )
+                    item, common.hash_path(hash_for_asset_administration_shells, i)
                 )
 
         if that.submodels is not None:
-            hash_for_submodels = common.hash_path(
-                context,
-                'submodels'
-            ) 
+            hash_for_submodels = common.hash_path(context, "submodels")
             for i, item in enumerate(that.submodels):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_submodels,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_submodels, i))
 
         if that.concept_descriptions is not None:
             hash_for_concept_descriptions = common.hash_path(
-                context,
-                'concept_descriptions'
-            ) 
+                context, "concept_descriptions"
+            )
             for i, item in enumerate(that.concept_descriptions):
                 self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_concept_descriptions,
-                        i
-                    )
+                    item, common.hash_path(hash_for_concept_descriptions, i)
                 )
 
     def visit_embedded_data_specification_with_context(
-        self,
-        that: aas_types.EmbeddedDataSpecification,
-        context: common.CanHash
+        self, that: aas_types.EmbeddedDataSpecification, context: common.CanHash
     ) -> None:
         self._fix_embedded_data_specification(that, context)
 
         self.visit_with_context(
-            that.data_specification,
-            common.hash_path(
-                context,
-                'data_specification'
-            )
+            that.data_specification, common.hash_path(context, "data_specification")
         )
 
         self.visit_with_context(
             that.data_specification_content,
-            common.hash_path(
-                context,
-                'data_specification_content'
-            )
+            common.hash_path(context, "data_specification_content"),
         )
 
     def visit_level_type_with_context(
-        self,
-        that: aas_types.LevelType,
-        context: common.CanHash
+        self, that: aas_types.LevelType, context: common.CanHash
     ) -> None:
         self._fix_level_type(that, context)
 
     def visit_value_reference_pair_with_context(
-        self,
-        that: aas_types.ValueReferencePair,
-        context: common.CanHash
+        self, that: aas_types.ValueReferencePair, context: common.CanHash
     ) -> None:
         self._fix_value_reference_pair(that, context)
 
-        self.visit_with_context(
-            that.value_id,
-            common.hash_path(
-                context,
-                'value_id'
-            )
-        )
+        self.visit_with_context(that.value_id, common.hash_path(context, "value_id"))
 
     def visit_value_list_with_context(
-        self,
-        that: aas_types.ValueList,
-        context: common.CanHash
+        self, that: aas_types.ValueList, context: common.CanHash
     ) -> None:
         self._fix_value_list(that, context)
 
         hash_for_value_reference_pairs = common.hash_path(
-            context,
-            'value_reference_pairs'
-        ) 
+            context, "value_reference_pairs"
+        )
         for i, item in enumerate(that.value_reference_pairs):
             self.visit_with_context(
-                item,
-                common.hash_path(
-                    hash_for_value_reference_pairs,
-                    i
-                )
+                item, common.hash_path(hash_for_value_reference_pairs, i)
             )
 
     def visit_lang_string_preferred_name_type_iec_61360_with_context(
         self,
         that: aas_types.LangStringPreferredNameTypeIEC61360,
-        context: common.CanHash
+        context: common.CanHash,
     ) -> None:
         self._fix_lang_string_preferred_name_type_iec_61360(that, context)
 
     def visit_lang_string_short_name_type_iec_61360_with_context(
-        self,
-        that: aas_types.LangStringShortNameTypeIEC61360,
-        context: common.CanHash
+        self, that: aas_types.LangStringShortNameTypeIEC61360, context: common.CanHash
     ) -> None:
         self._fix_lang_string_short_name_type_iec_61360(that, context)
 
     def visit_lang_string_definition_type_iec_61360_with_context(
-        self,
-        that: aas_types.LangStringDefinitionTypeIEC61360,
-        context: common.CanHash
+        self, that: aas_types.LangStringDefinitionTypeIEC61360, context: common.CanHash
     ) -> None:
         self._fix_lang_string_definition_type_iec_61360(that, context)
 
     def visit_data_specification_iec_61360_with_context(
-        self,
-        that: aas_types.DataSpecificationIEC61360,
-        context: common.CanHash
+        self, that: aas_types.DataSpecificationIEC61360, context: common.CanHash
     ) -> None:
         self._fix_data_specification_iec_61360(that, context)
 
-        hash_for_preferred_name = common.hash_path(
-            context,
-            'preferred_name'
-        ) 
+        hash_for_preferred_name = common.hash_path(context, "preferred_name")
         for i, item in enumerate(that.preferred_name):
-            self.visit_with_context(
-                item,
-                common.hash_path(
-                    hash_for_preferred_name,
-                    i
-                )
-            )
+            self.visit_with_context(item, common.hash_path(hash_for_preferred_name, i))
 
         if that.short_name is not None:
-            hash_for_short_name = common.hash_path(
-                context,
-                'short_name'
-            ) 
+            hash_for_short_name = common.hash_path(context, "short_name")
             for i, item in enumerate(that.short_name):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_short_name,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_short_name, i))
 
         if that.unit_id is not None:
-            self.visit_with_context(
-                that.unit_id,
-                common.hash_path(
-                    context,
-                    'unit_id'
-                )
-            )
+            self.visit_with_context(that.unit_id, common.hash_path(context, "unit_id"))
 
         if that.definition is not None:
-            hash_for_definition = common.hash_path(
-                context,
-                'definition'
-            ) 
+            hash_for_definition = common.hash_path(context, "definition")
             for i, item in enumerate(that.definition):
-                self.visit_with_context(
-                    item,
-                    common.hash_path(
-                        hash_for_definition,
-                        i
-                    )
-                )
+                self.visit_with_context(item, common.hash_path(hash_for_definition, i))
 
         if that.value_list is not None:
             self.visit_with_context(
-                that.value_list,
-                common.hash_path(
-                    context,
-                    'value_list'
-                )
+                that.value_list, common.hash_path(context, "value_list")
             )
 
         if that.level_type is not None:
             self.visit_with_context(
-                that.level_type,
-                common.hash_path(
-                    context,
-                    'level_type'
-                )
+                that.level_type, common.hash_path(context, "level_type")
             )
 
 

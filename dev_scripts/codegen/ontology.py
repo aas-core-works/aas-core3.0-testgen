@@ -65,8 +65,8 @@ class ClassGraph:
 
     def __init__(
         self,
-            relationship_map: RelationshipMap,
-            shortest_paths_from_environment: ShortestPathMap
+        relationship_map: RelationshipMap,
+        shortest_paths_from_environment: ShortestPathMap,
     ) -> None:
         """Initialize with the given values."""
         self.relationship_map = relationship_map

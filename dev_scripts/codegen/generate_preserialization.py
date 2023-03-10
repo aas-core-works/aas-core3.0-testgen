@@ -8,17 +8,13 @@ from typing import List, Optional, Tuple
 
 from aas_core_codegen import intermediate
 from aas_core_codegen.common import (
-    Stripped, indent_but_first_line, assert_never, Identifier
+    Stripped,
+    indent_but_first_line,
+    assert_never,
+    Identifier,
 )
-from aas_core_codegen.python import (
-    common as python_common,
-    naming as python_naming
-)
-from aas_core_codegen.python.common import (
-    INDENT as I,
-    INDENT2 as II,
-    INDENT3 as III
-)
+from aas_core_codegen.python import common as python_common, naming as python_naming
+from aas_core_codegen.python.common import INDENT as I, INDENT2 as II, INDENT3 as III
 from icontract import ensure
 
 import aas_core3_0_testgen.common
@@ -46,19 +42,16 @@ class Instance:
 {I}\"\"\"Represent an instance of a class.\"\"\"
 
 {I}def __init__(
-{II}self, properties: OrderedDict[str, ValueUnion], model_type: Identifier
+{II}self, properties: OrderedDict[str, ValueUnion], class_name: Identifier
 {I}) -> None:
 {II}\"\"\"
 {II}Initialize with the given values.
 
-{II}The ``model_type`` needs to be always indicated. Whether it is represented in
-{II}the final serialization depends on the context of the serialization.
-
-{II}The ``model_type`` corresponds to the class name in the meta-model, not to the
-{II}class name in the respective serialization.
+{II}The ``class_name`` needs to be always indicated. It is written in aas-core-meta
+{II}format, *not* as the Python class name.
 {II}\"\"\"
 {II}self.properties = properties
-{II}self.model_type = model_type"""
+{II}self.class_name = class_name"""
         ),
         Stripped(
             f"""\
@@ -84,7 +77,7 @@ def _to_jsonable(value: ValueUnion) -> Any:
 {III}return value
 {I}elif isinstance(value, Instance):
 {II}obj = collections.OrderedDict()  # type: MutableMapping[str, Any]
-{II}obj["model_type"] = value.model_type
+{II}obj["class_name"] = value.class_name
 
 {II}properties_dict = collections.OrderedDict()  # type: MutableMapping[str, Any]
 {II}for prop_name, prop_value in value.properties.items():
@@ -107,7 +100,7 @@ def dump(value: ValueUnion) -> str:
 {I}This is meant for debugging, not for the end-user serialization.
 {I}\"\"\"
 {I}return json.dumps(_to_jsonable(value), indent=2)"""
-        )
+        ),
     ]
 
 
@@ -133,12 +126,9 @@ properties = collections.OrderedDict(
 
         block = None  # type: Optional[Stripped]
 
-        if (
-                isinstance(type_anno, intermediate.PrimitiveTypeAnnotation)
-                or (
-                isinstance(type_anno, intermediate.OurTypeAnnotation)
-                and isinstance(type_anno.our_type, intermediate.ConstrainedPrimitive)
-        )
+        if isinstance(type_anno, intermediate.PrimitiveTypeAnnotation) or (
+            isinstance(type_anno, intermediate.OurTypeAnnotation)
+            and isinstance(type_anno.our_type, intermediate.ConstrainedPrimitive)
         ):
             primitive_type = intermediate.try_primitive_type(type_anno)
             assert primitive_type is not None
@@ -165,7 +155,7 @@ properties[{prop_name_literal}] = (
                 raise AssertionError("Should have been handled before")
 
             elif isinstance(
-                    our_type, (intermediate.AbstractClass, intermediate.ConcreteClass)
+                our_type, (intermediate.AbstractClass, intermediate.ConcreteClass)
             ):
                 block = Stripped(
                     f"""\
@@ -223,7 +213,7 @@ if that.{prop_name} is not None:
             f"""\
 return Instance(
 {I}properties=properties,
-{I}model_type=Identifier(
+{I}class_name=Identifier(
 {II}{python_common.string_literal(cls.name)}
 {I})
 )"""
@@ -232,9 +222,7 @@ return Instance(
 
     body = "\n\n".join(blocks)
 
-    transform_name = python_naming.method_name(
-        Identifier(f"transform_{cls.name}")
-    )
+    transform_name = python_naming.method_name(Identifier(f"transform_{cls.name}"))
     cls_name = python_naming.class_name(cls.name)
 
     return Stripped(
@@ -270,7 +258,7 @@ class _Preserializer(
 
 @ensure(lambda result: (result[0] is not None) ^ (result[1] is not None))
 def _generate(
-        symbol_table: intermediate.SymbolTable
+    symbol_table: intermediate.SymbolTable,
 ) -> Tuple[Optional[Stripped], Optional[str]]:
     """Generate the module."""
     warning = dev_scripts.codegen.common.generate_warning(__file__)
@@ -294,12 +282,10 @@ from typing import (
 from aas_core_codegen.common import Identifier, assert_never
 
 from aas_core3 import types as aas_types"""
-        )
+        ),
     ]
 
-    blocks.extend(
-        _generate_preserialization_classes()
-    )
+    blocks.extend(_generate_preserialization_classes())
 
     blocks.extend(
         [
@@ -313,7 +299,7 @@ def preserialize(
 {I}\"\"\"Pre-serialize ``that`` instance for further modification.\"\"\"
 {I}return _PRESERIALIZER.transform(that)"""
             ),
-            warning
+            warning,
         ]
     )
 

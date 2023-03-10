@@ -8,17 +8,13 @@ from typing import List, Optional, Sequence, Tuple, MutableMapping
 
 from aas_core_codegen import intermediate
 from aas_core_codegen.common import (
-    Stripped, indent_but_first_line, Identifier, assert_never
+    Stripped,
+    indent_but_first_line,
+    Identifier,
+    assert_never,
 )
-from aas_core_codegen.python import (
-    common as python_common,
-    naming as python_naming
-)
-from aas_core_codegen.python.common import (
-    INDENT as I,
-    INDENT2 as II,
-    INDENT3 as III
-)
+from aas_core_codegen.python import common as python_common, naming as python_naming
+from aas_core_codegen.python.common import INDENT as I, INDENT2 as II, INDENT3 as III
 from icontract import ensure, require
 
 import aas_core3_0_testgen.common
@@ -28,12 +24,10 @@ import dev_scripts.codegen.ontology
 _REPO_DIR = pathlib.Path(os.path.realpath(__file__)).parent.parent.parent
 
 
-def _determine_concrete_minimal_function(
-        cls: intermediate.ConcreteClass
-) -> str:
+def _determine_concrete_minimal_function(cls: intermediate.ConcreteClass) -> str:
     """
     Determine the concrete minimal function for the given ``cls``.
-    
+
     This function is necessary as concrete classes without descendants are created with
     ``minimal_*`` functions, while concrete classes with descendants are semi-randomly
     dispatched to either itself (``concrete_minimal_``) or one of the concrete
@@ -44,16 +38,12 @@ def _determine_concrete_minimal_function(
             Identifier(f"concrete_minimal_{cls.name}")
         )
     else:
-        function_name = python_naming.function_name(
-            Identifier(f"minimal_{cls.name}")
-        )
+        function_name = python_naming.function_name(Identifier(f"minimal_{cls.name}"))
 
     return f"creation.{function_name}"
 
 
-def _determine_concrete_maximal_function(
-        cls: intermediate.ConcreteClass
-) -> str:
+def _determine_concrete_maximal_function(cls: intermediate.ConcreteClass) -> str:
     """
     Determine the concrete maximal function for the given ``cls``.
 
@@ -67,22 +57,20 @@ def _determine_concrete_maximal_function(
             Identifier(f"concrete_maximal_{cls.name}")
         )
     else:
-        function_name = python_naming.function_name(
-            Identifier(f"maximal_{cls.name}")
-        )
+        function_name = python_naming.function_name(Identifier(f"maximal_{cls.name}"))
 
     return f"creation.{function_name}"
 
 
 @require(lambda shortest_path_from_environment: len(shortest_path_from_environment) > 0)
 def _generate_create_cls_in_environment(
-        cls: intermediate.ConcreteClass,
-        shortest_path_from_environment: Sequence[dev_scripts.codegen.ontology.Segment]
+    cls: intermediate.ConcreteClass,
+    shortest_path_from_environment: Sequence[dev_scripts.codegen.ontology.Segment],
 ) -> Stripped:
     """Generate the function to create instances wrapped in an environment."""
     blocks = [
-        Stripped("path_hash = common.hash_path([])"),
-        Stripped("path = []  # type: List[Union[int, str]]")
+        Stripped("path_hash = common.hash_path(None, [])"),
+        Stripped("path = []  # type: List[Union[int, str]]"),
     ]  # type: List[Stripped]
 
     variable_registry = dict()  # type: MutableMapping[Identifier, int]
@@ -102,9 +90,7 @@ def _generate_create_cls_in_environment(
 
         variable_registry[a_cls_name] = count
 
-        return python_naming.variable_name(
-            Identifier(f"{prefix}{a_cls_name}")
-        )
+        return python_naming.variable_name(Identifier(f"{prefix}{a_cls_name}"))
 
     first_source_variable = None  # type: Optional[Identifier]
     source_variable = None  # type: Optional[Identifier]
@@ -137,8 +123,7 @@ def _generate_create_cls_in_environment(
             target_creation = _determine_concrete_minimal_function(segment.target)
 
         if isinstance(
-                segment.relationship,
-                dev_scripts.codegen.ontology.PropertyRelationship
+            segment.relationship, dev_scripts.codegen.ontology.PropertyRelationship
         ):
             prop_name = python_naming.property_name(segment.relationship.property_name)
             prop_name_literal = python_common.string_literal(prop_name)
@@ -162,8 +147,7 @@ path_hash = common.hash_path(
             source_variable = target_variable
 
         elif isinstance(
-                segment.relationship,
-                dev_scripts.codegen.ontology.ListPropertyRelationship
+            segment.relationship, dev_scripts.codegen.ontology.ListPropertyRelationship
         ):
             prop_name = python_naming.property_name(segment.relationship.property_name)
             prop_name_literal = python_common.string_literal(prop_name)
@@ -235,7 +219,7 @@ def {function_name}(
 
 
 def _generate_minimal_cls_in_environment(
-        cls: intermediate.ConcreteClass,
+    cls: intermediate.ConcreteClass,
 ) -> Stripped:
     """Generate the function to create minimal instances wrapped in an environment."""
     cls_name = python_naming.class_name(cls.name)
@@ -270,7 +254,7 @@ def {function_name}() -> Tuple[
 
 
 def _generate_class_name_to_minimal_in_environment(
-        classes_in_environment: Sequence[intermediate.ConcreteClass]
+    classes_in_environment: Sequence[intermediate.ConcreteClass],
 ) -> Stripped:
     """Generate the dispatch map from class names to creation function."""
     items = []  # type: List[Tuple[str, Identifier]]
@@ -279,12 +263,7 @@ def _generate_class_name_to_minimal_in_environment(
             Identifier(f"minimal_{cls.name}_in_environment")
         )
 
-        items.append(
-            (
-                python_common.string_literal(cls.name),
-                minimal_in_environment
-            )
-        )
+        items.append((python_common.string_literal(cls.name), minimal_in_environment))
 
     items_joined = ",\n".join(
         f"""\
@@ -333,7 +312,7 @@ def minimal_in_environment(
 
 
 def _generate_maximal_cls_in_environment(
-        cls: intermediate.ConcreteClass,
+    cls: intermediate.ConcreteClass,
 ) -> Stripped:
     """Generate the function to create maximal instances wrapped in an environment."""
     cls_name = python_naming.class_name(cls.name)
@@ -368,7 +347,7 @@ def {function_name}() -> Tuple[
 
 
 def _generate_class_name_to_maximal_in_environment(
-        classes_in_environment: Sequence[intermediate.ConcreteClass]
+    classes_in_environment: Sequence[intermediate.ConcreteClass],
 ) -> Stripped:
     """Generate the dispatch map from class names to creation function."""
     items = []  # type: List[Tuple[str, Identifier]]
@@ -377,12 +356,7 @@ def _generate_class_name_to_maximal_in_environment(
             Identifier(f"maximal_{cls.name}_in_environment")
         )
 
-        items.append(
-            (
-                python_common.string_literal(cls.name),
-                maximal_in_environment
-            )
-        )
+        items.append((python_common.string_literal(cls.name), maximal_in_environment))
 
     items_joined = ",\n".join(
         f"""\
@@ -432,7 +406,7 @@ def maximal_in_environment(
 
 @ensure(lambda result: (result[0] is not None) ^ (result[1] is not None))
 def _generate(
-        symbol_table: intermediate.SymbolTable
+    symbol_table: intermediate.SymbolTable,
 ) -> Tuple[Optional[Stripped], Optional[str]]:
     """Generate the module."""
     class_graph = dev_scripts.codegen.ontology.compute_class_graph(
@@ -468,7 +442,7 @@ from aas_core3 import types as aas_types
 
 import aas_core3_0_testgen.common as common
 import aas_core3_0_testgen.codegened.creation as creation"""
-        )
+        ),
     ]
 
     classes_in_environment = []  # type: List[intermediate.ConcreteClass]
@@ -510,8 +484,7 @@ import aas_core3_0_testgen.codegened.creation as creation"""
 
         blocks.append(
             _generate_create_cls_in_environment(
-                cls=cls,
-                shortest_path_from_environment=shortest_path_from_environment
+                cls=cls, shortest_path_from_environment=shortest_path_from_environment
             )
         )
 
@@ -531,7 +504,7 @@ import aas_core3_0_testgen.codegened.creation as creation"""
     blocks.append(_generate_minimal_in_environment())
 
     # endregion
-    
+
     # Maximal in environment
 
     for cls in classes_in_environment:
@@ -546,6 +519,17 @@ import aas_core3_0_testgen.codegened.creation as creation"""
     blocks.append(_generate_maximal_in_environment())
 
     # endregion
+
+    blocks.append(
+        Stripped(
+            f"""\
+def lives_in_environment(
+{I}class_name: str
+) -> bool:
+{I}\"\"\"Check if the instance of the class lives in the Environment.\"\"\"
+{I}return class_name in _CLASS_NAME_TO_MINIMAL_IN_ENVIRONMENT"""
+        )
+    )
 
     blocks.append(warning)
 
