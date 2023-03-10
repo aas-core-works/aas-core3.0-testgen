@@ -8,10 +8,13 @@ Fix instances in place to conform to the meta-model constraints.
 """
 from typing import TypeVar, List, Type, Generic, Protocol
 
+import typing_extensions
+
 import aas_core3.types as aas_types
 import aas_core3.constants as aas_constants
 
 from aas_core3_0_testgen import common, primitiving
+from aas_core3_0_testgen.codegened import abstract_fixing
 
 LangStringT = TypeVar("LangStringT", bound=aas_types.AbstractLangString)
 
@@ -145,18 +148,19 @@ def generate_external_reference(path_hash: common.CanHash) -> aas_types.Referenc
     )
 
 
-class _Handyman(aas_types.PassThroughVisitorWithContext[common.CanHash]):
+class _Handyman(abstract_fixing):
     """Fix the instances recursively on the best-effort basis."""
 
-    def visit_basic_event_element(
+    @typing_extensions.override
+    def _fix_basic_event_element(
             self,
             that: aas_types.BasicEventElement,
-            context: common.CanHash
+            path_hash: common.CanHash
     ) -> None:
         # Fix that the observed is a proper model reference
         if that.observed is not None:
             that.observed = generate_model_reference(
-                common.hash_path(context, "observed"),
+                common.hash_path(path_hash, "observed"),
                 expected_type=aas_types.KeyTypes.REFERABLE
             )
 
@@ -168,12 +172,27 @@ class _Handyman(aas_types.PassThroughVisitorWithContext[common.CanHash]):
         # Fix that the message broker is a proper model reference
         if that.message_broker is not None:
             that.message_broker = generate_model_reference(
-                common.hash_path(context, "message_broker"),
+                common.hash_path(path_hash, "message_broker"),
                 expected_type=aas_types.KeyTypes.REFERABLE
             )
 
-        for child in that.descend_once()
-            self.visit(child, )
+    @typing_extensions.override
+    def _fix_asset_information(
+            self,
+            that: aas_types.AssetInformation,
+            path_hash: common.CanHash
+    ) -> None:
+        # Fix for AASd-131: Either the global asset ID shall be defined or at least one
+        # specific asset ID.
+        if (
+                that.global_asset_id is None
+                and that.specific_asset_ids is None
+        ):
+            that.global_asset_id = primitiving.generate_str(
+                common.hash_path(path_hash, "global_asset_id")
+            )
+
+
 
 
 # TODO (mristin, 2023-03-9): implement Handyman 🠒 use PassThrough visitor

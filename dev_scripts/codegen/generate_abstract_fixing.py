@@ -48,7 +48,7 @@ def {method_name}(
 {I}Do *not* recurse into children. This is handled by ``visit_**`` methods since
 {I}we have to couple the path hash and property names.
 {I}\"\"\"
-{I}# Intentionally empty
+{I}# Intentionally empty, to be overridden
 {I}return"""
     )
 
@@ -88,11 +88,12 @@ def _generate_visit_method(cls: intermediate.ConcreteClass) -> Stripped:
 
                 block = Stripped(
                     f"""\
-self.visit(
+self.visit_with_context(
 {I}that.{prop_name},
 {I}common.hash_path(
 {II}context,
 {II}{prop_name_literal}
+{I})
 )"""
                 )
             else:
@@ -116,7 +117,7 @@ self.visit(
 {I}{prop_name_literal}
 ) 
 for i, item in enumerate(that.{prop_name}):
-{I}self.visit(
+{I}self.visit_with_context(
 {II}item,
 {II}common.hash_path(
 {III}{prop_hash_var},
@@ -141,14 +142,15 @@ if that.{prop_name} is not None:
     body = "\n\n".join(blocks)
 
     method_name = python_naming.method_name(
-        Identifier(f"visit_{cls.name}")
+        Identifier(f"visit_{cls.name}_with_context")
     )
     cls_name = python_naming.class_name(cls.name)
 
     return Stripped(
         f"""\
 def {method_name}(
-{I}that: aas_types.{cls_name}
+{I}self,
+{I}that: aas_types.{cls_name},
 {I}context: common.CanHash
 ) -> None:
 {I}{indent_but_first_line(body, I)}"""
@@ -193,7 +195,9 @@ def _generate(
         warning,
         Stripped(
             f"""\
-from aas_core3 import types as aas_types"""
+from aas_core3 import types as aas_types
+
+from aas_core3_0_testgen import common"""
         ),
         _generate_abstract_handyman(symbol_table=symbol_table),
         warning
