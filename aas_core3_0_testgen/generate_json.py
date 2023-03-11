@@ -19,6 +19,7 @@ import aas_core_codegen.naming
 from aas_core_codegen import intermediate
 from aas_core_codegen.common import Identifier
 from icontract import ensure
+from typing_extensions import assert_never
 
 from aas_core3_0_testgen import common, generation
 from aas_core3_0_testgen.codegened import preserialization
@@ -170,10 +171,12 @@ class _Serializer:
     def _serialize_primitive(
         self, value: preserialization.PrimitiveValueUnion
     ) -> Union[bool, int, float, str]:
-        if isinstance(value, bytearray):
+        if isinstance(value, bytes):
             return base64.b64encode(value).decode(encoding="ascii")
-        else:
+        elif isinstance(value, (bool, int, float, str)):
             return value
+        else:
+            assert_never(value)
 
     def serialize_instance(
         self, instance: preserialization.Instance

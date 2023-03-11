@@ -6,23 +6,30 @@ Fix instances in place to conform to the meta-model constraints.
     We fix instances on the best-effort basis. It might be that something goes wrong.
     Please always verify the results.
 """
+import ast
+import inspect
 from typing import TypeVar, List, Type, Sequence, Union
 
 import aas_core3.constants as aas_constants
 import aas_core3.types as aas_types
 import aas_core3.verification as aas_verification
 import typing_extensions
+from icontract import ensure
+from typing_extensions import assert_never
 
 from aas_core3_0_testgen import common, primitiving
-from aas_core3_0_testgen.codegened import abstract_fixing
+from aas_core3_0_testgen.frozen_examples import (
+    xs_value as frozen_examples_xs_value
+)
+from aas_core3_0_testgen.codegened import abstract_fixing, preserialization
 
 LangStringT = TypeVar("LangStringT", bound=aas_types.AbstractLangString)
 
 
 def _extend_lang_string_set_to_have_an_entry_at_least_in_english(
-    path_hash: common.CanHash,
-    lang_string_set: List[LangStringT],
-    lang_string_class: Type[LangStringT],
+        path_hash: common.CanHash,
+        lang_string_set: List[LangStringT],
+        lang_string_class: Type[LangStringT],
 ) -> None:
     """Extend ``lang_string_set`` to contain at least one entry in English."""
     has_english = False
@@ -87,8 +94,8 @@ def generate_id_short(path_hash: common.CanHash) -> str:
 
 
 def generate_model_reference(
-    path_hash: common.CanHash,
-    expected_type: aas_types.KeyTypes,
+        path_hash: common.CanHash,
+        expected_type: aas_types.KeyTypes,
 ) -> aas_types.Reference:
     """Generate a model reference to something semi-random of ``expected_type``."""
     if expected_type in aas_constants.AAS_IDENTIFIABLES:
@@ -98,7 +105,10 @@ def generate_model_reference(
                 value=generate_urn(common.hash_path(path_hash, ["keys", 0, "value"])),
             )
         ]
-    elif expected_type in aas_constants.AAS_SUBMODEL_ELEMENTS_AS_KEYS:
+    elif (
+            expected_type in aas_constants.AAS_SUBMODEL_ELEMENTS_AS_KEYS
+            or expected_type is aas_types.KeyTypes.REFERABLE
+    ):
         keys = [
             aas_types.Key(
                 type=aas_types.KeyTypes.SUBMODEL,
@@ -135,12 +145,60 @@ def generate_external_reference(path_hash: common.CanHash) -> aas_types.Referenc
     )
 
 
+def generate_xs_value(
+        path_hash: common.CanHash,
+        value_type: aas_types.DataTypeDefXSD
+) -> str:
+    """Generate a semi-random value corresponding to the ``value_tyep``."""
+    return primitiving.choose_value(
+        path_hash,
+        list(
+            frozen_examples_xs_value.BY_VALUE_TYPE[value_type.value].positives.values()
+        )
+    )
+
+
 class _Handyman(abstract_fixing.AbstractHandyman):
     """Fix the instances recursively on the best-effort basis."""
 
     @typing_extensions.override
+    def _fix_asset_administration_shell(
+            self, that: aas_types.AssetAdministrationShell, path_hash: common.CanHash
+    ) -> None:
+        # Fix: Derived-from must be a model reference to an asset administration shell.
+        if that.derived_from is not None:
+            that.derived_from = generate_model_reference(
+                common.hash_path(path_hash, "derived_from"),
+                expected_type=aas_types.KeyTypes.ASSET_ADMINISTRATION_SHELL
+            )
+
+        # Fix: All submodels must be model references to a submodel.
+        if that.submodels is not None:
+            that.submodels = [
+                generate_model_reference(
+                    common.hash_path(path_hash, ["submodels", 0]),
+                    expected_type=aas_types.KeyTypes.SUBMODEL
+                )
+            ]
+
+    @typing_extensions.override
+    def _fix_asset_information(
+            self, that: aas_types.AssetInformation, path_hash: common.CanHash
+    ) -> None:
+        # region Fix for AASd-131
+        if that.global_asset_id is None and that.specific_asset_ids is None:
+            that.global_asset_id = primitiving.generate_str(
+                common.hash_path(path_hash, "global_asset_id")
+            )
+
+        if that.global_asset_id is not None and that.specific_asset_ids is not None:
+            that.specific_asset_ids = None
+
+        # endregion
+
+    @typing_extensions.override
     def _fix_basic_event_element(
-        self, that: aas_types.BasicEventElement, path_hash: common.CanHash
+            self, that: aas_types.BasicEventElement, path_hash: common.CanHash
     ) -> None:
         # Fix that the observed is a proper model reference
         if that.observed is not None:
@@ -161,13 +219,241 @@ class _Handyman(abstract_fixing.AbstractHandyman):
                 expected_type=aas_types.KeyTypes.REFERABLE,
             )
 
-    # TODO (mristin, 2023-03-10): continue here, make sure minimal and maximal work.
+    def _fix_data_specification_iec_61360(
+            self, that: aas_types.DataSpecificationIEC61360, path_hash: common.CanHash
+    ) -> None:
+        # Constraint AASc-3a-010: If value and value_list, pick value
+        if that.value is not None and that.value_list is not None:
+            that.value_list = None
+
+        # Constraint AASc-3a-010: If neither value nor value_list, set value
+        if that.value is None and that.value_list is None:
+            that.value = primitiving.generate_str(common.hash_path(path_hash, "value"))
+
+        # Constraint AASc-3a-009: unit or unit ID must be set if data type requires it
+        if (
+                that.data_type is not None
+                and that.data_type in aas_constants.IEC_61360_DATA_TYPES_WITH_UNIT
+        ):
+            that.unit = primitiving.generate_str(common.hash_path(path_hash, "unit"))
+
+        # Constraint AASc-002: preferred name at least in English
+        _extend_lang_string_set_to_have_an_entry_at_least_in_english(
+            path_hash=common.hash_path(path_hash, "preferred_name"),
+            lang_string_set=that.preferred_name,
+            lang_string_class=aas_types.LangStringPreferredNameTypeIEC61360
+        )
+
+    def _fix_entity(self, that: aas_types.Entity, path_hash: common.CanHash) -> None:
+        # Fix AASd-014: Either the attribute global asset ID or specific asset ID
+        # must be set if entity type is set to 'SelfManagedEntity'. They are not
+        # existing otherwise.
+        if that.entity_type is aas_types.EntityType.SELF_MANAGED_ENTITY:
+            if that.global_asset_id is not None and that.specific_asset_ids is not None:
+                that.specific_asset_ids = None
+        else:
+            that.global_asset_id = None
+            that.specific_asset_ids = None
+
+    def _fix_event_payload(
+            self, that: aas_types.EventPayload, path_hash: common.CanHash
+    ) -> None:
+        if (
+                not aas_verification.is_model_reference_to(
+                    that.source, aas_types.KeyTypes.EVENT_ELEMENT
+                )
+                and not aas_verification.is_model_reference_to(
+            that.source, aas_types.KeyTypes.BASIC_EVENT_ELEMENT
+        )
+        ):
+            that.source = generate_model_reference(
+                path_hash=common.hash_path(path_hash, "source"),
+                expected_type=aas_types.KeyTypes.EVENT_ELEMENT
+            )
+
+        if not aas_verification.is_model_reference_to_referable(
+                that.observable_reference
+        ):
+            that.observable_reference = generate_model_reference(
+                path_hash=common.hash_path(path_hash, "source"),
+                expected_type=aas_types.KeyTypes.REFERABLE
+            )
+
+    def _fix_extension(
+            self, that: aas_types.Extension, path_hash: common.CanHash
+    ) -> None:
+        # Fix: The value must match the value type.
+        if that.value is not None:
+            value_type = that.value_type_or_default()
+            if not aas_verification.value_consistent_with_xsd_type(
+                    that.value, value_type
+            ):
+                that.value = generate_xs_value(
+                    common.hash_path(path_hash, "value"),
+                    value_type
+                )
+
+    def _fix_property(
+            self, that: aas_types.Property, path_hash: common.CanHash
+    ) -> None:
+        if (
+                that.value is not None
+                and not aas_verification.value_consistent_with_xsd_type(
+            that.value, that.value_type
+        )
+        ):
+            that.value = generate_xs_value(
+                common.hash_path(path_hash, "value"),
+                that.value_type
+            )
+
+    def _fix_qualifier(
+            self, that: aas_types.Qualifier, path_hash: common.CanHash
+    ) -> None:
+        if (
+                that.value is not None
+                and not aas_verification.value_consistent_with_xsd_type(
+            that.value, that.value_type
+        )
+        ):
+            that.value = generate_xs_value(
+                common.hash_path(path_hash, "value"),
+                that.value_type
+            )
+
+    def _fix_range(self, that: aas_types.Range, path_hash: common.CanHash) -> None:
+        if that.min is not None and that.max is not None:
+            # We unset the min so that we never have a semantically invalid range.
+            that.min = None
+
+        assert (that.min is None) or (that.max is None)
+
+        if that.min is not None:
+            that.min = generate_xs_value(
+                common.hash_path(path_hash, "min"),
+                that.value_type
+            )
+
+        if that.max is not None:
+            that.max = generate_xs_value(
+                common.hash_path(path_hash, "max"),
+                that.value_type
+            )
+
+    def _fix_reference(
+            self, that: aas_types.Reference, path_hash: common.CanHash
+    ) -> None:
+        # NOTE (mristin, 2023-03-11):
+        # We first check if this instance needs fixing at all. It could be
+        # that the previous function higher up in the stack already fixed
+        # the reference, so we do not want to undo the changes.
+        #
+        # We do not check before fixing in all the ``_fix_*`` methods as that is
+        # computationally prohibitive.
+        errors = list(aas_verification.verify(that))
+        if len(errors) == 0:
+            return
+
+        # Simply overwrite the keys to satisfy the reference type
+        if that.type is aas_types.ReferenceTypes.EXTERNAL_REFERENCE:
+            that.keys = [
+                aas_types.Key(
+                    type=aas_types.KeyTypes.GLOBAL_REFERENCE,
+                    value=generate_urn(
+                        common.hash_path(path_hash, ["keys", 0, "value"])
+                    )
+                )
+            ]
+        elif that.type is aas_types.ReferenceTypes.MODEL_REFERENCE:
+            that.keys = [
+                aas_types.Key(
+                    type=aas_types.KeyTypes.SUBMODEL,
+                    value=generate_urn(
+                        common.hash_path(path_hash, ["keys", 0, "value"])),
+                )
+            ]
+        else:
+            assert_never(that.type)
+
+    def _fix_submodel(
+            self, that: aas_types.Submodel, path_hash: common.CanHash
+    ) -> None:
+        # ID shorts must be defined for all submodel elements
+        if that.submodel_elements is not None:
+            for i, submodel_element in enumerate(that.submodel_elements):
+                if submodel_element.id_short is None:
+                    submodel_element.id_short = generate_id_short(
+                        common.hash_path(
+                            path_hash, ["submodel_elements", i, "id_short"]
+                        )
+                    )
+
+        # region Fix AASd-119 and AASd-129
+
+        # Check for AASd-119
+        must_be_template = False
+        if that.qualifiers is not None:
+            if any(
+                    qualifier.kind_or_default() is
+                    aas_types.QualifierKind.TEMPLATE_QUALIFIER
+                    for qualifier in that.qualifiers
+            ):
+                must_be_template = True
+
+        # Check for AASd-129
+        if that.submodel_elements is not None:
+            for submodel_element in that.submodel_elements:
+                if submodel_element.qualifiers is not None:
+                    for qualifier in submodel_element.qualifiers:
+                        if (
+                                qualifier.kind_or_default()
+                                is aas_types.QualifierKind.TEMPLATE_QUALIFIER
+                        ):
+                            must_be_template = True
+                            break
+
+                if must_be_template:
+                    break
+
+        if must_be_template:
+            that.kind = aas_types.ModellingKind.TEMPLATE
+
+        # endregion
+
+
+# TODO (mristin, 2023-03-10): continue here, make sure minimal and maximal work.
+
+
+def _assert_fix_methods_sorted_in_handyman() -> None:
+    """Assert that we alphabetically sorted methods in :py:class:`_Handyman`."""
+    handyman_cls = _Handyman
+    source_code = inspect.getsource(handyman_cls)
+    root = ast.parse(source_code)
+    assert isinstance(root, ast.Module)
+    assert len(root.body) == 1
+
+    handyman_cls_ast = root.body[0]
+    assert isinstance(handyman_cls_ast, ast.ClassDef)
+
+    method_names = [
+        node.name
+        for node in handyman_cls_ast.body
+        if isinstance(node, ast.FunctionDef) and node.name.startswith("_fix_")
+    ]
+
+    assert method_names == sorted(method_names), (
+        f"The ``_fix_*`` methods in {_Handyman.__name__} must be sorted "
+        f"for readability."
+    )
+
+
+_assert_fix_methods_sorted_in_handyman()
 
 
 def assert_instance_at_path_in_environment(
-    environment: aas_types.Environment,
-    instance: aas_types.Class,
-    path: Sequence[Union[str, int]],
+        environment: aas_types.Environment,
+        instance: aas_types.Class,
+        path: Sequence[Union[str, int]],
 ) -> None:
     """Assert that the ``instance`` still resides in ``environment`` at ``path``."""
     something, error = common.dereference_instance(
@@ -207,8 +493,14 @@ def fix(root: aas_types.Class) -> None:
     if len(errors) > 0:
         errors_joined = "\n".join(f"* {error.path}: {error.cause}" for error in errors)
 
+        preserialized_dump = preserialization.dump(
+            preserialization.preserialize(root)
+        )
+
         raise AssertionError(
             f"Expected no errors after fixing the instance {root}, "
             f"but got errors:\n"
-            f"{errors_joined}"
+            f"{errors_joined}\n\n"
+            f"The dump of the preserialized instance:\n"
+            f"{preserialized_dump}"
         )

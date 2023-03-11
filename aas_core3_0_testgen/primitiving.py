@@ -105,13 +105,6 @@ def generate_str(
         raise AssertionError(f"Unexpected case: {min_len=}, {max_len=}")
 
 
-# fmt: off
-@ensure(
-    lambda count, result:
-    not (count is not None)
-    or (len(result) == count)
-)
-# fmt: on
 def generate_str_satisfying_pattern(path_hash: common.CanHash, pattern: str) -> str:
     """Transform the digest to one of the pattern examples."""
     examples = frozen_examples_pattern.BY_PATTERN.get(pattern, None)

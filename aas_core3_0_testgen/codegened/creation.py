@@ -11,7 +11,9 @@ import aas_core3_0_testgen.common as common
 import aas_core3_0_testgen.primitiving as primitiving
 
 
-def minimal_has_semantics(path_hash: common.CanHash) -> aas_types.HasSemantics:
+def minimal_has_semantics(
+    path_hash: common.CanHash
+) -> aas_types.HasSemantics:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -22,9 +24,11 @@ def minimal_has_semantics(path_hash: common.CanHash) -> aas_types.HasSemantics:
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMAL["Has_semantics"]
+    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMALS[
+        'Has_semantics'
+    ]
     concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+        number % len(concrete_minimal_functions)
     ]
     instance = concrete_minimal_function(path_hash)
     assert isinstance(
@@ -34,7 +38,9 @@ def minimal_has_semantics(path_hash: common.CanHash) -> aas_types.HasSemantics:
     return instance
 
 
-def minimal_extension(path_hash: common.CanHash) -> aas_types.Extension:
+def minimal_extension(
+    path_hash: common.CanHash
+) -> aas_types.Extension:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -47,13 +53,20 @@ def minimal_extension(path_hash: common.CanHash) -> aas_types.Extension:
     return aas_types.Extension(
         name=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "name"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'name'
+                ),
+                min_len=1,
+                max_len=128
             )
         )
     )
 
 
-def minimal_has_extensions(path_hash: common.CanHash) -> aas_types.HasExtensions:
+def minimal_has_extensions(
+    path_hash: common.CanHash
+) -> aas_types.HasExtensions:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -64,9 +77,11 @@ def minimal_has_extensions(path_hash: common.CanHash) -> aas_types.HasExtensions
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMAL["Has_extensions"]
+    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMALS[
+        'Has_extensions'
+    ]
     concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+        number % len(concrete_minimal_functions)
     ]
     instance = concrete_minimal_function(path_hash)
     assert isinstance(
@@ -76,7 +91,9 @@ def minimal_has_extensions(path_hash: common.CanHash) -> aas_types.HasExtensions
     return instance
 
 
-def minimal_referable(path_hash: common.CanHash) -> aas_types.Referable:
+def minimal_referable(
+    path_hash: common.CanHash
+) -> aas_types.Referable:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -87,9 +104,11 @@ def minimal_referable(path_hash: common.CanHash) -> aas_types.Referable:
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMAL["Referable"]
+    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMALS[
+        'Referable'
+    ]
     concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+        number % len(concrete_minimal_functions)
     ]
     instance = concrete_minimal_function(path_hash)
     assert isinstance(
@@ -99,7 +118,9 @@ def minimal_referable(path_hash: common.CanHash) -> aas_types.Referable:
     return instance
 
 
-def minimal_identifiable(path_hash: common.CanHash) -> aas_types.Identifiable:
+def minimal_identifiable(
+    path_hash: common.CanHash
+) -> aas_types.Identifiable:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -110,9 +131,11 @@ def minimal_identifiable(path_hash: common.CanHash) -> aas_types.Identifiable:
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMAL["Identifiable"]
+    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMALS[
+        'Identifiable'
+    ]
     concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+        number % len(concrete_minimal_functions)
     ]
     instance = concrete_minimal_function(path_hash)
     assert isinstance(
@@ -122,7 +145,9 @@ def minimal_identifiable(path_hash: common.CanHash) -> aas_types.Identifiable:
     return instance
 
 
-def minimal_has_kind(path_hash: common.CanHash) -> aas_types.HasKind:
+def minimal_has_kind(
+    path_hash: common.CanHash
+) -> aas_types.HasKind:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -133,9 +158,11 @@ def minimal_has_kind(path_hash: common.CanHash) -> aas_types.HasKind:
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMAL["Has_kind"]
+    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMALS[
+        'Has_kind'
+    ]
     concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+        number % len(concrete_minimal_functions)
     ]
     instance = concrete_minimal_function(path_hash)
     assert isinstance(
@@ -146,7 +173,7 @@ def minimal_has_kind(path_hash: common.CanHash) -> aas_types.HasKind:
 
 
 def minimal_has_data_specification(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.HasDataSpecification:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -158,11 +185,11 @@ def minimal_has_data_specification(
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMAL[
-        "Has_data_specification"
+    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMALS[
+        'Has_data_specification'
     ]
     concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+        number % len(concrete_minimal_functions)
     ]
     instance = concrete_minimal_function(path_hash)
     assert isinstance(
@@ -173,7 +200,7 @@ def minimal_has_data_specification(
 
 
 def minimal_administrative_information(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.AdministrativeInformation:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -187,7 +214,9 @@ def minimal_administrative_information(
     return aas_types.AdministrativeInformation()
 
 
-def minimal_qualifiable(path_hash: common.CanHash) -> aas_types.Qualifiable:
+def minimal_qualifiable(
+    path_hash: common.CanHash
+) -> aas_types.Qualifiable:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -198,9 +227,11 @@ def minimal_qualifiable(path_hash: common.CanHash) -> aas_types.Qualifiable:
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMAL["Qualifiable"]
+    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMALS[
+        'Qualifiable'
+    ]
     concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+        number % len(concrete_minimal_functions)
     ]
     instance = concrete_minimal_function(path_hash)
     assert isinstance(
@@ -210,7 +241,9 @@ def minimal_qualifiable(path_hash: common.CanHash) -> aas_types.Qualifiable:
     return instance
 
 
-def minimal_qualifier(path_hash: common.CanHash) -> aas_types.Qualifier:
+def minimal_qualifier(
+    path_hash: common.CanHash
+) -> aas_types.Qualifier:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -223,20 +256,28 @@ def minimal_qualifier(path_hash: common.CanHash) -> aas_types.Qualifier:
     return aas_types.Qualifier(
         type=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "type"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'type'
+                ),
+                min_len=1,
+                max_len=128
             )
         ),
         value_type=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "value_type"),
-                list(aas_types.DataTypeDefXSD),
+                common.hash_path(
+                    path_hash,
+                    'value_type'
+                ),
+                list(aas_types.DataTypeDefXSD)
             )
-        ),
+        )
     )
 
 
 def minimal_asset_administration_shell(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.AssetAdministrationShell:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -250,16 +291,28 @@ def minimal_asset_administration_shell(
     return aas_types.AssetAdministrationShell(
         id=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "ID"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'ID'
+                ),
+                min_len=1,
+                max_len=2000
             )
         ),
         asset_information=(
-            minimal_asset_information(common.hash_path(path_hash, "asset_information"))
-        ),
+            minimal_asset_information(
+                common.hash_path(
+                    path_hash,
+                    'asset_information'
+                )
+            )
+        )
     )
 
 
-def minimal_asset_information(path_hash: common.CanHash) -> aas_types.AssetInformation:
+def minimal_asset_information(
+    path_hash: common.CanHash
+) -> aas_types.AssetInformation:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -272,13 +325,19 @@ def minimal_asset_information(path_hash: common.CanHash) -> aas_types.AssetInfor
     return aas_types.AssetInformation(
         asset_kind=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "asset_kind"), list(aas_types.AssetKind)
+                common.hash_path(
+                    path_hash,
+                    'asset_kind'
+                ),
+                list(aas_types.AssetKind)
             )
         )
     )
 
 
-def minimal_resource(path_hash: common.CanHash) -> aas_types.Resource:
+def minimal_resource(
+    path_hash: common.CanHash
+) -> aas_types.Resource:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -291,14 +350,19 @@ def minimal_resource(path_hash: common.CanHash) -> aas_types.Resource:
     return aas_types.Resource(
         path=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "path"),
-                "^file:(//((localhost|(\\[((([0-9A-Fa-f]{1,4}:){6}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|::([0-9A-Fa-f]{1,4}:){5}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|([0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){4}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){3}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){2}[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){2}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){3}[0-9A-Fa-f]{1,4})?::[0-9A-Fa-f]{1,4}:([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){4}[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){5}[0-9A-Fa-f]{1,4})?::[0-9A-Fa-f]{1,4}|(([0-9A-Fa-f]{1,4}:){6}[0-9A-Fa-f]{1,4})?::)|[vV][0-9A-Fa-f]+\\.([a-zA-Z0-9\\-._~]|[!$&'()*+,;=]|:)+)\\]|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])|([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=])*)))?/((([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))+(/(([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))*)*)?|/((([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))+(/(([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))*)*)?)$",
+                common.hash_path(
+                    path_hash,
+                    'path'
+                ),
+                "^file:(//((localhost|(\\[((([0-9A-Fa-f]{1,4}:){6}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|::([0-9A-Fa-f]{1,4}:){5}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|([0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){4}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){3}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){2}[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){2}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){3}[0-9A-Fa-f]{1,4})?::[0-9A-Fa-f]{1,4}:([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){4}[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){5}[0-9A-Fa-f]{1,4})?::[0-9A-Fa-f]{1,4}|(([0-9A-Fa-f]{1,4}:){6}[0-9A-Fa-f]{1,4})?::)|[vV][0-9A-Fa-f]+\\.([a-zA-Z0-9\\-._~]|[!$&'()*+,;=]|:)+)\\]|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])|([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=])*)))?/((([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))+(/(([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))*)*)?|/((([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))+(/(([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))*)*)?)$"
             )
         )
     )
 
 
-def minimal_specific_asset_id(path_hash: common.CanHash) -> aas_types.SpecificAssetID:
+def minimal_specific_asset_id(
+    path_hash: common.CanHash
+) -> aas_types.SpecificAssetID:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -311,18 +375,30 @@ def minimal_specific_asset_id(path_hash: common.CanHash) -> aas_types.SpecificAs
     return aas_types.SpecificAssetID(
         name=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "name"), min_len=1, max_len=64
+                common.hash_path(
+                    path_hash,
+                    'name'
+                ),
+                min_len=1,
+                max_len=64
             )
         ),
         value=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "value"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'value'
+                ),
+                min_len=1,
+                max_len=2000
             )
-        ),
+        )
     )
 
 
-def minimal_submodel(path_hash: common.CanHash) -> aas_types.Submodel:
+def minimal_submodel(
+    path_hash: common.CanHash
+) -> aas_types.Submodel:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -335,13 +411,20 @@ def minimal_submodel(path_hash: common.CanHash) -> aas_types.Submodel:
     return aas_types.Submodel(
         id=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "ID"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'ID'
+                ),
+                min_len=1,
+                max_len=2000
             )
         )
     )
 
 
-def minimal_submodel_element(path_hash: common.CanHash) -> aas_types.SubmodelElement:
+def minimal_submodel_element(
+    path_hash: common.CanHash
+) -> aas_types.SubmodelElement:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -352,9 +435,11 @@ def minimal_submodel_element(path_hash: common.CanHash) -> aas_types.SubmodelEle
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMAL["Submodel_element"]
+    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMALS[
+        'Submodel_element'
+    ]
     concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+        number % len(concrete_minimal_functions)
     ]
     instance = concrete_minimal_function(path_hash)
     assert isinstance(
@@ -365,7 +450,7 @@ def minimal_submodel_element(path_hash: common.CanHash) -> aas_types.SubmodelEle
 
 
 def concrete_minimal_relationship_element(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.RelationshipElement:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -382,13 +467,27 @@ def concrete_minimal_relationship_element(
         more meta-model constraints.
     """
     return aas_types.RelationshipElement(
-        first=(minimal_reference(common.hash_path(path_hash, "first"))),
-        second=(minimal_reference(common.hash_path(path_hash, "second"))),
+        first=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'first'
+                )
+            )
+        ),
+        second=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'second'
+                )
+            )
+        )
     )
 
 
 def minimal_relationship_element(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.RelationshipElement:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -400,9 +499,11 @@ def minimal_relationship_element(
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMAL["Relationship_element"]
+    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMALS[
+        'Relationship_element'
+    ]
     concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+        number % len(concrete_minimal_functions)
     ]
     instance = concrete_minimal_function(path_hash)
     assert isinstance(
@@ -413,7 +514,7 @@ def minimal_relationship_element(
 
 
 def minimal_submodel_element_list(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.SubmodelElementList:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -427,15 +528,18 @@ def minimal_submodel_element_list(
     return aas_types.SubmodelElementList(
         type_value_list_element=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "type_value_list_element"),
-                list(aas_types.AASSubmodelElements),
+                common.hash_path(
+                    path_hash,
+                    'type_value_list_element'
+                ),
+                list(aas_types.AASSubmodelElements)
             )
         )
     )
 
 
 def minimal_submodel_element_collection(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.SubmodelElementCollection:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -449,7 +553,9 @@ def minimal_submodel_element_collection(
     return aas_types.SubmodelElementCollection()
 
 
-def minimal_data_element(path_hash: common.CanHash) -> aas_types.DataElement:
+def minimal_data_element(
+    path_hash: common.CanHash
+) -> aas_types.DataElement:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -460,9 +566,11 @@ def minimal_data_element(path_hash: common.CanHash) -> aas_types.DataElement:
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMAL["Data_element"]
+    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMALS[
+        'Data_element'
+    ]
     concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+        number % len(concrete_minimal_functions)
     ]
     instance = concrete_minimal_function(path_hash)
     assert isinstance(
@@ -472,7 +580,9 @@ def minimal_data_element(path_hash: common.CanHash) -> aas_types.DataElement:
     return instance
 
 
-def minimal_property(path_hash: common.CanHash) -> aas_types.Property:
+def minimal_property(
+    path_hash: common.CanHash
+) -> aas_types.Property:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -485,15 +595,18 @@ def minimal_property(path_hash: common.CanHash) -> aas_types.Property:
     return aas_types.Property(
         value_type=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "value_type"),
-                list(aas_types.DataTypeDefXSD),
+                common.hash_path(
+                    path_hash,
+                    'value_type'
+                ),
+                list(aas_types.DataTypeDefXSD)
             )
         )
     )
 
 
 def minimal_multi_language_property(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.MultiLanguageProperty:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -507,7 +620,9 @@ def minimal_multi_language_property(
     return aas_types.MultiLanguageProperty()
 
 
-def minimal_range(path_hash: common.CanHash) -> aas_types.Range:
+def minimal_range(
+    path_hash: common.CanHash
+) -> aas_types.Range:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -520,14 +635,19 @@ def minimal_range(path_hash: common.CanHash) -> aas_types.Range:
     return aas_types.Range(
         value_type=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "value_type"),
-                list(aas_types.DataTypeDefXSD),
+                common.hash_path(
+                    path_hash,
+                    'value_type'
+                ),
+                list(aas_types.DataTypeDefXSD)
             )
         )
     )
 
 
-def minimal_reference_element(path_hash: common.CanHash) -> aas_types.ReferenceElement:
+def minimal_reference_element(
+    path_hash: common.CanHash
+) -> aas_types.ReferenceElement:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -540,7 +660,9 @@ def minimal_reference_element(path_hash: common.CanHash) -> aas_types.ReferenceE
     return aas_types.ReferenceElement()
 
 
-def minimal_blob(path_hash: common.CanHash) -> aas_types.Blob:
+def minimal_blob(
+    path_hash: common.CanHash
+) -> aas_types.Blob:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -553,14 +675,19 @@ def minimal_blob(path_hash: common.CanHash) -> aas_types.Blob:
     return aas_types.Blob(
         content_type=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "content_type"),
-                "^([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+/([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+([ \t]*;[ \t]*([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+=(([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+|\"(([\t !#-\\[\\]-~]|[\\x80-\\xff])|\\\\([\t !-~]|[\\x80-\\xff]))*\"))*$",
+                common.hash_path(
+                    path_hash,
+                    'content_type'
+                ),
+                "^([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+/([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+([ \t]*;[ \t]*([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+=(([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+|\"(([\t !#-\\[\\]-~]|[\\x80-\\xff])|\\\\([\t !-~]|[\\x80-\\xff]))*\"))*$"
             )
         )
     )
 
 
-def minimal_file(path_hash: common.CanHash) -> aas_types.File:
+def minimal_file(
+    path_hash: common.CanHash
+) -> aas_types.File:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -573,15 +700,18 @@ def minimal_file(path_hash: common.CanHash) -> aas_types.File:
     return aas_types.File(
         content_type=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "content_type"),
-                "^([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+/([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+([ \t]*;[ \t]*([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+=(([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+|\"(([\t !#-\\[\\]-~]|[\\x80-\\xff])|\\\\([\t !-~]|[\\x80-\\xff]))*\"))*$",
+                common.hash_path(
+                    path_hash,
+                    'content_type'
+                ),
+                "^([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+/([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+([ \t]*;[ \t]*([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+=(([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+|\"(([\t !#-\\[\\]-~]|[\\x80-\\xff])|\\\\([\t !-~]|[\\x80-\\xff]))*\"))*$"
             )
         )
     )
 
 
 def minimal_annotated_relationship_element(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.AnnotatedRelationshipElement:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -593,12 +723,28 @@ def minimal_annotated_relationship_element(
         more meta-model constraints.
     """
     return aas_types.AnnotatedRelationshipElement(
-        first=(minimal_reference(common.hash_path(path_hash, "first"))),
-        second=(minimal_reference(common.hash_path(path_hash, "second"))),
+        first=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'first'
+                )
+            )
+        ),
+        second=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'second'
+                )
+            )
+        )
     )
 
 
-def minimal_entity(path_hash: common.CanHash) -> aas_types.Entity:
+def minimal_entity(
+    path_hash: common.CanHash
+) -> aas_types.Entity:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -611,13 +757,19 @@ def minimal_entity(path_hash: common.CanHash) -> aas_types.Entity:
     return aas_types.Entity(
         entity_type=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "entity_type"), list(aas_types.EntityType)
+                common.hash_path(
+                    path_hash,
+                    'entity_type'
+                ),
+                list(aas_types.EntityType)
             )
         )
     )
 
 
-def minimal_event_payload(path_hash: common.CanHash) -> aas_types.EventPayload:
+def minimal_event_payload(
+    path_hash: common.CanHash
+) -> aas_types.EventPayload:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -628,20 +780,37 @@ def minimal_event_payload(path_hash: common.CanHash) -> aas_types.EventPayload:
         more meta-model constraints.
     """
     return aas_types.EventPayload(
-        source=(minimal_reference(common.hash_path(path_hash, "source"))),
+        source=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'source'
+                )
+            )
+        ),
         observable_reference=(
-            minimal_reference(common.hash_path(path_hash, "observable_reference"))
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'observable_reference'
+                )
+            )
         ),
         time_stamp=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "time_stamp"),
-                "^-?(([1-9][0-9][0-9][0-9]+)|(0[0-9][0-9][0-9]))-((0[1-9])|(1[0-2]))-((0[1-9])|([12][0-9])|(3[01]))T(((([01][0-9])|(2[0-3])):[0-5][0-9]:([0-5][0-9])(\\.[0-9]+)?)|24:00:00(\\.0+)?)(Z|\\+00:00|-00:00)$",
+                common.hash_path(
+                    path_hash,
+                    'time_stamp'
+                ),
+                '^-?(([1-9][0-9][0-9][0-9]+)|(0[0-9][0-9][0-9]))-((0[1-9])|(1[0-2]))-((0[1-9])|([12][0-9])|(3[01]))T(((([01][0-9])|(2[0-3])):[0-5][0-9]:([0-5][0-9])(\\.[0-9]+)?)|24:00:00(\\.0+)?)(Z|\\+00:00|-00:00)$'
             )
-        ),
+        )
     )
 
 
-def minimal_event_element(path_hash: common.CanHash) -> aas_types.EventElement:
+def minimal_event_element(
+    path_hash: common.CanHash
+) -> aas_types.EventElement:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -652,9 +821,11 @@ def minimal_event_element(path_hash: common.CanHash) -> aas_types.EventElement:
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMAL["Event_element"]
+    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMALS[
+        'Event_element'
+    ]
     concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+        number % len(concrete_minimal_functions)
     ]
     instance = concrete_minimal_function(path_hash)
     assert isinstance(
@@ -665,7 +836,7 @@ def minimal_event_element(path_hash: common.CanHash) -> aas_types.EventElement:
 
 
 def minimal_basic_event_element(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.BasicEventElement:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -677,21 +848,38 @@ def minimal_basic_event_element(
         more meta-model constraints.
     """
     return aas_types.BasicEventElement(
-        observed=(minimal_reference(common.hash_path(path_hash, "observed"))),
+        observed=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'observed'
+                )
+            )
+        ),
         direction=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "direction"), list(aas_types.Direction)
+                common.hash_path(
+                    path_hash,
+                    'direction'
+                ),
+                list(aas_types.Direction)
             )
         ),
         state=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "state"), list(aas_types.StateOfEvent)
+                common.hash_path(
+                    path_hash,
+                    'state'
+                ),
+                list(aas_types.StateOfEvent)
             )
-        ),
+        )
     )
 
 
-def minimal_operation(path_hash: common.CanHash) -> aas_types.Operation:
+def minimal_operation(
+    path_hash: common.CanHash
+) -> aas_types.Operation:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -705,7 +893,7 @@ def minimal_operation(path_hash: common.CanHash) -> aas_types.Operation:
 
 
 def minimal_operation_variable(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.OperationVariable:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -717,11 +905,20 @@ def minimal_operation_variable(
         more meta-model constraints.
     """
     return aas_types.OperationVariable(
-        value=(minimal_submodel_element(common.hash_path(path_hash, "value")))
+        value=(
+            minimal_submodel_element(
+                common.hash_path(
+                    path_hash,
+                    'value'
+                )
+            )
+        )
     )
 
 
-def minimal_capability(path_hash: common.CanHash) -> aas_types.Capability:
+def minimal_capability(
+    path_hash: common.CanHash
+) -> aas_types.Capability:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -735,7 +932,7 @@ def minimal_capability(path_hash: common.CanHash) -> aas_types.Capability:
 
 
 def minimal_concept_description(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.ConceptDescription:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -749,13 +946,20 @@ def minimal_concept_description(
     return aas_types.ConceptDescription(
         id=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "ID"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'ID'
+                ),
+                min_len=1,
+                max_len=2000
             )
         )
     )
 
 
-def minimal_reference(path_hash: common.CanHash) -> aas_types.Reference:
+def minimal_reference(
+    path_hash: common.CanHash
+) -> aas_types.Reference:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -768,14 +972,29 @@ def minimal_reference(path_hash: common.CanHash) -> aas_types.Reference:
     return aas_types.Reference(
         type=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "type"), list(aas_types.ReferenceTypes)
+                common.hash_path(
+                    path_hash,
+                    'type'
+                ),
+                list(aas_types.ReferenceTypes)
             )
         ),
-        keys=([minimal_key(common.hash_path(path_hash, "keys"))]),
+        keys=(
+            [
+                minimal_key(
+                    common.hash_path(
+                        path_hash,
+                        'keys'
+                    )
+                )
+            ]
+        )
     )
 
 
-def minimal_key(path_hash: common.CanHash) -> aas_types.Key:
+def minimal_key(
+    path_hash: common.CanHash
+) -> aas_types.Key:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -788,19 +1007,28 @@ def minimal_key(path_hash: common.CanHash) -> aas_types.Key:
     return aas_types.Key(
         type=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "type"), list(aas_types.KeyTypes)
+                common.hash_path(
+                    path_hash,
+                    'type'
+                ),
+                list(aas_types.KeyTypes)
             )
         ),
         value=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "value"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'value'
+                ),
+                min_len=1,
+                max_len=2000
             )
-        ),
+        )
     )
 
 
 def minimal_abstract_lang_string(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.AbstractLangString:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -812,9 +1040,11 @@ def minimal_abstract_lang_string(
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMAL["Abstract_lang_string"]
+    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMALS[
+        'Abstract_lang_string'
+    ]
     concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+        number % len(concrete_minimal_functions)
     ]
     instance = concrete_minimal_function(path_hash)
     assert isinstance(
@@ -825,7 +1055,7 @@ def minimal_abstract_lang_string(
 
 
 def minimal_lang_string_name_type(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.LangStringNameType:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -839,20 +1069,28 @@ def minimal_lang_string_name_type(
     return aas_types.LangStringNameType(
         language=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "language"),
-                "^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$",
+                common.hash_path(
+                    path_hash,
+                    'language'
+                ),
+                '^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$'
             )
         ),
         text=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "text"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'text'
+                ),
+                min_len=1,
+                max_len=128
             )
-        ),
+        )
     )
 
 
 def minimal_lang_string_text_type(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.LangStringTextType:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -866,19 +1104,29 @@ def minimal_lang_string_text_type(
     return aas_types.LangStringTextType(
         language=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "language"),
-                "^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$",
+                common.hash_path(
+                    path_hash,
+                    'language'
+                ),
+                '^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$'
             )
         ),
         text=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "text"), min_len=1, max_len=1023
+                common.hash_path(
+                    path_hash,
+                    'text'
+                ),
+                min_len=1,
+                max_len=1023
             )
-        ),
+        )
     )
 
 
-def minimal_environment(path_hash: common.CanHash) -> aas_types.Environment:
+def minimal_environment(
+    path_hash: common.CanHash
+) -> aas_types.Environment:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -892,7 +1140,7 @@ def minimal_environment(path_hash: common.CanHash) -> aas_types.Environment:
 
 
 def minimal_data_specification_content(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.DataSpecificationContent:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -904,11 +1152,11 @@ def minimal_data_specification_content(
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMAL[
-        "Data_specification_content"
+    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MINIMALS[
+        'Data_specification_content'
     ]
     concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+        number % len(concrete_minimal_functions)
     ]
     instance = concrete_minimal_function(path_hash)
     assert isinstance(
@@ -919,7 +1167,7 @@ def minimal_data_specification_content(
 
 
 def minimal_embedded_data_specification(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.EmbeddedDataSpecification:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -932,17 +1180,27 @@ def minimal_embedded_data_specification(
     """
     return aas_types.EmbeddedDataSpecification(
         data_specification=(
-            minimal_reference(common.hash_path(path_hash, "data_specification"))
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'data_specification'
+                )
+            )
         ),
         data_specification_content=(
             minimal_data_specification_content(
-                common.hash_path(path_hash, "data_specification_content")
+                common.hash_path(
+                    path_hash,
+                    'data_specification_content'
+                )
             )
-        ),
+        )
     )
 
 
-def minimal_level_type(path_hash: common.CanHash) -> aas_types.LevelType:
+def minimal_level_type(
+    path_hash: common.CanHash
+) -> aas_types.LevelType:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -953,15 +1211,43 @@ def minimal_level_type(path_hash: common.CanHash) -> aas_types.LevelType:
         more meta-model constraints.
     """
     return aas_types.LevelType(
-        min=(primitiving.generate_bool(common.hash_path(path_hash, "min"))),
-        nom=(primitiving.generate_bool(common.hash_path(path_hash, "nom"))),
-        typ=(primitiving.generate_bool(common.hash_path(path_hash, "typ"))),
-        max=(primitiving.generate_bool(common.hash_path(path_hash, "max"))),
+        min=(
+            primitiving.generate_bool(
+                common.hash_path(
+                    path_hash,
+                    'min'
+                )
+            )
+        ),
+        nom=(
+            primitiving.generate_bool(
+                common.hash_path(
+                    path_hash,
+                    'nom'
+                )
+            )
+        ),
+        typ=(
+            primitiving.generate_bool(
+                common.hash_path(
+                    path_hash,
+                    'typ'
+                )
+            )
+        ),
+        max=(
+            primitiving.generate_bool(
+                common.hash_path(
+                    path_hash,
+                    'max'
+                )
+            )
+        )
     )
 
 
 def minimal_value_reference_pair(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.ValueReferencePair:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -975,14 +1261,28 @@ def minimal_value_reference_pair(
     return aas_types.ValueReferencePair(
         value=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "value"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'value'
+                ),
+                min_len=1,
+                max_len=2000
             )
         ),
-        value_id=(minimal_reference(common.hash_path(path_hash, "value_ID"))),
+        value_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'value_ID'
+                )
+            )
+        )
     )
 
 
-def minimal_value_list(path_hash: common.CanHash) -> aas_types.ValueList:
+def minimal_value_list(
+    path_hash: common.CanHash
+) -> aas_types.ValueList:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -996,7 +1296,10 @@ def minimal_value_list(path_hash: common.CanHash) -> aas_types.ValueList:
         value_reference_pairs=(
             [
                 minimal_value_reference_pair(
-                    common.hash_path(path_hash, "value_reference_pairs")
+                    common.hash_path(
+                        path_hash,
+                        'value_reference_pairs'
+                    )
                 )
             ]
         )
@@ -1004,7 +1307,7 @@ def minimal_value_list(path_hash: common.CanHash) -> aas_types.ValueList:
 
 
 def minimal_lang_string_preferred_name_type_iec_61360(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.LangStringPreferredNameTypeIEC61360:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -1018,20 +1321,28 @@ def minimal_lang_string_preferred_name_type_iec_61360(
     return aas_types.LangStringPreferredNameTypeIEC61360(
         language=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "language"),
-                "^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$",
+                common.hash_path(
+                    path_hash,
+                    'language'
+                ),
+                '^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$'
             )
         ),
         text=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "text"), min_len=1, max_len=255
+                common.hash_path(
+                    path_hash,
+                    'text'
+                ),
+                min_len=1,
+                max_len=255
             )
-        ),
+        )
     )
 
 
 def minimal_lang_string_short_name_type_iec_61360(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.LangStringShortNameTypeIEC61360:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -1045,20 +1356,28 @@ def minimal_lang_string_short_name_type_iec_61360(
     return aas_types.LangStringShortNameTypeIEC61360(
         language=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "language"),
-                "^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$",
+                common.hash_path(
+                    path_hash,
+                    'language'
+                ),
+                '^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$'
             )
         ),
         text=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "text"), min_len=1, max_len=18
+                common.hash_path(
+                    path_hash,
+                    'text'
+                ),
+                min_len=1,
+                max_len=18
             )
-        ),
+        )
     )
 
 
 def minimal_lang_string_definition_type_iec_61360(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.LangStringDefinitionTypeIEC61360:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -1072,20 +1391,28 @@ def minimal_lang_string_definition_type_iec_61360(
     return aas_types.LangStringDefinitionTypeIEC61360(
         language=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "language"),
-                "^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$",
+                common.hash_path(
+                    path_hash,
+                    'language'
+                ),
+                '^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$'
             )
         ),
         text=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "text"), min_len=1, max_len=1023
+                common.hash_path(
+                    path_hash,
+                    'text'
+                ),
+                min_len=1,
+                max_len=1023
             )
-        ),
+        )
     )
 
 
 def minimal_data_specification_iec_61360(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.DataSpecificationIEC61360:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -1100,15 +1427,19 @@ def minimal_data_specification_iec_61360(
         preferred_name=(
             [
                 minimal_lang_string_preferred_name_type_iec_61360(
-                    common.hash_path(path_hash, "preferred_name")
+                    common.hash_path(
+                        path_hash,
+                        'preferred_name'
+                    )
                 )
             ]
         )
     )
 
 
-_CLASS_NAME_TO_CONCRETE_MINIMAL = {
-    "Has_semantics": [
+_CLASS_NAME_TO_CONCRETE_MINIMALS = {
+    'Has_semantics':
+    [
         minimal_relationship_element,
         minimal_annotated_relationship_element,
         minimal_basic_event_element,
@@ -1126,9 +1457,10 @@ _CLASS_NAME_TO_CONCRETE_MINIMAL = {
         minimal_specific_asset_id,
         minimal_submodel,
         minimal_submodel_element_collection,
-        minimal_submodel_element_list,
+        minimal_submodel_element_list
     ],
-    "Has_extensions": [
+    'Has_extensions':
+    [
         minimal_relationship_element,
         minimal_annotated_relationship_element,
         minimal_asset_administration_shell,
@@ -1145,9 +1477,10 @@ _CLASS_NAME_TO_CONCRETE_MINIMAL = {
         minimal_reference_element,
         minimal_submodel,
         minimal_submodel_element_collection,
-        minimal_submodel_element_list,
+        minimal_submodel_element_list
     ],
-    "Referable": [
+    'Referable':
+    [
         minimal_relationship_element,
         minimal_annotated_relationship_element,
         minimal_asset_administration_shell,
@@ -1164,15 +1497,20 @@ _CLASS_NAME_TO_CONCRETE_MINIMAL = {
         minimal_reference_element,
         minimal_submodel,
         minimal_submodel_element_collection,
-        minimal_submodel_element_list,
+        minimal_submodel_element_list
     ],
-    "Identifiable": [
+    'Identifiable':
+    [
         minimal_asset_administration_shell,
         minimal_concept_description,
-        minimal_submodel,
+        minimal_submodel
     ],
-    "Has_kind": [minimal_submodel],
-    "Has_data_specification": [
+    'Has_kind':
+    [
+        minimal_submodel
+    ],
+    'Has_data_specification':
+    [
         minimal_administrative_information,
         minimal_relationship_element,
         minimal_annotated_relationship_element,
@@ -1190,9 +1528,10 @@ _CLASS_NAME_TO_CONCRETE_MINIMAL = {
         minimal_reference_element,
         minimal_submodel,
         minimal_submodel_element_collection,
-        minimal_submodel_element_list,
+        minimal_submodel_element_list
     ],
-    "Qualifiable": [
+    'Qualifiable':
+    [
         minimal_relationship_element,
         minimal_annotated_relationship_element,
         minimal_basic_event_element,
@@ -1207,9 +1546,10 @@ _CLASS_NAME_TO_CONCRETE_MINIMAL = {
         minimal_reference_element,
         minimal_submodel,
         minimal_submodel_element_collection,
-        minimal_submodel_element_list,
+        minimal_submodel_element_list
     ],
-    "Submodel_element": [
+    'Submodel_element':
+    [
         minimal_relationship_element,
         minimal_annotated_relationship_element,
         minimal_basic_event_element,
@@ -1223,33 +1563,125 @@ _CLASS_NAME_TO_CONCRETE_MINIMAL = {
         minimal_range,
         minimal_reference_element,
         minimal_submodel_element_collection,
-        minimal_submodel_element_list,
+        minimal_submodel_element_list
     ],
-    "Relationship_element": [
+    'Relationship_element':
+    [
         concrete_minimal_relationship_element,
-        minimal_annotated_relationship_element,
+        minimal_annotated_relationship_element
     ],
-    "Data_element": [
+    'Data_element':
+    [
         minimal_blob,
         minimal_file,
         minimal_multi_language_property,
         minimal_property,
         minimal_range,
-        minimal_reference_element,
+        minimal_reference_element
     ],
-    "Event_element": [minimal_basic_event_element],
-    "Abstract_lang_string": [
+    'Event_element':
+    [
+        minimal_basic_event_element
+    ],
+    'Abstract_lang_string':
+    [
         minimal_lang_string_definition_type_iec_61360,
         minimal_lang_string_name_type,
         minimal_lang_string_preferred_name_type_iec_61360,
         minimal_lang_string_short_name_type_iec_61360,
-        minimal_lang_string_text_type,
+        minimal_lang_string_text_type
     ],
-    "Data_specification_content": [minimal_data_specification_iec_61360],
+    'Data_specification_content':
+    [
+        minimal_data_specification_iec_61360
+    ]
 }
 
 
-def concrete_minimal(path_hash: common.CanHash, class_name: str) -> aas_types.Class:
+_CLASS_NAME_TO_EXACT_CONCRETE_MINIMAL = {
+    'Extension':
+    minimal_extension,
+    'Administrative_information':
+    minimal_administrative_information,
+    'Qualifier':
+    minimal_qualifier,
+    'Asset_administration_shell':
+    minimal_asset_administration_shell,
+    'Asset_information':
+    minimal_asset_information,
+    'Resource':
+    minimal_resource,
+    'Specific_asset_ID':
+    minimal_specific_asset_id,
+    'Submodel':
+    minimal_submodel,
+    'Relationship_element':
+    concrete_minimal_relationship_element,
+    'Submodel_element_list':
+    minimal_submodel_element_list,
+    'Submodel_element_collection':
+    minimal_submodel_element_collection,
+    'Property':
+    minimal_property,
+    'Multi_language_property':
+    minimal_multi_language_property,
+    'Range':
+    minimal_range,
+    'Reference_element':
+    minimal_reference_element,
+    'Blob':
+    minimal_blob,
+    'File':
+    minimal_file,
+    'Annotated_relationship_element':
+    minimal_annotated_relationship_element,
+    'Entity':
+    minimal_entity,
+    'Event_payload':
+    minimal_event_payload,
+    'Basic_event_element':
+    minimal_basic_event_element,
+    'Operation':
+    minimal_operation,
+    'Operation_variable':
+    minimal_operation_variable,
+    'Capability':
+    minimal_capability,
+    'Concept_description':
+    minimal_concept_description,
+    'Reference':
+    minimal_reference,
+    'Key':
+    minimal_key,
+    'Lang_string_name_type':
+    minimal_lang_string_name_type,
+    'Lang_string_text_type':
+    minimal_lang_string_text_type,
+    'Environment':
+    minimal_environment,
+    'Embedded_data_specification':
+    minimal_embedded_data_specification,
+    'Level_type':
+    minimal_level_type,
+    'Value_reference_pair':
+    minimal_value_reference_pair,
+    'Value_list':
+    minimal_value_list,
+    'Lang_string_preferred_name_type_IEC_61360':
+    minimal_lang_string_preferred_name_type_iec_61360,
+    'Lang_string_short_name_type_IEC_61360':
+    minimal_lang_string_short_name_type_iec_61360,
+    'Lang_string_definition_type_IEC_61360':
+    minimal_lang_string_definition_type_iec_61360,
+    'Data_specification_IEC_61360':
+    minimal_data_specification_iec_61360
+}
+
+
+def exact_concrete_minimal(
+    path_hash: common.CanHash,
+    class_name: str
+) -> aas_types.Class:
     """
     Create a minimal instance of exactly ``class_name``.
 
@@ -1259,7 +1691,7 @@ def concrete_minimal(path_hash: common.CanHash, class_name: str) -> aas_types.Cl
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    dispatch = _CLASS_NAME_TO_CONCRETE_MINIMAL.get(class_name, None)
+    dispatch = _CLASS_NAME_TO_EXACT_CONCRETE_MINIMAL.get(class_name, None)
     if dispatch is None:
         raise KeyError(
             f"The class name {class_name!r} does not denote a concrete class "
@@ -1269,7 +1701,9 @@ def concrete_minimal(path_hash: common.CanHash, class_name: str) -> aas_types.Cl
     return dispatch(path_hash)
 
 
-def maximal_has_semantics(path_hash: common.CanHash) -> aas_types.HasSemantics:
+def maximal_has_semantics(
+    path_hash: common.CanHash
+) -> aas_types.HasSemantics:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -1280,11 +1714,13 @@ def maximal_has_semantics(path_hash: common.CanHash) -> aas_types.HasSemantics:
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMAL["Has_semantics"]
-    concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+    concrete_maximal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMALS[
+        'Has_semantics'
     ]
-    instance = concrete_minimal_function(path_hash)
+    concrete_maximal_function = concrete_maximal_functions[
+        number % len(concrete_maximal_functions)
+    ]
+    instance = concrete_maximal_function(path_hash)
     assert isinstance(
         instance,
         aas_types.HasSemantics,
@@ -1292,7 +1728,9 @@ def maximal_has_semantics(path_hash: common.CanHash) -> aas_types.HasSemantics:
     return instance
 
 
-def maximal_extension(path_hash: common.CanHash) -> aas_types.Extension:
+def maximal_extension(
+    path_hash: common.CanHash
+) -> aas_types.Extension:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -1303,31 +1741,67 @@ def maximal_extension(path_hash: common.CanHash) -> aas_types.Extension:
         more meta-model constraints.
     """
     return aas_types.Extension(
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
         supplemental_semantic_ids=(
             [
                 minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
                 )
             ]
         ),
         name=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "name"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'name'
+                ),
+                min_len=1,
+                max_len=128
             )
         ),
         value_type=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "value_type"),
-                list(aas_types.DataTypeDefXSD),
+                common.hash_path(
+                    path_hash,
+                    'value_type'
+                ),
+                list(aas_types.DataTypeDefXSD)
             )
         ),
-        value=(primitiving.generate_str(common.hash_path(path_hash, "value"))),
-        refers_to=([minimal_reference(common.hash_path(path_hash, "refers_to"))]),
+        value=(
+            primitiving.generate_str(
+                common.hash_path(
+                    path_hash,
+                    'value'
+                )
+            )
+        ),
+        refers_to=(
+            [
+                minimal_reference(
+                    common.hash_path(
+                        path_hash,
+                        'refers_to'
+                    )
+                )
+            ]
+        )
     )
 
 
-def maximal_has_extensions(path_hash: common.CanHash) -> aas_types.HasExtensions:
+def maximal_has_extensions(
+    path_hash: common.CanHash
+) -> aas_types.HasExtensions:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -1338,11 +1812,13 @@ def maximal_has_extensions(path_hash: common.CanHash) -> aas_types.HasExtensions
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMAL["Has_extensions"]
-    concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+    concrete_maximal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMALS[
+        'Has_extensions'
     ]
-    instance = concrete_minimal_function(path_hash)
+    concrete_maximal_function = concrete_maximal_functions[
+        number % len(concrete_maximal_functions)
+    ]
+    instance = concrete_maximal_function(path_hash)
     assert isinstance(
         instance,
         aas_types.HasExtensions,
@@ -1350,7 +1826,9 @@ def maximal_has_extensions(path_hash: common.CanHash) -> aas_types.HasExtensions
     return instance
 
 
-def maximal_referable(path_hash: common.CanHash) -> aas_types.Referable:
+def maximal_referable(
+    path_hash: common.CanHash
+) -> aas_types.Referable:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -1361,11 +1839,13 @@ def maximal_referable(path_hash: common.CanHash) -> aas_types.Referable:
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMAL["Referable"]
-    concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+    concrete_maximal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMALS[
+        'Referable'
     ]
-    instance = concrete_minimal_function(path_hash)
+    concrete_maximal_function = concrete_maximal_functions[
+        number % len(concrete_maximal_functions)
+    ]
+    instance = concrete_maximal_function(path_hash)
     assert isinstance(
         instance,
         aas_types.Referable,
@@ -1373,7 +1853,9 @@ def maximal_referable(path_hash: common.CanHash) -> aas_types.Referable:
     return instance
 
 
-def maximal_identifiable(path_hash: common.CanHash) -> aas_types.Identifiable:
+def maximal_identifiable(
+    path_hash: common.CanHash
+) -> aas_types.Identifiable:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -1384,11 +1866,13 @@ def maximal_identifiable(path_hash: common.CanHash) -> aas_types.Identifiable:
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMAL["Identifiable"]
-    concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+    concrete_maximal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMALS[
+        'Identifiable'
     ]
-    instance = concrete_minimal_function(path_hash)
+    concrete_maximal_function = concrete_maximal_functions[
+        number % len(concrete_maximal_functions)
+    ]
+    instance = concrete_maximal_function(path_hash)
     assert isinstance(
         instance,
         aas_types.Identifiable,
@@ -1396,7 +1880,9 @@ def maximal_identifiable(path_hash: common.CanHash) -> aas_types.Identifiable:
     return instance
 
 
-def maximal_has_kind(path_hash: common.CanHash) -> aas_types.HasKind:
+def maximal_has_kind(
+    path_hash: common.CanHash
+) -> aas_types.HasKind:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -1407,11 +1893,13 @@ def maximal_has_kind(path_hash: common.CanHash) -> aas_types.HasKind:
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMAL["Has_kind"]
-    concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+    concrete_maximal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMALS[
+        'Has_kind'
     ]
-    instance = concrete_minimal_function(path_hash)
+    concrete_maximal_function = concrete_maximal_functions[
+        number % len(concrete_maximal_functions)
+    ]
+    instance = concrete_maximal_function(path_hash)
     assert isinstance(
         instance,
         aas_types.HasKind,
@@ -1420,7 +1908,7 @@ def maximal_has_kind(path_hash: common.CanHash) -> aas_types.HasKind:
 
 
 def maximal_has_data_specification(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.HasDataSpecification:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -1432,13 +1920,13 @@ def maximal_has_data_specification(
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMAL[
-        "Has_data_specification"
+    concrete_maximal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMALS[
+        'Has_data_specification'
     ]
-    concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+    concrete_maximal_function = concrete_maximal_functions[
+        number % len(concrete_maximal_functions)
     ]
-    instance = concrete_minimal_function(path_hash)
+    instance = concrete_maximal_function(path_hash)
     assert isinstance(
         instance,
         aas_types.HasDataSpecification,
@@ -1447,7 +1935,7 @@ def maximal_has_data_specification(
 
 
 def maximal_administrative_information(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.AdministrativeInformation:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -1462,30 +1950,55 @@ def maximal_administrative_information(
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
         version=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "version"), "^(0|[1-9][0-9]*)$"
+                common.hash_path(
+                    path_hash,
+                    'version'
+                ),
+                '^(0|[1-9][0-9]*)$'
             )
         ),
         revision=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "revision"), "^(0|[1-9][0-9]*)$"
+                common.hash_path(
+                    path_hash,
+                    'revision'
+                ),
+                '^(0|[1-9][0-9]*)$'
             )
         ),
-        creator=(minimal_reference(common.hash_path(path_hash, "creator"))),
+        creator=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'creator'
+                )
+            )
+        ),
         template_id=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "template_ID"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'template_ID'
+                ),
+                min_len=1,
+                max_len=2000
             )
-        ),
+        )
     )
 
 
-def maximal_qualifiable(path_hash: common.CanHash) -> aas_types.Qualifiable:
+def maximal_qualifiable(
+    path_hash: common.CanHash
+) -> aas_types.Qualifiable:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -1496,11 +2009,13 @@ def maximal_qualifiable(path_hash: common.CanHash) -> aas_types.Qualifiable:
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMAL["Qualifiable"]
-    concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+    concrete_maximal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMALS[
+        'Qualifiable'
     ]
-    instance = concrete_minimal_function(path_hash)
+    concrete_maximal_function = concrete_maximal_functions[
+        number % len(concrete_maximal_functions)
+    ]
+    instance = concrete_maximal_function(path_hash)
     assert isinstance(
         instance,
         aas_types.Qualifiable,
@@ -1508,7 +2023,9 @@ def maximal_qualifiable(path_hash: common.CanHash) -> aas_types.Qualifiable:
     return instance
 
 
-def maximal_qualifier(path_hash: common.CanHash) -> aas_types.Qualifier:
+def maximal_qualifier(
+    path_hash: common.CanHash
+) -> aas_types.Qualifier:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -1519,37 +2036,73 @@ def maximal_qualifier(path_hash: common.CanHash) -> aas_types.Qualifier:
         more meta-model constraints.
     """
     return aas_types.Qualifier(
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
         supplemental_semantic_ids=(
             [
                 minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
                 )
             ]
         ),
         kind=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "kind"), list(aas_types.QualifierKind)
+                common.hash_path(
+                    path_hash,
+                    'kind'
+                ),
+                list(aas_types.QualifierKind)
             )
         ),
         type=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "type"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'type'
+                ),
+                min_len=1,
+                max_len=128
             )
         ),
         value_type=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "value_type"),
-                list(aas_types.DataTypeDefXSD),
+                common.hash_path(
+                    path_hash,
+                    'value_type'
+                ),
+                list(aas_types.DataTypeDefXSD)
             )
         ),
-        value=(primitiving.generate_str(common.hash_path(path_hash, "value"))),
-        value_id=(minimal_reference(common.hash_path(path_hash, "value_ID"))),
+        value=(
+            primitiving.generate_str(
+                common.hash_path(
+                    path_hash,
+                    'value'
+                )
+            )
+        ),
+        value_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'value_ID'
+                )
+            )
+        )
     )
 
 
 def maximal_asset_administration_shell(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.AssetAdministrationShell:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -1561,49 +2114,115 @@ def maximal_asset_administration_shell(
         more meta-model constraints.
     """
     return aas_types.AssetAdministrationShell(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "category"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                min_len=1,
+                max_len=128
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
+            [
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
+                )
+            ]
         ),
         description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
         ),
         administration=(
             minimal_administrative_information(
-                common.hash_path(path_hash, "administration")
+                common.hash_path(
+                    path_hash,
+                    'administration'
+                )
             )
         ),
         id=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "ID"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'ID'
+                ),
+                min_len=1,
+                max_len=2000
             )
         ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
-        derived_from=(minimal_reference(common.hash_path(path_hash, "derived_from"))),
-        asset_information=(
-            minimal_asset_information(common.hash_path(path_hash, "asset_information"))
+        derived_from=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'derived_from'
+                )
+            )
         ),
-        submodels=([minimal_reference(common.hash_path(path_hash, "submodels"))]),
+        asset_information=(
+            minimal_asset_information(
+                common.hash_path(
+                    path_hash,
+                    'asset_information'
+                )
+            )
+        ),
+        submodels=(
+            [
+                minimal_reference(
+                    common.hash_path(
+                        path_hash,
+                        'submodels'
+                    )
+                )
+            ]
+        )
     )
 
 
-def maximal_asset_information(path_hash: common.CanHash) -> aas_types.AssetInformation:
+def maximal_asset_information(
+    path_hash: common.CanHash
+) -> aas_types.AssetInformation:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -1616,33 +2235,57 @@ def maximal_asset_information(path_hash: common.CanHash) -> aas_types.AssetInfor
     return aas_types.AssetInformation(
         asset_kind=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "asset_kind"), list(aas_types.AssetKind)
+                common.hash_path(
+                    path_hash,
+                    'asset_kind'
+                ),
+                list(aas_types.AssetKind)
             )
         ),
         global_asset_id=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "global_asset_ID"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'global_asset_ID'
+                ),
+                min_len=1,
+                max_len=2000
             )
         ),
         specific_asset_ids=(
             [
                 minimal_specific_asset_id(
-                    common.hash_path(path_hash, "specific_asset_IDs")
+                    common.hash_path(
+                        path_hash,
+                        'specific_asset_IDs'
+                    )
                 )
             ]
         ),
         asset_type=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "asset_type"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'asset_type'
+                ),
+                min_len=1,
+                max_len=2000
             )
         ),
         default_thumbnail=(
-            minimal_resource(common.hash_path(path_hash, "default_thumbnail"))
-        ),
+            minimal_resource(
+                common.hash_path(
+                    path_hash,
+                    'default_thumbnail'
+                )
+            )
+        )
     )
 
 
-def maximal_resource(path_hash: common.CanHash) -> aas_types.Resource:
+def maximal_resource(
+    path_hash: common.CanHash
+) -> aas_types.Resource:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -1655,20 +2298,28 @@ def maximal_resource(path_hash: common.CanHash) -> aas_types.Resource:
     return aas_types.Resource(
         path=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "path"),
-                "^file:(//((localhost|(\\[((([0-9A-Fa-f]{1,4}:){6}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|::([0-9A-Fa-f]{1,4}:){5}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|([0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){4}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){3}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){2}[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){2}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){3}[0-9A-Fa-f]{1,4})?::[0-9A-Fa-f]{1,4}:([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){4}[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){5}[0-9A-Fa-f]{1,4})?::[0-9A-Fa-f]{1,4}|(([0-9A-Fa-f]{1,4}:){6}[0-9A-Fa-f]{1,4})?::)|[vV][0-9A-Fa-f]+\\.([a-zA-Z0-9\\-._~]|[!$&'()*+,;=]|:)+)\\]|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])|([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=])*)))?/((([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))+(/(([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))*)*)?|/((([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))+(/(([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))*)*)?)$",
+                common.hash_path(
+                    path_hash,
+                    'path'
+                ),
+                "^file:(//((localhost|(\\[((([0-9A-Fa-f]{1,4}:){6}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|::([0-9A-Fa-f]{1,4}:){5}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|([0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){4}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){3}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){2}[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){2}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){3}[0-9A-Fa-f]{1,4})?::[0-9A-Fa-f]{1,4}:([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){4}[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){5}[0-9A-Fa-f]{1,4})?::[0-9A-Fa-f]{1,4}|(([0-9A-Fa-f]{1,4}:){6}[0-9A-Fa-f]{1,4})?::)|[vV][0-9A-Fa-f]+\\.([a-zA-Z0-9\\-._~]|[!$&'()*+,;=]|:)+)\\]|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])|([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=])*)))?/((([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))+(/(([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))*)*)?|/((([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))+(/(([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))*)*)?)$"
             )
         ),
         content_type=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "content_type"),
-                "^([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+/([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+([ \t]*;[ \t]*([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+=(([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+|\"(([\t !#-\\[\\]-~]|[\\x80-\\xff])|\\\\([\t !-~]|[\\x80-\\xff]))*\"))*$",
+                common.hash_path(
+                    path_hash,
+                    'content_type'
+                ),
+                "^([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+/([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+([ \t]*;[ \t]*([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+=(([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+|\"(([\t !#-\\[\\]-~]|[\\x80-\\xff])|\\\\([\t !-~]|[\\x80-\\xff]))*\"))*$"
             )
-        ),
+        )
     )
 
 
-def maximal_specific_asset_id(path_hash: common.CanHash) -> aas_types.SpecificAssetID:
+def maximal_specific_asset_id(
+    path_hash: common.CanHash
+) -> aas_types.SpecificAssetID:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -1679,31 +2330,58 @@ def maximal_specific_asset_id(path_hash: common.CanHash) -> aas_types.SpecificAs
         more meta-model constraints.
     """
     return aas_types.SpecificAssetID(
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
         supplemental_semantic_ids=(
             [
                 minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
                 )
             ]
         ),
         name=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "name"), min_len=1, max_len=64
+                common.hash_path(
+                    path_hash,
+                    'name'
+                ),
+                min_len=1,
+                max_len=64
             )
         ),
         value=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "value"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'value'
+                ),
+                min_len=1,
+                max_len=2000
             )
         ),
         external_subject_id=(
-            minimal_reference(common.hash_path(path_hash, "external_subject_ID"))
-        ),
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'external_subject_ID'
+                )
+            )
+        )
     )
 
 
-def maximal_submodel(path_hash: common.CanHash) -> aas_types.Submodel:
+def maximal_submodel(
+    path_hash: common.CanHash
+) -> aas_types.Submodel:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -1714,61 +2392,136 @@ def maximal_submodel(path_hash: common.CanHash) -> aas_types.Submodel:
         more meta-model constraints.
     """
     return aas_types.Submodel(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "category"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                min_len=1,
+                max_len=128
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
+            [
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
+                )
+            ]
         ),
         description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
         ),
         administration=(
             minimal_administrative_information(
-                common.hash_path(path_hash, "administration")
+                common.hash_path(
+                    path_hash,
+                    'administration'
+                )
             )
         ),
         id=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "ID"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'ID'
+                ),
+                min_len=1,
+                max_len=2000
             )
         ),
         kind=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "kind"), list(aas_types.ModellingKind)
+                common.hash_path(
+                    path_hash,
+                    'kind'
+                ),
+                list(aas_types.ModellingKind)
             )
         ),
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
         supplemental_semantic_ids=(
             [
                 minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
                 )
             ]
         ),
-        qualifiers=([minimal_qualifier(common.hash_path(path_hash, "qualifiers"))]),
+        qualifiers=(
+            [
+                minimal_qualifier(
+                    common.hash_path(
+                        path_hash,
+                        'qualifiers'
+                    )
+                )
+            ]
+        ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
         submodel_elements=(
-            [minimal_submodel_element(common.hash_path(path_hash, "submodel_elements"))]
-        ),
+            [
+                minimal_submodel_element(
+                    common.hash_path(
+                        path_hash,
+                        'submodel_elements'
+                    )
+                )
+            ]
+        )
     )
 
 
-def maximal_submodel_element(path_hash: common.CanHash) -> aas_types.SubmodelElement:
+def maximal_submodel_element(
+    path_hash: common.CanHash
+) -> aas_types.SubmodelElement:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -1779,11 +2532,13 @@ def maximal_submodel_element(path_hash: common.CanHash) -> aas_types.SubmodelEle
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMAL["Submodel_element"]
-    concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+    concrete_maximal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMALS[
+        'Submodel_element'
     ]
-    instance = concrete_minimal_function(path_hash)
+    concrete_maximal_function = concrete_maximal_functions[
+        number % len(concrete_maximal_functions)
+    ]
+    instance = concrete_maximal_function(path_hash)
     assert isinstance(
         instance,
         aas_types.SubmodelElement,
@@ -1792,7 +2547,7 @@ def maximal_submodel_element(path_hash: common.CanHash) -> aas_types.SubmodelEle
 
 
 def concrete_maximal_relationship_element(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.RelationshipElement:
     """
     Generate a maximal instance based on the ``path_hash``.
@@ -1809,46 +2564,114 @@ def concrete_maximal_relationship_element(
         more meta-model constraints.
     """
     return aas_types.RelationshipElement(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "category"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                min_len=1,
+                max_len=128
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
+            [
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
+                )
+            ]
         ),
         description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
         ),
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
         supplemental_semantic_ids=(
             [
                 minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
                 )
             ]
         ),
-        qualifiers=([minimal_qualifier(common.hash_path(path_hash, "qualifiers"))]),
+        qualifiers=(
+            [
+                minimal_qualifier(
+                    common.hash_path(
+                        path_hash,
+                        'qualifiers'
+                    )
+                )
+            ]
+        ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
-        first=(minimal_reference(common.hash_path(path_hash, "first"))),
-        second=(minimal_reference(common.hash_path(path_hash, "second"))),
+        first=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'first'
+                )
+            )
+        ),
+        second=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'second'
+                )
+            )
+        )
     )
 
 
 def maximal_relationship_element(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.RelationshipElement:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -1860,11 +2683,13 @@ def maximal_relationship_element(
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMAL["Relationship_element"]
-    concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+    concrete_maximal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMALS[
+        'Relationship_element'
     ]
-    instance = concrete_minimal_function(path_hash)
+    concrete_maximal_function = concrete_maximal_functions[
+        number % len(concrete_maximal_functions)
+    ]
+    instance = concrete_maximal_function(path_hash)
     assert isinstance(
         instance,
         aas_types.RelationshipElement,
@@ -1873,7 +2698,7 @@ def maximal_relationship_element(
 
 
 def maximal_submodel_element_list(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.SubmodelElementList:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -1885,63 +2710,142 @@ def maximal_submodel_element_list(
         more meta-model constraints.
     """
     return aas_types.SubmodelElementList(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "category"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                min_len=1,
+                max_len=128
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
-        ),
-        description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
-        ),
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
-        supplemental_semantic_ids=(
             [
-                minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
                 )
             ]
         ),
-        qualifiers=([minimal_qualifier(common.hash_path(path_hash, "qualifiers"))]),
+        description=(
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
+        ),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
+        supplemental_semantic_ids=(
+            [
+                minimal_reference(
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
+                )
+            ]
+        ),
+        qualifiers=(
+            [
+                minimal_qualifier(
+                    common.hash_path(
+                        path_hash,
+                        'qualifiers'
+                    )
+                )
+            ]
+        ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
         order_relevant=(
-            primitiving.generate_bool(common.hash_path(path_hash, "order_relevant"))
+            primitiving.generate_bool(
+                common.hash_path(
+                    path_hash,
+                    'order_relevant'
+                )
+            )
         ),
         semantic_id_list_element=(
-            minimal_reference(common.hash_path(path_hash, "semantic_ID_list_element"))
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID_list_element'
+                )
+            )
         ),
         type_value_list_element=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "type_value_list_element"),
-                list(aas_types.AASSubmodelElements),
+                common.hash_path(
+                    path_hash,
+                    'type_value_list_element'
+                ),
+                list(aas_types.AASSubmodelElements)
             )
         ),
         value_type_list_element=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "value_type_list_element"),
-                list(aas_types.DataTypeDefXSD),
+                common.hash_path(
+                    path_hash,
+                    'value_type_list_element'
+                ),
+                list(aas_types.DataTypeDefXSD)
             )
         ),
-        value=([minimal_submodel_element(common.hash_path(path_hash, "value"))]),
+        value=(
+            [
+                minimal_submodel_element(
+                    common.hash_path(
+                        path_hash,
+                        'value'
+                    )
+                )
+            ]
+        )
     )
 
 
 def maximal_submodel_element_collection(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.SubmodelElementCollection:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -1953,44 +2857,109 @@ def maximal_submodel_element_collection(
         more meta-model constraints.
     """
     return aas_types.SubmodelElementCollection(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "category"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                min_len=1,
+                max_len=128
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
+            [
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
+                )
+            ]
         ),
         description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
         ),
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
         supplemental_semantic_ids=(
             [
                 minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
                 )
             ]
         ),
-        qualifiers=([minimal_qualifier(common.hash_path(path_hash, "qualifiers"))]),
+        qualifiers=(
+            [
+                minimal_qualifier(
+                    common.hash_path(
+                        path_hash,
+                        'qualifiers'
+                    )
+                )
+            ]
+        ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
-        value=([minimal_submodel_element(common.hash_path(path_hash, "value"))]),
+        value=(
+            [
+                minimal_submodel_element(
+                    common.hash_path(
+                        path_hash,
+                        'value'
+                    )
+                )
+            ]
+        )
     )
 
 
-def maximal_data_element(path_hash: common.CanHash) -> aas_types.DataElement:
+def maximal_data_element(
+    path_hash: common.CanHash
+) -> aas_types.DataElement:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -2001,11 +2970,13 @@ def maximal_data_element(path_hash: common.CanHash) -> aas_types.DataElement:
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMAL["Data_element"]
-    concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+    concrete_maximal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMALS[
+        'Data_element'
     ]
-    instance = concrete_minimal_function(path_hash)
+    concrete_maximal_function = concrete_maximal_functions[
+        number % len(concrete_maximal_functions)
+    ]
+    instance = concrete_maximal_function(path_hash)
     assert isinstance(
         instance,
         aas_types.DataElement,
@@ -2013,7 +2984,9 @@ def maximal_data_element(path_hash: common.CanHash) -> aas_types.DataElement:
     return instance
 
 
-def maximal_property(path_hash: common.CanHash) -> aas_types.Property:
+def maximal_property(
+    path_hash: common.CanHash
+) -> aas_types.Property:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -2024,53 +2997,126 @@ def maximal_property(path_hash: common.CanHash) -> aas_types.Property:
         more meta-model constraints.
     """
     return aas_types.Property(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "category"),
-                ["CONSTANT", "PARAMETER", "VARIABLE"],
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                [
+                    'CONSTANT',
+                    'PARAMETER',
+                    'VARIABLE'
+                ]
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
-        ),
-        description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
-        ),
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
-        supplemental_semantic_ids=(
             [
-                minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
                 )
             ]
         ),
-        qualifiers=([minimal_qualifier(common.hash_path(path_hash, "qualifiers"))]),
+        description=(
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
+        ),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
+        supplemental_semantic_ids=(
+            [
+                minimal_reference(
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
+                )
+            ]
+        ),
+        qualifiers=(
+            [
+                minimal_qualifier(
+                    common.hash_path(
+                        path_hash,
+                        'qualifiers'
+                    )
+                )
+            ]
+        ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
         value_type=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "value_type"),
-                list(aas_types.DataTypeDefXSD),
+                common.hash_path(
+                    path_hash,
+                    'value_type'
+                ),
+                list(aas_types.DataTypeDefXSD)
             )
         ),
-        value=(primitiving.generate_str(common.hash_path(path_hash, "value"))),
-        value_id=(minimal_reference(common.hash_path(path_hash, "value_ID"))),
+        value=(
+            primitiving.generate_str(
+                common.hash_path(
+                    path_hash,
+                    'value'
+                )
+            )
+        ),
+        value_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'value_ID'
+                )
+            )
+        )
     )
 
 
 def maximal_multi_language_property(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.MultiLanguageProperty:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -2082,46 +3128,120 @@ def maximal_multi_language_property(
         more meta-model constraints.
     """
     return aas_types.MultiLanguageProperty(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "category"),
-                ["CONSTANT", "PARAMETER", "VARIABLE"],
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                [
+                    'CONSTANT',
+                    'PARAMETER',
+                    'VARIABLE'
+                ]
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
+            [
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
+                )
+            ]
         ),
         description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
         ),
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
         supplemental_semantic_ids=(
             [
                 minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
                 )
             ]
         ),
-        qualifiers=([minimal_qualifier(common.hash_path(path_hash, "qualifiers"))]),
+        qualifiers=(
+            [
+                minimal_qualifier(
+                    common.hash_path(
+                        path_hash,
+                        'qualifiers'
+                    )
+                )
+            ]
+        ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
-        value=([minimal_lang_string_text_type(common.hash_path(path_hash, "value"))]),
-        value_id=(minimal_reference(common.hash_path(path_hash, "value_ID"))),
+        value=(
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'value'
+                    )
+                )
+            ]
+        ),
+        value_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'value_ID'
+                )
+            )
+        )
     )
 
 
-def maximal_range(path_hash: common.CanHash) -> aas_types.Range:
+def maximal_range(
+    path_hash: common.CanHash
+) -> aas_types.Range:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -2132,52 +3252,127 @@ def maximal_range(path_hash: common.CanHash) -> aas_types.Range:
         more meta-model constraints.
     """
     return aas_types.Range(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "category"),
-                ["CONSTANT", "PARAMETER", "VARIABLE"],
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                [
+                    'CONSTANT',
+                    'PARAMETER',
+                    'VARIABLE'
+                ]
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
-        ),
-        description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
-        ),
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
-        supplemental_semantic_ids=(
             [
-                minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
                 )
             ]
         ),
-        qualifiers=([minimal_qualifier(common.hash_path(path_hash, "qualifiers"))]),
+        description=(
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
+        ),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
+        supplemental_semantic_ids=(
+            [
+                minimal_reference(
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
+                )
+            ]
+        ),
+        qualifiers=(
+            [
+                minimal_qualifier(
+                    common.hash_path(
+                        path_hash,
+                        'qualifiers'
+                    )
+                )
+            ]
+        ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
         value_type=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "value_type"),
-                list(aas_types.DataTypeDefXSD),
+                common.hash_path(
+                    path_hash,
+                    'value_type'
+                ),
+                list(aas_types.DataTypeDefXSD)
             )
         ),
-        min=(primitiving.generate_str(common.hash_path(path_hash, "min"))),
-        max=(primitiving.generate_str(common.hash_path(path_hash, "max"))),
+        min=(
+            primitiving.generate_str(
+                common.hash_path(
+                    path_hash,
+                    'min'
+                )
+            )
+        ),
+        max=(
+            primitiving.generate_str(
+                common.hash_path(
+                    path_hash,
+                    'max'
+                )
+            )
+        )
     )
 
 
-def maximal_reference_element(path_hash: common.CanHash) -> aas_types.ReferenceElement:
+def maximal_reference_element(
+    path_hash: common.CanHash
+) -> aas_types.ReferenceElement:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -2188,45 +3383,110 @@ def maximal_reference_element(path_hash: common.CanHash) -> aas_types.ReferenceE
         more meta-model constraints.
     """
     return aas_types.ReferenceElement(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "category"),
-                ["CONSTANT", "PARAMETER", "VARIABLE"],
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                [
+                    'CONSTANT',
+                    'PARAMETER',
+                    'VARIABLE'
+                ]
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
+            [
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
+                )
+            ]
         ),
         description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
         ),
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
         supplemental_semantic_ids=(
             [
                 minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
                 )
             ]
         ),
-        qualifiers=([minimal_qualifier(common.hash_path(path_hash, "qualifiers"))]),
+        qualifiers=(
+            [
+                minimal_qualifier(
+                    common.hash_path(
+                        path_hash,
+                        'qualifiers'
+                    )
+                )
+            ]
+        ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
-        value=(minimal_reference(common.hash_path(path_hash, "value"))),
+        value=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'value'
+                )
+            )
+        )
     )
 
 
-def maximal_blob(path_hash: common.CanHash) -> aas_types.Blob:
+def maximal_blob(
+    path_hash: common.CanHash
+) -> aas_types.Blob:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -2237,51 +3497,119 @@ def maximal_blob(path_hash: common.CanHash) -> aas_types.Blob:
         more meta-model constraints.
     """
     return aas_types.Blob(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "category"),
-                ["CONSTANT", "PARAMETER", "VARIABLE"],
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                [
+                    'CONSTANT',
+                    'PARAMETER',
+                    'VARIABLE'
+                ]
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
+            [
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
+                )
+            ]
         ),
         description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
         ),
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
         supplemental_semantic_ids=(
             [
                 minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
                 )
             ]
         ),
-        qualifiers=([minimal_qualifier(common.hash_path(path_hash, "qualifiers"))]),
+        qualifiers=(
+            [
+                minimal_qualifier(
+                    common.hash_path(
+                        path_hash,
+                        'qualifiers'
+                    )
+                )
+            ]
+        ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
-        value=(primitiving.generate_bytes(common.hash_path(path_hash, "value"))),
-        content_type=(
-            primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "content_type"),
-                "^([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+/([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+([ \t]*;[ \t]*([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+=(([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+|\"(([\t !#-\\[\\]-~]|[\\x80-\\xff])|\\\\([\t !-~]|[\\x80-\\xff]))*\"))*$",
+        value=(
+            primitiving.generate_bytes(
+                common.hash_path(
+                    path_hash,
+                    'value'
+                )
             )
         ),
+        content_type=(
+            primitiving.generate_str_satisfying_pattern(
+                common.hash_path(
+                    path_hash,
+                    'content_type'
+                ),
+                "^([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+/([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+([ \t]*;[ \t]*([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+=(([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+|\"(([\t !#-\\[\\]-~]|[\\x80-\\xff])|\\\\([\t !-~]|[\\x80-\\xff]))*\"))*$"
+            )
+        )
     )
 
 
-def maximal_file(path_hash: common.CanHash) -> aas_types.File:
+def maximal_file(
+    path_hash: common.CanHash
+) -> aas_types.File:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -2292,57 +3620,119 @@ def maximal_file(path_hash: common.CanHash) -> aas_types.File:
         more meta-model constraints.
     """
     return aas_types.File(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "category"),
-                ["CONSTANT", "PARAMETER", "VARIABLE"],
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                [
+                    'CONSTANT',
+                    'PARAMETER',
+                    'VARIABLE'
+                ]
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
-        ),
-        description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
-        ),
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
-        supplemental_semantic_ids=(
             [
-                minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
                 )
             ]
         ),
-        qualifiers=([minimal_qualifier(common.hash_path(path_hash, "qualifiers"))]),
+        description=(
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
+        ),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
+        supplemental_semantic_ids=(
+            [
+                minimal_reference(
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
+                )
+            ]
+        ),
+        qualifiers=(
+            [
+                minimal_qualifier(
+                    common.hash_path(
+                        path_hash,
+                        'qualifiers'
+                    )
+                )
+            ]
+        ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
         value=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "value"),
-                "^file:(//((localhost|(\\[((([0-9A-Fa-f]{1,4}:){6}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|::([0-9A-Fa-f]{1,4}:){5}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|([0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){4}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){3}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){2}[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){2}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){3}[0-9A-Fa-f]{1,4})?::[0-9A-Fa-f]{1,4}:([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){4}[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){5}[0-9A-Fa-f]{1,4})?::[0-9A-Fa-f]{1,4}|(([0-9A-Fa-f]{1,4}:){6}[0-9A-Fa-f]{1,4})?::)|[vV][0-9A-Fa-f]+\\.([a-zA-Z0-9\\-._~]|[!$&'()*+,;=]|:)+)\\]|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])|([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=])*)))?/((([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))+(/(([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))*)*)?|/((([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))+(/(([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))*)*)?)$",
+                common.hash_path(
+                    path_hash,
+                    'value'
+                ),
+                "^file:(//((localhost|(\\[((([0-9A-Fa-f]{1,4}:){6}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|::([0-9A-Fa-f]{1,4}:){5}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|([0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){4}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){3}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){2}[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:){2}([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){3}[0-9A-Fa-f]{1,4})?::[0-9A-Fa-f]{1,4}:([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){4}[0-9A-Fa-f]{1,4})?::([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{1,4}|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(([0-9A-Fa-f]{1,4}:){5}[0-9A-Fa-f]{1,4})?::[0-9A-Fa-f]{1,4}|(([0-9A-Fa-f]{1,4}:){6}[0-9A-Fa-f]{1,4})?::)|[vV][0-9A-Fa-f]+\\.([a-zA-Z0-9\\-._~]|[!$&'()*+,;=]|:)+)\\]|([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])|([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=])*)))?/((([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))+(/(([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))*)*)?|/((([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))+(/(([a-zA-Z0-9\\-._~]|%[0-9A-Fa-f][0-9A-Fa-f]|[!$&'()*+,;=]|[:@]))*)*)?)$"
             )
         ),
         content_type=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "content_type"),
-                "^([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+/([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+([ \t]*;[ \t]*([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+=(([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+|\"(([\t !#-\\[\\]-~]|[\\x80-\\xff])|\\\\([\t !-~]|[\\x80-\\xff]))*\"))*$",
+                common.hash_path(
+                    path_hash,
+                    'content_type'
+                ),
+                "^([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+/([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+([ \t]*;[ \t]*([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+=(([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+|\"(([\t !#-\\[\\]-~]|[\\x80-\\xff])|\\\\([\t !-~]|[\\x80-\\xff]))*\"))*$"
             )
-        ),
+        )
     )
 
 
 def maximal_annotated_relationship_element(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.AnnotatedRelationshipElement:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -2354,48 +3744,125 @@ def maximal_annotated_relationship_element(
         more meta-model constraints.
     """
     return aas_types.AnnotatedRelationshipElement(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "category"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                min_len=1,
+                max_len=128
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
+            [
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
+                )
+            ]
         ),
         description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
         ),
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
         supplemental_semantic_ids=(
             [
                 minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
                 )
             ]
         ),
-        qualifiers=([minimal_qualifier(common.hash_path(path_hash, "qualifiers"))]),
+        qualifiers=(
+            [
+                minimal_qualifier(
+                    common.hash_path(
+                        path_hash,
+                        'qualifiers'
+                    )
+                )
+            ]
+        ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
-        first=(minimal_reference(common.hash_path(path_hash, "first"))),
-        second=(minimal_reference(common.hash_path(path_hash, "second"))),
-        annotations=(
-            [minimal_data_element(common.hash_path(path_hash, "annotations"))]
+        first=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'first'
+                )
+            )
         ),
+        second=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'second'
+                )
+            )
+        ),
+        annotations=(
+            [
+                minimal_data_element(
+                    common.hash_path(
+                        path_hash,
+                        'annotations'
+                    )
+                )
+            ]
+        )
     )
 
 
-def maximal_entity(path_hash: common.CanHash) -> aas_types.Entity:
+def maximal_entity(
+    path_hash: common.CanHash
+) -> aas_types.Entity:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -2406,63 +3873,138 @@ def maximal_entity(path_hash: common.CanHash) -> aas_types.Entity:
         more meta-model constraints.
     """
     return aas_types.Entity(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "category"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                min_len=1,
+                max_len=128
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
-        ),
-        description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
-        ),
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
-        supplemental_semantic_ids=(
             [
-                minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
                 )
             ]
         ),
-        qualifiers=([minimal_qualifier(common.hash_path(path_hash, "qualifiers"))]),
+        description=(
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
+        ),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
+        supplemental_semantic_ids=(
+            [
+                minimal_reference(
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
+                )
+            ]
+        ),
+        qualifiers=(
+            [
+                minimal_qualifier(
+                    common.hash_path(
+                        path_hash,
+                        'qualifiers'
+                    )
+                )
+            ]
+        ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
         statements=(
-            [minimal_submodel_element(common.hash_path(path_hash, "statements"))]
+            [
+                minimal_submodel_element(
+                    common.hash_path(
+                        path_hash,
+                        'statements'
+                    )
+                )
+            ]
         ),
         entity_type=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "entity_type"), list(aas_types.EntityType)
+                common.hash_path(
+                    path_hash,
+                    'entity_type'
+                ),
+                list(aas_types.EntityType)
             )
         ),
         global_asset_id=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "global_asset_ID"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'global_asset_ID'
+                ),
+                min_len=1,
+                max_len=2000
             )
         ),
         specific_asset_ids=(
             [
                 minimal_specific_asset_id(
-                    common.hash_path(path_hash, "specific_asset_IDs")
+                    common.hash_path(
+                        path_hash,
+                        'specific_asset_IDs'
+                    )
                 )
             ]
-        ),
+        )
     )
 
 
-def maximal_event_payload(path_hash: common.CanHash) -> aas_types.EventPayload:
+def maximal_event_payload(
+    path_hash: common.CanHash
+) -> aas_types.EventPayload:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -2473,33 +4015,79 @@ def maximal_event_payload(path_hash: common.CanHash) -> aas_types.EventPayload:
         more meta-model constraints.
     """
     return aas_types.EventPayload(
-        source=(minimal_reference(common.hash_path(path_hash, "source"))),
+        source=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'source'
+                )
+            )
+        ),
         source_semantic_id=(
-            minimal_reference(common.hash_path(path_hash, "source_semantic_ID"))
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'source_semantic_ID'
+                )
+            )
         ),
         observable_reference=(
-            minimal_reference(common.hash_path(path_hash, "observable_reference"))
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'observable_reference'
+                )
+            )
         ),
         observable_semantic_id=(
-            minimal_reference(common.hash_path(path_hash, "observable_semantic_ID"))
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'observable_semantic_ID'
+                )
+            )
         ),
         topic=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "topic"), min_len=1, max_len=255
+                common.hash_path(
+                    path_hash,
+                    'topic'
+                ),
+                min_len=1,
+                max_len=255
             )
         ),
-        subject_id=(minimal_reference(common.hash_path(path_hash, "subject_ID"))),
+        subject_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'subject_ID'
+                )
+            )
+        ),
         time_stamp=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "time_stamp"),
-                "^-?(([1-9][0-9][0-9][0-9]+)|(0[0-9][0-9][0-9]))-((0[1-9])|(1[0-2]))-((0[1-9])|([12][0-9])|(3[01]))T(((([01][0-9])|(2[0-3])):[0-5][0-9]:([0-5][0-9])(\\.[0-9]+)?)|24:00:00(\\.0+)?)(Z|\\+00:00|-00:00)$",
+                common.hash_path(
+                    path_hash,
+                    'time_stamp'
+                ),
+                '^-?(([1-9][0-9][0-9][0-9]+)|(0[0-9][0-9][0-9]))-((0[1-9])|(1[0-2]))-((0[1-9])|([12][0-9])|(3[01]))T(((([01][0-9])|(2[0-3])):[0-5][0-9]:([0-5][0-9])(\\.[0-9]+)?)|24:00:00(\\.0+)?)(Z|\\+00:00|-00:00)$'
             )
         ),
-        payload=(primitiving.generate_bytes(common.hash_path(path_hash, "payload"))),
+        payload=(
+            primitiving.generate_bytes(
+                common.hash_path(
+                    path_hash,
+                    'payload'
+                )
+            )
+        )
     )
 
 
-def maximal_event_element(path_hash: common.CanHash) -> aas_types.EventElement:
+def maximal_event_element(
+    path_hash: common.CanHash
+) -> aas_types.EventElement:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -2510,11 +4098,13 @@ def maximal_event_element(path_hash: common.CanHash) -> aas_types.EventElement:
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMAL["Event_element"]
-    concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+    concrete_maximal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMALS[
+        'Event_element'
     ]
-    instance = concrete_minimal_function(path_hash)
+    concrete_maximal_function = concrete_maximal_functions[
+        number % len(concrete_maximal_functions)
+    ]
+    instance = concrete_maximal_function(path_hash)
     assert isinstance(
         instance,
         aas_types.EventElement,
@@ -2523,7 +4113,7 @@ def maximal_event_element(path_hash: common.CanHash) -> aas_types.EventElement:
 
 
 def maximal_basic_event_element(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.BasicEventElement:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -2535,80 +4125,170 @@ def maximal_basic_event_element(
         more meta-model constraints.
     """
     return aas_types.BasicEventElement(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "category"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                min_len=1,
+                max_len=128
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
+            [
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
+                )
+            ]
         ),
         description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
         ),
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
         supplemental_semantic_ids=(
             [
                 minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
                 )
             ]
         ),
-        qualifiers=([minimal_qualifier(common.hash_path(path_hash, "qualifiers"))]),
+        qualifiers=(
+            [
+                minimal_qualifier(
+                    common.hash_path(
+                        path_hash,
+                        'qualifiers'
+                    )
+                )
+            ]
+        ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
-        observed=(minimal_reference(common.hash_path(path_hash, "observed"))),
+        observed=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'observed'
+                )
+            )
+        ),
         direction=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "direction"), list(aas_types.Direction)
+                common.hash_path(
+                    path_hash,
+                    'direction'
+                ),
+                list(aas_types.Direction)
             )
         ),
         state=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "state"), list(aas_types.StateOfEvent)
+                common.hash_path(
+                    path_hash,
+                    'state'
+                ),
+                list(aas_types.StateOfEvent)
             )
         ),
         message_topic=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "message_topic"), min_len=1, max_len=255
+                common.hash_path(
+                    path_hash,
+                    'message_topic'
+                ),
+                min_len=1,
+                max_len=255
             )
         ),
         message_broker=(
-            minimal_reference(common.hash_path(path_hash, "message_broker"))
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'message_broker'
+                )
+            )
         ),
         last_update=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "last_update"),
-                "^-?(([1-9][0-9][0-9][0-9]+)|(0[0-9][0-9][0-9]))-((0[1-9])|(1[0-2]))-((0[1-9])|([12][0-9])|(3[01]))T(((([01][0-9])|(2[0-3])):[0-5][0-9]:([0-5][0-9])(\\.[0-9]+)?)|24:00:00(\\.0+)?)(Z|\\+00:00|-00:00)$",
+                common.hash_path(
+                    path_hash,
+                    'last_update'
+                ),
+                '^-?(([1-9][0-9][0-9][0-9]+)|(0[0-9][0-9][0-9]))-((0[1-9])|(1[0-2]))-((0[1-9])|([12][0-9])|(3[01]))T(((([01][0-9])|(2[0-3])):[0-5][0-9]:([0-5][0-9])(\\.[0-9]+)?)|24:00:00(\\.0+)?)(Z|\\+00:00|-00:00)$'
             )
         ),
         min_interval=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "min_interval"),
-                "^-?P((([0-9]+Y([0-9]+M)?([0-9]+D)?|([0-9]+M)([0-9]+D)?|([0-9]+D))(T(([0-9]+H)([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?|([0-9]+M)([0-9]+(\\.[0-9]+)?S)?|([0-9]+(\\.[0-9]+)?S)))?)|(T(([0-9]+H)([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?|([0-9]+M)([0-9]+(\\.[0-9]+)?S)?|([0-9]+(\\.[0-9]+)?S))))$",
+                common.hash_path(
+                    path_hash,
+                    'min_interval'
+                ),
+                '^-?P((([0-9]+Y([0-9]+M)?([0-9]+D)?|([0-9]+M)([0-9]+D)?|([0-9]+D))(T(([0-9]+H)([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?|([0-9]+M)([0-9]+(\\.[0-9]+)?S)?|([0-9]+(\\.[0-9]+)?S)))?)|(T(([0-9]+H)([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?|([0-9]+M)([0-9]+(\\.[0-9]+)?S)?|([0-9]+(\\.[0-9]+)?S))))$'
             )
         ),
         max_interval=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "max_interval"),
-                "^-?P((([0-9]+Y([0-9]+M)?([0-9]+D)?|([0-9]+M)([0-9]+D)?|([0-9]+D))(T(([0-9]+H)([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?|([0-9]+M)([0-9]+(\\.[0-9]+)?S)?|([0-9]+(\\.[0-9]+)?S)))?)|(T(([0-9]+H)([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?|([0-9]+M)([0-9]+(\\.[0-9]+)?S)?|([0-9]+(\\.[0-9]+)?S))))$",
+                common.hash_path(
+                    path_hash,
+                    'max_interval'
+                ),
+                '^-?P((([0-9]+Y([0-9]+M)?([0-9]+D)?|([0-9]+M)([0-9]+D)?|([0-9]+D))(T(([0-9]+H)([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?|([0-9]+M)([0-9]+(\\.[0-9]+)?S)?|([0-9]+(\\.[0-9]+)?S)))?)|(T(([0-9]+H)([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?|([0-9]+M)([0-9]+(\\.[0-9]+)?S)?|([0-9]+(\\.[0-9]+)?S))))$'
             )
-        ),
+        )
     )
 
 
-def maximal_operation(path_hash: common.CanHash) -> aas_types.Operation:
+def maximal_operation(
+    path_hash: common.CanHash
+) -> aas_types.Operation:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -2619,61 +4299,128 @@ def maximal_operation(path_hash: common.CanHash) -> aas_types.Operation:
         more meta-model constraints.
     """
     return aas_types.Operation(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "category"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                min_len=1,
+                max_len=128
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
-        ),
-        description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
-        ),
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
-        supplemental_semantic_ids=(
             [
-                minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
                 )
             ]
         ),
-        qualifiers=([minimal_qualifier(common.hash_path(path_hash, "qualifiers"))]),
+        description=(
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
+        ),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
+        supplemental_semantic_ids=(
+            [
+                minimal_reference(
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
+                )
+            ]
+        ),
+        qualifiers=(
+            [
+                minimal_qualifier(
+                    common.hash_path(
+                        path_hash,
+                        'qualifiers'
+                    )
+                )
+            ]
+        ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
         input_variables=(
-            [minimal_operation_variable(common.hash_path(path_hash, "input_variables"))]
+            [
+                minimal_operation_variable(
+                    common.hash_path(
+                        path_hash,
+                        'input_variables'
+                    )
+                )
+            ]
         ),
         output_variables=(
             [
                 minimal_operation_variable(
-                    common.hash_path(path_hash, "output_variables")
+                    common.hash_path(
+                        path_hash,
+                        'output_variables'
+                    )
                 )
             ]
         ),
         inoutput_variables=(
             [
                 minimal_operation_variable(
-                    common.hash_path(path_hash, "inoutput_variables")
+                    common.hash_path(
+                        path_hash,
+                        'inoutput_variables'
+                    )
                 )
             ]
-        ),
+        )
     )
 
 
 def maximal_operation_variable(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.OperationVariable:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -2685,11 +4432,20 @@ def maximal_operation_variable(
         more meta-model constraints.
     """
     return aas_types.OperationVariable(
-        value=(minimal_submodel_element(common.hash_path(path_hash, "value")))
+        value=(
+            minimal_submodel_element(
+                common.hash_path(
+                    path_hash,
+                    'value'
+                )
+            )
+        )
     )
 
 
-def maximal_capability(path_hash: common.CanHash) -> aas_types.Capability:
+def maximal_capability(
+    path_hash: common.CanHash
+) -> aas_types.Capability:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -2700,44 +4456,98 @@ def maximal_capability(path_hash: common.CanHash) -> aas_types.Capability:
         more meta-model constraints.
     """
     return aas_types.Capability(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "category"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                min_len=1,
+                max_len=128
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
+            [
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
+                )
+            ]
         ),
         description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
         ),
-        semantic_id=(minimal_reference(common.hash_path(path_hash, "semantic_ID"))),
+        semantic_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'semantic_ID'
+                )
+            )
+        ),
         supplemental_semantic_ids=(
             [
                 minimal_reference(
-                    common.hash_path(path_hash, "supplemental_semantic_IDs")
+                    common.hash_path(
+                        path_hash,
+                        'supplemental_semantic_IDs'
+                    )
                 )
             ]
         ),
-        qualifiers=([minimal_qualifier(common.hash_path(path_hash, "qualifiers"))]),
+        qualifiers=(
+            [
+                minimal_qualifier(
+                    common.hash_path(
+                        path_hash,
+                        'qualifiers'
+                    )
+                )
+            ]
+        ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
-        ),
+        )
     )
 
 
 def maximal_concept_description(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.ConceptDescription:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -2749,45 +4559,99 @@ def maximal_concept_description(
         more meta-model constraints.
     """
     return aas_types.ConceptDescription(
-        extensions=([minimal_extension(common.hash_path(path_hash, "extensions"))]),
+        extensions=(
+            [
+                minimal_extension(
+                    common.hash_path(
+                        path_hash,
+                        'extensions'
+                    )
+                )
+            ]
+        ),
         category=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "category"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'category'
+                ),
+                min_len=1,
+                max_len=128
             )
         ),
         id_short=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "ID_short"), "^[a-zA-Z][a-zA-Z0-9_]*$"
+                common.hash_path(
+                    path_hash,
+                    'ID_short'
+                ),
+                '^[a-zA-Z][a-zA-Z0-9_]*$'
             )
         ),
         display_name=(
-            [minimal_lang_string_name_type(common.hash_path(path_hash, "display_name"))]
+            [
+                minimal_lang_string_name_type(
+                    common.hash_path(
+                        path_hash,
+                        'display_name'
+                    )
+                )
+            ]
         ),
         description=(
-            [minimal_lang_string_text_type(common.hash_path(path_hash, "description"))]
+            [
+                minimal_lang_string_text_type(
+                    common.hash_path(
+                        path_hash,
+                        'description'
+                    )
+                )
+            ]
         ),
         administration=(
             minimal_administrative_information(
-                common.hash_path(path_hash, "administration")
+                common.hash_path(
+                    path_hash,
+                    'administration'
+                )
             )
         ),
         id=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "ID"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'ID'
+                ),
+                min_len=1,
+                max_len=2000
             )
         ),
         embedded_data_specifications=(
             [
                 minimal_embedded_data_specification(
-                    common.hash_path(path_hash, "embedded_data_specifications")
+                    common.hash_path(
+                        path_hash,
+                        'embedded_data_specifications'
+                    )
                 )
             ]
         ),
-        is_case_of=([minimal_reference(common.hash_path(path_hash, "is_case_of"))]),
+        is_case_of=(
+            [
+                minimal_reference(
+                    common.hash_path(
+                        path_hash,
+                        'is_case_of'
+                    )
+                )
+            ]
+        )
     )
 
 
-def maximal_reference(path_hash: common.CanHash) -> aas_types.Reference:
+def maximal_reference(
+    path_hash: common.CanHash
+) -> aas_types.Reference:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -2800,17 +4664,37 @@ def maximal_reference(path_hash: common.CanHash) -> aas_types.Reference:
     return aas_types.Reference(
         type=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "type"), list(aas_types.ReferenceTypes)
+                common.hash_path(
+                    path_hash,
+                    'type'
+                ),
+                list(aas_types.ReferenceTypes)
             )
         ),
         referred_semantic_id=(
-            minimal_reference(common.hash_path(path_hash, "referred_semantic_ID"))
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'referred_semantic_ID'
+                )
+            )
         ),
-        keys=([minimal_key(common.hash_path(path_hash, "keys"))]),
+        keys=(
+            [
+                minimal_key(
+                    common.hash_path(
+                        path_hash,
+                        'keys'
+                    )
+                )
+            ]
+        )
     )
 
 
-def maximal_key(path_hash: common.CanHash) -> aas_types.Key:
+def maximal_key(
+    path_hash: common.CanHash
+) -> aas_types.Key:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -2823,19 +4707,28 @@ def maximal_key(path_hash: common.CanHash) -> aas_types.Key:
     return aas_types.Key(
         type=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "type"), list(aas_types.KeyTypes)
+                common.hash_path(
+                    path_hash,
+                    'type'
+                ),
+                list(aas_types.KeyTypes)
             )
         ),
         value=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "value"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'value'
+                ),
+                min_len=1,
+                max_len=2000
             )
-        ),
+        )
     )
 
 
 def maximal_abstract_lang_string(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.AbstractLangString:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -2847,11 +4740,13 @@ def maximal_abstract_lang_string(
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMAL["Abstract_lang_string"]
-    concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+    concrete_maximal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMALS[
+        'Abstract_lang_string'
     ]
-    instance = concrete_minimal_function(path_hash)
+    concrete_maximal_function = concrete_maximal_functions[
+        number % len(concrete_maximal_functions)
+    ]
+    instance = concrete_maximal_function(path_hash)
     assert isinstance(
         instance,
         aas_types.AbstractLangString,
@@ -2860,7 +4755,7 @@ def maximal_abstract_lang_string(
 
 
 def maximal_lang_string_name_type(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.LangStringNameType:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -2874,20 +4769,28 @@ def maximal_lang_string_name_type(
     return aas_types.LangStringNameType(
         language=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "language"),
-                "^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$",
+                common.hash_path(
+                    path_hash,
+                    'language'
+                ),
+                '^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$'
             )
         ),
         text=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "text"), min_len=1, max_len=128
+                common.hash_path(
+                    path_hash,
+                    'text'
+                ),
+                min_len=1,
+                max_len=128
             )
-        ),
+        )
     )
 
 
 def maximal_lang_string_text_type(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.LangStringTextType:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -2901,19 +4804,29 @@ def maximal_lang_string_text_type(
     return aas_types.LangStringTextType(
         language=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "language"),
-                "^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$",
+                common.hash_path(
+                    path_hash,
+                    'language'
+                ),
+                '^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$'
             )
         ),
         text=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "text"), min_len=1, max_len=1023
+                common.hash_path(
+                    path_hash,
+                    'text'
+                ),
+                min_len=1,
+                max_len=1023
             )
-        ),
+        )
     )
 
 
-def maximal_environment(path_hash: common.CanHash) -> aas_types.Environment:
+def maximal_environment(
+    path_hash: common.CanHash
+) -> aas_types.Environment:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -2927,23 +4840,38 @@ def maximal_environment(path_hash: common.CanHash) -> aas_types.Environment:
         asset_administration_shells=(
             [
                 minimal_asset_administration_shell(
-                    common.hash_path(path_hash, "asset_administration_shells")
+                    common.hash_path(
+                        path_hash,
+                        'asset_administration_shells'
+                    )
                 )
             ]
         ),
-        submodels=([minimal_submodel(common.hash_path(path_hash, "submodels"))]),
+        submodels=(
+            [
+                minimal_submodel(
+                    common.hash_path(
+                        path_hash,
+                        'submodels'
+                    )
+                )
+            ]
+        ),
         concept_descriptions=(
             [
                 minimal_concept_description(
-                    common.hash_path(path_hash, "concept_descriptions")
+                    common.hash_path(
+                        path_hash,
+                        'concept_descriptions'
+                    )
                 )
             ]
-        ),
+        )
     )
 
 
 def maximal_data_specification_content(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.DataSpecificationContent:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -2955,13 +4883,13 @@ def maximal_data_specification_content(
         more meta-model constraints.
     """
     number = int(path_hash.hexdigest()[:8], base=16)
-    concrete_minimal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMAL[
-        "Data_specification_content"
+    concrete_maximal_functions = _CLASS_NAME_TO_CONCRETE_MAXIMALS[
+        'Data_specification_content'
     ]
-    concrete_minimal_function = concrete_minimal_functions[
-        number % concrete_minimal_functions
+    concrete_maximal_function = concrete_maximal_functions[
+        number % len(concrete_maximal_functions)
     ]
-    instance = concrete_minimal_function(path_hash)
+    instance = concrete_maximal_function(path_hash)
     assert isinstance(
         instance,
         aas_types.DataSpecificationContent,
@@ -2970,7 +4898,7 @@ def maximal_data_specification_content(
 
 
 def maximal_embedded_data_specification(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.EmbeddedDataSpecification:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -2983,17 +4911,27 @@ def maximal_embedded_data_specification(
     """
     return aas_types.EmbeddedDataSpecification(
         data_specification=(
-            minimal_reference(common.hash_path(path_hash, "data_specification"))
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'data_specification'
+                )
+            )
         ),
         data_specification_content=(
             minimal_data_specification_content(
-                common.hash_path(path_hash, "data_specification_content")
+                common.hash_path(
+                    path_hash,
+                    'data_specification_content'
+                )
             )
-        ),
+        )
     )
 
 
-def maximal_level_type(path_hash: common.CanHash) -> aas_types.LevelType:
+def maximal_level_type(
+    path_hash: common.CanHash
+) -> aas_types.LevelType:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -3004,15 +4942,43 @@ def maximal_level_type(path_hash: common.CanHash) -> aas_types.LevelType:
         more meta-model constraints.
     """
     return aas_types.LevelType(
-        min=(primitiving.generate_bool(common.hash_path(path_hash, "min"))),
-        nom=(primitiving.generate_bool(common.hash_path(path_hash, "nom"))),
-        typ=(primitiving.generate_bool(common.hash_path(path_hash, "typ"))),
-        max=(primitiving.generate_bool(common.hash_path(path_hash, "max"))),
+        min=(
+            primitiving.generate_bool(
+                common.hash_path(
+                    path_hash,
+                    'min'
+                )
+            )
+        ),
+        nom=(
+            primitiving.generate_bool(
+                common.hash_path(
+                    path_hash,
+                    'nom'
+                )
+            )
+        ),
+        typ=(
+            primitiving.generate_bool(
+                common.hash_path(
+                    path_hash,
+                    'typ'
+                )
+            )
+        ),
+        max=(
+            primitiving.generate_bool(
+                common.hash_path(
+                    path_hash,
+                    'max'
+                )
+            )
+        )
     )
 
 
 def maximal_value_reference_pair(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.ValueReferencePair:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -3026,14 +4992,28 @@ def maximal_value_reference_pair(
     return aas_types.ValueReferencePair(
         value=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "value"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'value'
+                ),
+                min_len=1,
+                max_len=2000
             )
         ),
-        value_id=(minimal_reference(common.hash_path(path_hash, "value_ID"))),
+        value_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'value_ID'
+                )
+            )
+        )
     )
 
 
-def maximal_value_list(path_hash: common.CanHash) -> aas_types.ValueList:
+def maximal_value_list(
+    path_hash: common.CanHash
+) -> aas_types.ValueList:
     """
     Generate a minimal instance based on the ``path_hash``.
 
@@ -3047,7 +5027,10 @@ def maximal_value_list(path_hash: common.CanHash) -> aas_types.ValueList:
         value_reference_pairs=(
             [
                 minimal_value_reference_pair(
-                    common.hash_path(path_hash, "value_reference_pairs")
+                    common.hash_path(
+                        path_hash,
+                        'value_reference_pairs'
+                    )
                 )
             ]
         )
@@ -3055,7 +5038,7 @@ def maximal_value_list(path_hash: common.CanHash) -> aas_types.ValueList:
 
 
 def maximal_lang_string_preferred_name_type_iec_61360(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.LangStringPreferredNameTypeIEC61360:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -3069,20 +5052,28 @@ def maximal_lang_string_preferred_name_type_iec_61360(
     return aas_types.LangStringPreferredNameTypeIEC61360(
         language=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "language"),
-                "^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$",
+                common.hash_path(
+                    path_hash,
+                    'language'
+                ),
+                '^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$'
             )
         ),
         text=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "text"), min_len=1, max_len=255
+                common.hash_path(
+                    path_hash,
+                    'text'
+                ),
+                min_len=1,
+                max_len=255
             )
-        ),
+        )
     )
 
 
 def maximal_lang_string_short_name_type_iec_61360(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.LangStringShortNameTypeIEC61360:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -3096,20 +5087,28 @@ def maximal_lang_string_short_name_type_iec_61360(
     return aas_types.LangStringShortNameTypeIEC61360(
         language=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "language"),
-                "^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$",
+                common.hash_path(
+                    path_hash,
+                    'language'
+                ),
+                '^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$'
             )
         ),
         text=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "text"), min_len=1, max_len=18
+                common.hash_path(
+                    path_hash,
+                    'text'
+                ),
+                min_len=1,
+                max_len=18
             )
-        ),
+        )
     )
 
 
 def maximal_lang_string_definition_type_iec_61360(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.LangStringDefinitionTypeIEC61360:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -3123,20 +5122,28 @@ def maximal_lang_string_definition_type_iec_61360(
     return aas_types.LangStringDefinitionTypeIEC61360(
         language=(
             primitiving.generate_str_satisfying_pattern(
-                common.hash_path(path_hash, "language"),
-                "^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$",
+                common.hash_path(
+                    path_hash,
+                    'language'
+                ),
+                '^(([a-zA-Z]{2,3}(-[a-zA-Z]{3}(-[a-zA-Z]{3}){2})?|[a-zA-Z]{4}|[a-zA-Z]{5,8})(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|[0-9]{3}))?(-(([a-zA-Z0-9]){5,8}|[0-9]([a-zA-Z0-9]){3}))*(-[0-9A-WY-Za-wy-z](-([a-zA-Z0-9]){2,8})+)*(-[xX](-([a-zA-Z0-9]){1,8})+)?|[xX](-([a-zA-Z0-9]){1,8})+|((en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)|(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|zh-min|zh-min-nan|zh-xiang)))$'
             )
         ),
         text=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "text"), min_len=1, max_len=1023
+                common.hash_path(
+                    path_hash,
+                    'text'
+                ),
+                min_len=1,
+                max_len=1023
             )
-        ),
+        )
     )
 
 
 def maximal_data_specification_iec_61360(
-    path_hash: common.CanHash,
+    path_hash: common.CanHash
 ) -> aas_types.DataSpecificationIEC61360:
     """
     Generate a minimal instance based on the ``path_hash``.
@@ -3151,65 +5158,122 @@ def maximal_data_specification_iec_61360(
         preferred_name=(
             [
                 minimal_lang_string_preferred_name_type_iec_61360(
-                    common.hash_path(path_hash, "preferred_name")
+                    common.hash_path(
+                        path_hash,
+                        'preferred_name'
+                    )
                 )
             ]
         ),
         short_name=(
             [
                 minimal_lang_string_short_name_type_iec_61360(
-                    common.hash_path(path_hash, "short_name")
+                    common.hash_path(
+                        path_hash,
+                        'short_name'
+                    )
                 )
             ]
         ),
         unit=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "unit"), min_len=1, max_len=None
+                common.hash_path(
+                    path_hash,
+                    'unit'
+                ),
+                min_len=1,
+                max_len=None
             )
         ),
-        unit_id=(minimal_reference(common.hash_path(path_hash, "unit_ID"))),
+        unit_id=(
+            minimal_reference(
+                common.hash_path(
+                    path_hash,
+                    'unit_ID'
+                )
+            )
+        ),
         source_of_definition=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "source_of_definition"),
+                common.hash_path(
+                    path_hash,
+                    'source_of_definition'
+                ),
                 min_len=1,
-                max_len=None,
+                max_len=None
             )
         ),
         symbol=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "symbol"), min_len=1, max_len=None
+                common.hash_path(
+                    path_hash,
+                    'symbol'
+                ),
+                min_len=1,
+                max_len=None
             )
         ),
         data_type=(
             primitiving.choose_value(
-                common.hash_path(path_hash, "data_type"),
-                list(aas_types.DataTypeIEC61360),
+                common.hash_path(
+                    path_hash,
+                    'data_type'
+                ),
+                list(aas_types.DataTypeIEC61360)
             )
         ),
         definition=(
             [
                 minimal_lang_string_definition_type_iec_61360(
-                    common.hash_path(path_hash, "definition")
+                    common.hash_path(
+                        path_hash,
+                        'definition'
+                    )
                 )
             ]
         ),
         value_format=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "value_format"), min_len=1, max_len=None
+                common.hash_path(
+                    path_hash,
+                    'value_format'
+                ),
+                min_len=1,
+                max_len=None
             )
         ),
-        value_list=(minimal_value_list(common.hash_path(path_hash, "value_list"))),
+        value_list=(
+            minimal_value_list(
+                common.hash_path(
+                    path_hash,
+                    'value_list'
+                )
+            )
+        ),
         value=(
             primitiving.generate_str(
-                common.hash_path(path_hash, "value"), min_len=1, max_len=2000
+                common.hash_path(
+                    path_hash,
+                    'value'
+                ),
+                min_len=1,
+                max_len=2000
             )
         ),
-        level_type=(minimal_level_type(common.hash_path(path_hash, "level_type"))),
+        level_type=(
+            minimal_level_type(
+                common.hash_path(
+                    path_hash,
+                    'level_type'
+                )
+            )
+        )
     )
 
 
-_CLASS_NAME_TO_CONCRETE_MAXIMAL = {
-    "Has_semantics": [
+_CLASS_NAME_TO_CONCRETE_MAXIMALS = {
+    'Has_semantics':
+    [
         maximal_relationship_element,
         maximal_annotated_relationship_element,
         maximal_basic_event_element,
@@ -3227,9 +5291,10 @@ _CLASS_NAME_TO_CONCRETE_MAXIMAL = {
         maximal_specific_asset_id,
         maximal_submodel,
         maximal_submodel_element_collection,
-        maximal_submodel_element_list,
+        maximal_submodel_element_list
     ],
-    "Has_extensions": [
+    'Has_extensions':
+    [
         maximal_relationship_element,
         maximal_annotated_relationship_element,
         maximal_asset_administration_shell,
@@ -3246,9 +5311,10 @@ _CLASS_NAME_TO_CONCRETE_MAXIMAL = {
         maximal_reference_element,
         maximal_submodel,
         maximal_submodel_element_collection,
-        maximal_submodel_element_list,
+        maximal_submodel_element_list
     ],
-    "Referable": [
+    'Referable':
+    [
         maximal_relationship_element,
         maximal_annotated_relationship_element,
         maximal_asset_administration_shell,
@@ -3265,15 +5331,20 @@ _CLASS_NAME_TO_CONCRETE_MAXIMAL = {
         maximal_reference_element,
         maximal_submodel,
         maximal_submodel_element_collection,
-        maximal_submodel_element_list,
+        maximal_submodel_element_list
     ],
-    "Identifiable": [
+    'Identifiable':
+    [
         maximal_asset_administration_shell,
         maximal_concept_description,
-        maximal_submodel,
+        maximal_submodel
     ],
-    "Has_kind": [maximal_submodel],
-    "Has_data_specification": [
+    'Has_kind':
+    [
+        maximal_submodel
+    ],
+    'Has_data_specification':
+    [
         maximal_administrative_information,
         maximal_relationship_element,
         maximal_annotated_relationship_element,
@@ -3291,9 +5362,10 @@ _CLASS_NAME_TO_CONCRETE_MAXIMAL = {
         maximal_reference_element,
         maximal_submodel,
         maximal_submodel_element_collection,
-        maximal_submodel_element_list,
+        maximal_submodel_element_list
     ],
-    "Qualifiable": [
+    'Qualifiable':
+    [
         maximal_relationship_element,
         maximal_annotated_relationship_element,
         maximal_basic_event_element,
@@ -3308,9 +5380,10 @@ _CLASS_NAME_TO_CONCRETE_MAXIMAL = {
         maximal_reference_element,
         maximal_submodel,
         maximal_submodel_element_collection,
-        maximal_submodel_element_list,
+        maximal_submodel_element_list
     ],
-    "Submodel_element": [
+    'Submodel_element':
+    [
         maximal_relationship_element,
         maximal_annotated_relationship_element,
         maximal_basic_event_element,
@@ -3324,33 +5397,125 @@ _CLASS_NAME_TO_CONCRETE_MAXIMAL = {
         maximal_range,
         maximal_reference_element,
         maximal_submodel_element_collection,
-        maximal_submodel_element_list,
+        maximal_submodel_element_list
     ],
-    "Relationship_element": [
+    'Relationship_element':
+    [
         concrete_maximal_relationship_element,
-        maximal_annotated_relationship_element,
+        maximal_annotated_relationship_element
     ],
-    "Data_element": [
+    'Data_element':
+    [
         maximal_blob,
         maximal_file,
         maximal_multi_language_property,
         maximal_property,
         maximal_range,
-        maximal_reference_element,
+        maximal_reference_element
     ],
-    "Event_element": [maximal_basic_event_element],
-    "Abstract_lang_string": [
+    'Event_element':
+    [
+        maximal_basic_event_element
+    ],
+    'Abstract_lang_string':
+    [
         maximal_lang_string_definition_type_iec_61360,
         maximal_lang_string_name_type,
         maximal_lang_string_preferred_name_type_iec_61360,
         maximal_lang_string_short_name_type_iec_61360,
-        maximal_lang_string_text_type,
+        maximal_lang_string_text_type
     ],
-    "Data_specification_content": [maximal_data_specification_iec_61360],
+    'Data_specification_content':
+    [
+        maximal_data_specification_iec_61360
+    ]
 }
 
 
-def concrete_maximal(path_hash: common.CanHash, class_name: str) -> aas_types.Class:
+_CLASS_NAME_TO_EXACT_CONCRETE_MAXIMAL = {
+    'Extension':
+    maximal_extension,
+    'Administrative_information':
+    maximal_administrative_information,
+    'Qualifier':
+    maximal_qualifier,
+    'Asset_administration_shell':
+    maximal_asset_administration_shell,
+    'Asset_information':
+    maximal_asset_information,
+    'Resource':
+    maximal_resource,
+    'Specific_asset_ID':
+    maximal_specific_asset_id,
+    'Submodel':
+    maximal_submodel,
+    'Relationship_element':
+    concrete_maximal_relationship_element,
+    'Submodel_element_list':
+    maximal_submodel_element_list,
+    'Submodel_element_collection':
+    maximal_submodel_element_collection,
+    'Property':
+    maximal_property,
+    'Multi_language_property':
+    maximal_multi_language_property,
+    'Range':
+    maximal_range,
+    'Reference_element':
+    maximal_reference_element,
+    'Blob':
+    maximal_blob,
+    'File':
+    maximal_file,
+    'Annotated_relationship_element':
+    maximal_annotated_relationship_element,
+    'Entity':
+    maximal_entity,
+    'Event_payload':
+    maximal_event_payload,
+    'Basic_event_element':
+    maximal_basic_event_element,
+    'Operation':
+    maximal_operation,
+    'Operation_variable':
+    maximal_operation_variable,
+    'Capability':
+    maximal_capability,
+    'Concept_description':
+    maximal_concept_description,
+    'Reference':
+    maximal_reference,
+    'Key':
+    maximal_key,
+    'Lang_string_name_type':
+    maximal_lang_string_name_type,
+    'Lang_string_text_type':
+    maximal_lang_string_text_type,
+    'Environment':
+    maximal_environment,
+    'Embedded_data_specification':
+    maximal_embedded_data_specification,
+    'Level_type':
+    maximal_level_type,
+    'Value_reference_pair':
+    maximal_value_reference_pair,
+    'Value_list':
+    maximal_value_list,
+    'Lang_string_preferred_name_type_IEC_61360':
+    maximal_lang_string_preferred_name_type_iec_61360,
+    'Lang_string_short_name_type_IEC_61360':
+    maximal_lang_string_short_name_type_iec_61360,
+    'Lang_string_definition_type_IEC_61360':
+    maximal_lang_string_definition_type_iec_61360,
+    'Data_specification_IEC_61360':
+    maximal_data_specification_iec_61360
+}
+
+
+def exact_concrete_maximal(
+    path_hash: common.CanHash,
+    class_name: str
+) -> aas_types.Class:
     """
     Create a maximal instance of exactly ``class_name``.
 
@@ -3360,7 +5525,7 @@ def concrete_maximal(path_hash: common.CanHash, class_name: str) -> aas_types.Cl
         That means it can be serialized as-is, but probably violates one or
         more meta-model constraints.
     """
-    dispatch = _CLASS_NAME_TO_CONCRETE_MAXIMAL.get(class_name, None)
+    dispatch = _CLASS_NAME_TO_EXACT_CONCRETE_MAXIMAL.get(class_name, None)
     if dispatch is None:
         raise KeyError(
             f"The class name {class_name!r} does not denote a concrete class "

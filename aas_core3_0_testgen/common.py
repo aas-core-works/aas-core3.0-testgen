@@ -281,11 +281,11 @@ def dereference_instance(
         else:
             aas_core_codegen.common.assert_never(segment)
 
-        if not isinstance(something, expected_type):
-            path_str = instance_path_as_posix(path)
-            return None, (
-                f"Expected an instance of {expected_type.__name__}, "
-                f"but got: {something} on path {path_str}"
-            )
+    if not isinstance(something, expected_type):
+        path_str = instance_path_as_posix(path)
+        return None, (
+            f"Expected an instance of {expected_type.__name__}, "
+            f"but got: {something} on path {path_str}"
+        )
 
-        return something, None
+    return something, None

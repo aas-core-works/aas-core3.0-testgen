@@ -280,7 +280,7 @@ BY_PATTERN: Mapping[str, Examples] = collections.OrderedDict(
                 ),
             ),
         ),
-        # MIME type
+        # Content type (a.k.a. MIME type)
         (
             "^([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+/([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+([ \t]*;[ \t]*([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+=(([!#$%&'*+\\-.^_`|~0-9a-zA-Z])+|\"(([\t !#-\\[\\]-~]|[\\x80-\\xff])|\\\\([\t !-~]|[\\x80-\\xff]))*\"))*$",
             Examples(
@@ -295,12 +295,12 @@ BY_PATTERN: Mapping[str, Examples] = collections.OrderedDict(
                         # Fuzzed
                         (
                             "fuzzed_01",
-                            '7/6qwqh6g   ;\t  \t\t\tSfY`0%T$j="\\£\\-\\z\\ß\\\x83\\n";\t \t\t\t \tafHag\'=Ojk;z6="àø"  \t \t\t\t\t\t;GHaV0^|#=":õsïõv\xad¢¿ÿ\\>"\t; \tse=!`B5#|91+gIZf&rwrjF  ;  \txYWL%Rl_8="Ç\\¥\\÷\\}"   \t \t \t     \t   \t;\tv="\\ü"',
+                            '7/6qwqh6g   ;\t  \t\t\tSfY`0%T$j="\\£\\-\\z\\ß\\\x83\\n";\t \t\t\t \tafHag\'=Ojk;z6="àø"  \t \t\t\t\t\t;GHaV0^|#=":õsïõv\xad¢¿ÿ\\',
                         ),
                         ("fuzzed_02", "15j/5j"),
                         (
                             "fuzzed_03",
-                            '\'VbrwFrYTU/fO7NnLxq   \t; \tMX.`10dB732`X5yRy=I56Ov9Us\t ;\t\t pRb~~hdw_C%2Zf=""\t\t\t    \t\t\t \t \t\t \t  ; h=1tT.9`#~  \t ;Zn%y=atQHDeMs`a2Hbza',
+                            '\'VbrwFrYTU/fO7NnLxq   \t; \tMX.`10dB732`X5yRy=I56Ov9Us\t ;\t\t pRb~~hdw_C%2Zf=""\t\t\t    \t\t\t \t \t\t \t  ; h=1t',
                         ),
                     ]
                 ),
