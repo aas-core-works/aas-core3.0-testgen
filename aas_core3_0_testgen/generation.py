@@ -514,10 +514,9 @@ def _generate_customized_environment_and_minimal_instance_for_key(
 
     assert isinstance(instance_of_aas, aas_types.AssetAdministrationShell)
 
-    instance_of_aas.derived_from = fixing.generate_external_reference(
-        common.hash_path(
-            path_hash, path_to_aas + ["derived_from"]
-        )
+    instance_of_aas.derived_from = fixing.generate_model_reference(
+        common.hash_path(path_hash, path_to_aas + ["derived_from"]),
+        expected_type=aas_types.KeyTypes.ASSET_ADMINISTRATION_SHELL
     )
 
     key = instance_of_aas.derived_from.keys[0]
@@ -546,10 +545,9 @@ def _generate_customized_environment_and_maximal_instance_for_key(
 
     assert isinstance(instance_of_aas, aas_types.AssetAdministrationShell)
 
-    instance_of_aas.derived_from = fixing.generate_external_reference(
-        common.hash_path(
-            path_hash, path_to_aas + ["derived_from"]
-        )
+    instance_of_aas.derived_from = fixing.generate_model_reference(
+        common.hash_path(path_hash, path_to_aas + ["derived_from"]),
+        aas_types.KeyTypes.ASSET_ADMINISTRATION_SHELL
     )
 
     key = instance_of_aas.derived_from.keys[0]
@@ -578,10 +576,9 @@ def _generate_customized_environment_and_minimal_instance_for_reference(
 
     assert isinstance(instance_of_aas, aas_types.AssetAdministrationShell)
 
-    instance_of_aas.derived_from = fixing.generate_external_reference(
-        common.hash_path(
-            path_hash, path_to_aas + ["derived_from"]
-        )
+    instance_of_aas.derived_from = fixing.generate_model_reference(
+        common.hash_path(path_hash, path_to_aas + ["derived_from"]),
+        aas_types.KeyTypes.ASSET_ADMINISTRATION_SHELL
     )
 
     reference = instance_of_aas.derived_from
@@ -613,16 +610,16 @@ def _generate_customized_environment_and_maximal_instance_for_reference(
     path_hash = common.hash_path(
         environment_path_hash, path_to_aas + ["derived_from"]
     )
-    instance_of_aas.derived_from = fixing.generate_external_reference(path_hash)
+    instance_of_aas.derived_from = fixing.generate_model_reference(
+        path_hash,
+        aas_types.KeyTypes.ASSET_ADMINISTRATION_SHELL
+    )
     path = path_to_aas + ["derived_from"]
 
     reference = instance_of_aas.derived_from
     reference.referred_semantic_id = fixing.generate_external_reference(
         common.hash_path(path_hash, "referred_semantic_id")
     )
-    # TODO (mristin, 2023-03-11): implement is_maximal, is_maximal_{cls} in creation
-    #  also is_minimal, is_minimal_{cls}
-    #  🠒 put it here as ensure and other custom-tailored functions
 
     fixing.assert_instance_at_path_in_environment(environment, reference, path)
     return environment, reference, path
@@ -633,7 +630,6 @@ def _generate_minimal_case(
         cls: intermediate.ConcreteClass, environment_cls: intermediate.ConcreteClass
 ) -> Tuple[CaseMinimal, Replica]:
     """Generate the example of a minimal instance ready for serialization."""
-    # TODO (mristin, 2023-03-11): add post-condition that the generated instance is minimal.
     try:
         if wrapping.lives_in_environment(cls.name):
             if cls.name == "Key":
@@ -659,7 +655,7 @@ def _generate_minimal_case(
             return (
                 CaseMinimal(
                     container_class=environment_cls,
-                    preserialized_container=preserialization.preserialize(instance),
+                    preserialized_container=preserialization.preserialize(environment),
                     cls=cls,
                 ),
                 Replica(container=environment, instance=instance, path=path),
@@ -671,7 +667,7 @@ def _generate_minimal_case(
 
             return (
                 CaseMinimal(
-                    container_class=environment_cls,
+                    container_class=cls,
                     preserialized_container=preserialization.preserialize(instance),
                     cls=cls,
                 ),
@@ -690,7 +686,6 @@ def _generate_maximal_case(
         cls: intermediate.ConcreteClass, environment_cls: intermediate.ConcreteClass
 ) -> Tuple[CaseMaximal, Replica]:
     """Generate the example of a minimal instance ready for serialization."""
-    # TODO (mristin, 2023-03-11): add post-condition that the generate instance is maximal.
     try:
         if wrapping.lives_in_environment(cls.name):
             if cls.name == "Key":
@@ -714,7 +709,7 @@ def _generate_maximal_case(
             return (
                 CaseMaximal(
                     container_class=environment_cls,
-                    preserialized_container=preserialization.preserialize(instance),
+                    preserialized_container=preserialization.preserialize(environment),
                     cls=cls,
                 ),
                 Replica(container=environment, instance=instance, path=path),
@@ -726,7 +721,7 @@ def _generate_maximal_case(
 
             return (
                 CaseMaximal(
-                    container_class=environment_cls,
+                    container_class=cls,
                     preserialized_container=preserialization.preserialize(instance),
                     cls=cls,
                 ),

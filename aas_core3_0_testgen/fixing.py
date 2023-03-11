@@ -8,7 +8,7 @@ Fix instances in place to conform to the meta-model constraints.
 """
 import ast
 import inspect
-from typing import TypeVar, List, Type, Sequence, Union
+from typing import TypeVar, List, Type, Sequence, Union, Optional
 
 import aas_core3.constants as aas_constants
 import aas_core3.types as aas_types
@@ -21,7 +21,7 @@ from aas_core3_0_testgen import common, primitiving
 from aas_core3_0_testgen.frozen_examples import (
     xs_value as frozen_examples_xs_value
 )
-from aas_core3_0_testgen.codegened import abstract_fixing, preserialization
+from aas_core3_0_testgen.codegened import abstract_fixing, preserialization, creation
 
 LangStringT = TypeVar("LangStringT", bound=aas_types.AbstractLangString)
 
@@ -156,6 +156,57 @@ def generate_xs_value(
             frozen_examples_xs_value.BY_VALUE_TYPE[value_type.value].positives.values()
         )
     )
+
+
+_AAS_SUBMODEL_ELEMENTS_TO_MINIMAL = {
+    aas_types.AASSubmodelElements.ANNOTATED_RELATIONSHIP_ELEMENT:
+        creation.minimal_annotated_relationship_element,
+    aas_types.AASSubmodelElements.BASIC_EVENT_ELEMENT:
+        creation.minimal_basic_event_element,
+    aas_types.AASSubmodelElements.BLOB:
+        creation.minimal_blob,
+    aas_types.AASSubmodelElements.CAPABILITY:
+        creation.minimal_capability,
+    aas_types.AASSubmodelElements.DATA_ELEMENT:
+        creation.minimal_data_element,
+    aas_types.AASSubmodelElements.ENTITY:
+        creation.minimal_entity,
+    aas_types.AASSubmodelElements.EVENT_ELEMENT:
+        creation.minimal_event_element,
+    aas_types.AASSubmodelElements.FILE:
+        creation.minimal_file,
+    aas_types.AASSubmodelElements.MULTI_LANGUAGE_PROPERTY:
+        creation.minimal_multi_language_property,
+    aas_types.AASSubmodelElements.OPERATION:
+        creation.minimal_operation,
+    aas_types.AASSubmodelElements.PROPERTY:
+        creation.minimal_property,
+    aas_types.AASSubmodelElements.RANGE:
+        creation.minimal_range,
+    aas_types.AASSubmodelElements.REFERENCE_ELEMENT:
+        creation.minimal_reference_element,
+    aas_types.AASSubmodelElements.RELATIONSHIP_ELEMENT:
+        creation.minimal_relationship_element,
+    aas_types.AASSubmodelElements.SUBMODEL_ELEMENT:
+        creation.minimal_submodel_element,
+    aas_types.AASSubmodelElements.SUBMODEL_ELEMENT_LIST:
+        creation.minimal_submodel_element_list,
+    aas_types.AASSubmodelElements.SUBMODEL_ELEMENT_COLLECTION:
+        creation.minimal_submodel_element_collection,
+}
+assert all(
+    literal in _AAS_SUBMODEL_ELEMENTS_TO_MINIMAL
+    for literal in aas_types.AASSubmodelElements
+)
+
+
+def generate_minimal_submodel_element(
+        submodel_element_type: aas_types.AASSubmodelElements,
+        path_hash: common.CanHash
+) -> aas_types.SubmodelElement:
+    """Generate a minimal instance of the given submodel element type."""
+    minimal_function = _AAS_SUBMODEL_ELEMENTS_TO_MINIMAL[submodel_element_type]
+    return minimal_function(path_hash)
 
 
 class _Handyman(abstract_fixing.AbstractHandyman):
@@ -419,6 +470,76 @@ class _Handyman(abstract_fixing.AbstractHandyman):
             that.kind = aas_types.ModellingKind.TEMPLATE
 
         # endregion
+
+    def _fix_submodel_element_collection(
+            self, that: aas_types.SubmodelElementCollection, path_hash: common.CanHash
+    ) -> None:
+        # Fix: ID-shorts need to be defined for all the elements.
+        if that.value is not None:
+            for i, item in enumerate(that.value):
+                if item.id_short is None:
+                    item.id_short = generate_id_short(
+                        common.hash_path(path_hash, ["value", i, "id_short"])
+                    )
+
+    def _fix_submodel_element_list(
+            self, that: aas_types.SubmodelElementList, path_hash: common.CanHash
+    ) -> None:
+        if that.value is not None:
+            # Fix AASd-107
+            if that.semantic_id_list_element is not None:
+                for item in that.value:
+                    if item.semantic_id is not None:
+                        item.semantic_id = that.semantic_id_list_element
+            else:
+                # Fix AASd-114
+                semantic_id = None  # type: Optional[aas_types.Reference]
+                for item in that.value:
+                    if item.semantic_id is not None:
+                        semantic_id = item.semantic_id
+                        break
+
+                if semantic_id is not None:
+                    for item in that.value:
+                        if item.semantic_id is not None:
+                            item.semantic_id = semantic_id
+
+            # Fix AASd-108
+            if that.type_value_list_element is not None:
+                new_value = []  # type: List[aas_types.SubmodelElement]
+                for i, item in enumerate(that.value):
+                    if aas_verification.submodel_element_is_of_type(
+                        item, that.type_value_list_element
+                    ):
+                        new_value.append(item)
+                        continue
+
+                    item = generate_minimal_submodel_element(
+                        submodel_element_type=that.type_value_list_element,
+                        path_hash=common.hash_path(path_hash, ["value", i])
+                    )
+
+                    new_value.append(item)
+
+                that.value = new_value
+
+            # Fix AASd-109
+            if that.type_value_list_element in (
+                    aas_types.AASSubmodelElements.PROPERTY,
+                    aas_types.AASSubmodelElements.RANGE
+            ):
+                if that.value_type_list_element is None:
+                    that.value_type_list_element = aas_types.DataTypeDefXSD.INT
+
+                for item in that.value:
+                    assert isinstance(item, (aas_types.Property, aas_types.Range)), (
+                        f"We should have fixed the item "
+                        f"to {that.type_value_list_element=} "
+                        f"before, but got here: {item=}"
+                    )
+
+                    item.value_type = that.value_type_list_element
+
 
 
 # TODO (mristin, 2023-03-10): continue here, make sure minimal and maximal work.

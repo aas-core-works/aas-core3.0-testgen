@@ -55,7 +55,7 @@ def _relative_path(test_case: generation.CaseUnion) -> pathlib.Path:
         return base_pth / "minimal.json"
 
     elif isinstance(test_case, generation.CaseMaximal):
-        return base_pth / "complete.json"
+        return base_pth / "maximal.json"
 
     elif isinstance(test_case, generation.CaseTypeViolation):
         prop_name = aas_core_codegen.naming.json_property(test_case.property_name)
