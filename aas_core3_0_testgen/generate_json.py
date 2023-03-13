@@ -252,6 +252,7 @@ def dereference(
 
     return cursor
 
+# TODO (mristin, 2023-03-13): implement also generate_invalid_model_types 🠒 set an invalid model type for each class
 
 # TODO (mristin, 2023-03-10): implement this once everything else is working
 # def _generate_null_violations(

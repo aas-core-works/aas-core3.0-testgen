@@ -1092,6 +1092,106 @@ def _generate_length_violations(
             # endregion
 
 
+def _generate_enum_violations(
+        maximal_case: CaseMaximal
+) -> Iterator[CaseEnumViolation]:
+    """Generate the test cases where enums have invalid literals."""
+    # Abbreviate for readability
+    replica = maximal_case.replica
+
+    for prop in maximal_case.cls.properties:
+        type_anno = intermediate.beneath_optional(prop.type_annotation)
+
+        if (
+                not isinstance(type_anno, intermediate.OurTypeAnnotation)
+                or not isinstance(type_anno.our_type, intermediate.Enumeration)
+        ):
+            continue
+
+        # region Replicate
+        preserialized_container, instance_to_preserialized = (
+            preserialization.preserialize(replica.container)
+        )
+        preserialized_instance = instance_to_preserialized[replica.instance]
+        # endregion
+
+        # region Mutate
+        invalid_literal = "totally utterly invalid"
+        while invalid_literal in type_anno.our_type.literals_by_value:
+            invalid_literal = "so " + invalid_literal
+
+        preserialized_instance.properties[prop.name] = invalid_literal
+
+        yield CaseEnumViolation(
+            container_class=maximal_case.container_class,
+            preserialized_container=preserialized_container,
+            enum=type_anno.our_type,
+            cls=maximal_case.cls,
+            prop=prop
+        )
+        # endregion
+
+
+def _generate_unexpected_additional_properties(
+        minimal_case: CaseMinimal
+)->Iterator[CaseUnexpectedAdditionalProperty]:
+    """Generate invalid cases with unexpected properties in the preserialization."""
+    # region Replicate
+    preserialized_container, instance_to_preserialized = (
+        preserialization.preserialize(minimal_case.replica.container)
+    )
+    preserialized_instance = instance_to_preserialized[minimal_case.replica.instance]
+    # endregion
+
+    # region Mutate
+    additional_prop_name = "unexpected_additional_property"
+    while additional_prop_name in minimal_case.cls.properties_by_name:
+        additional_prop_name = f"really_{additional_prop_name}"
+
+    preserialized_instance.properties[additional_prop_name] = "INVALID"
+
+    yield CaseUnexpectedAdditionalProperty(
+        container_class=minimal_case.container_class,
+        preserialized_container=preserialized_container,
+        cls=minimal_case.cls
+    )
+    # endregion
+
+
+def _generate_date_time_utc_violation_on_february_29th(
+        minimal_case: CaseMinimal,
+        date_time_utc_constrained_primitive: intermediate.ConstrainedPrimitive
+)->Iterator[CaseDateTimeUtcViolationOnFebruary29th]:
+    """Generate the cases where an invalid date-time satisfies the pattern."""
+    # Abbreviate for readability
+    replica = minimal_case.replica
+
+    for prop in minimal_case.cls.properties:
+        type_anno = intermediate.beneath_optional(prop.type_annotation)
+
+        if (
+                isinstance(type_anno, intermediate.OurTypeAnnotation)
+                and type_anno.our_type is date_time_utc_constrained_primitive
+        ):
+            # region Replicate
+            preserialized_container, instance_to_preserialized = (
+                preserialization.preserialize(replica.container)
+            )
+            preserialized_instance = instance_to_preserialized[replica.instance]
+            # endregion
+
+            # region Mutate
+            preserialized_instance.properties[prop.name] = f"2022-02-29T12:13:14Z"
+
+            yield CaseDateTimeUtcViolationOnFebruary29th(
+                container_class=minimal_case.container_class,
+                preserialized_container=preserialized_container,
+                cls=minimal_case.cls,
+                property_name=prop.name
+            )
+            # endregion
+
+
 def generate(
         symbol_table: intermediate.SymbolTable,
         constraints_by_class: MutableMapping[
@@ -1100,6 +1200,10 @@ def generate(
 ) -> Iterator[CaseUnion]:
     """Generate the test cases."""
     environment_cls = symbol_table.must_find_concrete_class(Identifier("Environment"))
+
+    date_time_utc_constrained_primitive = symbol_table.must_find_constrained_primitive(
+        Identifier("Date_time_UTC")
+    )
 
     for our_type in sorted(
             symbol_table.our_types,
@@ -1135,6 +1239,15 @@ def generate(
         yield from _generate_length_violations(
             maximal_case=maximal_case,
             constraints_by_property=constraints_by_class[our_type]
+        )
+
+        yield from _generate_enum_violations(maximal_case=maximal_case)
+
+        yield from _generate_unexpected_additional_properties(minimal_case=minimal_case)
+
+        yield from _generate_date_time_utc_violation_on_february_29th(
+            minimal_case=minimal_case,
+            date_time_utc_constrained_primitive=date_time_utc_constrained_primitive
         )
 
         # TODO (mristin, 2023-03-10): implement other cases once debugging done
