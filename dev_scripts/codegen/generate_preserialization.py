@@ -100,7 +100,7 @@ def dump(value: ValueUnion) -> str:
 {I}This is meant for debugging, not for the end-user serialization.
 {I}\"\"\"
 {I}return json.dumps(_to_jsonable(value), indent=2)"""
-        ),
+        )
     ]
 
 
@@ -211,12 +211,14 @@ if that.{prop_name} is not None:
     blocks.append(
         Stripped(
             f"""\
-return Instance(
+preserialized = Instance(
 {I}properties=properties,
 {I}class_name=Identifier(
 {II}{python_common.string_literal(cls.name)}
 {I})
-)"""
+)
+self.instance_to_preserialized[that] = preserialized
+return preserialized"""
         )
     )
 
@@ -237,7 +239,16 @@ def {transform_name}(
 
 def _generate_preserializer(symbol_table: intermediate.SymbolTable) -> Stripped:
     """Generate the preserializer as a transformer."""
-    methods = []  # type: List[Stripped]
+    methods = [
+        Stripped(
+            f"""\
+def __init__(self) -> None:
+{I}\"\"\"Initialize empty.\"\"\"
+{I}self.instance_to_preserialized = dict(
+{I})  # type: MutableMapping[aas_types.Class, Instance]"""
+        )
+
+    ]  # type: List[Stripped]
     for our_type in symbol_table.our_types:
         if not isinstance(our_type, intermediate.ConcreteClass):
             continue
@@ -276,6 +287,7 @@ from typing import (
 {I}List,
 {I}MutableMapping,
 {I}OrderedDict,
+{I}Tuple,
 {I}Union
 )
 
@@ -295,9 +307,16 @@ from aas_core3 import types as aas_types"""
                 f"""\
 def preserialize(
 {I}that: aas_types.Class
-) -> Instance:
-{I}\"\"\"Pre-serialize ``that`` instance for further modification.\"\"\"
-{I}return _PRESERIALIZER.transform(that)"""
+) -> Tuple[Instance, MutableMapping[aas_types.Class, Instance]]:
+{I}\"\"\"
+{I}Pre-serialize ``that`` instance for further modification.
+
+{I}Return the pre-serialization together with 
+{I}the map model instance 🠒 pre-serialized instance. 
+{I}\"\"\"
+{I}preserializer = _Preserializer()
+{I}preserialized = preserializer.transform(that)
+{I}return preserialized, preserializer.instance_to_preserialized"""
             ),
             warning,
         ]
@@ -319,7 +338,7 @@ def generate_and_write() -> Optional[str]:
         return error
 
     path = _REPO_DIR / "aas_core3_0_testgen" / "codegened" / "preserialization.py"
-    path.write_text(code + "\n")
+    path.write_text(code + "\n", encoding='utf-8')
 
 
 def main() -> int:

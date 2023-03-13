@@ -1182,7 +1182,7 @@ def generate_and_write() -> Optional[str]:
         return error
 
     path = _REPO_DIR / "aas_core3_0_testgen" / "codegened" / "creation.py"
-    path.write_text(code + "\n")
+    path.write_text(code + "\n", encoding='utf-8')
 
 
 def main() -> int:

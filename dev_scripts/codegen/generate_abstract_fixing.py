@@ -209,7 +209,7 @@ def generate_and_write() -> Optional[str]:
         return error
 
     path = _REPO_DIR / "aas_core3_0_testgen" / "codegened" / "abstract_fixing.py"
-    path.write_text(code + "\n")
+    path.write_text(code + "\n", encoding='utf-8')
 
 
 # TODO (mristin, 2023-03-10): continue here, test this
