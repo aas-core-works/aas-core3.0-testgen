@@ -1,18 +1,20 @@
 """Generate the pre-serialized representation of the test data."""
 import copy
-from typing import Union, MutableMapping, Iterator, Sequence, Tuple, List
+from typing import Union, MutableMapping, Iterator, Sequence, Tuple, List, Optional
 
 import aas_core3.types as aas_types
 import aas_core_codegen.common
 from aas_core_codegen import intermediate, infer_for_schema
 from aas_core_codegen.common import Identifier
 from icontract import require, DBC
+from typing_extensions import assert_never
 
-from aas_core3_0_testgen import fixing, common
+from aas_core3_0_testgen import fixing, common, primitiving
 from aas_core3_0_testgen.codegened import creation, wrapping, preserialization
 from aas_core3_0_testgen.frozen_examples import (
-pattern as frozen_examples_pattern
+    pattern as frozen_examples_pattern
 )
+
 
 class Case(DBC):
     """Represent an abstract test case."""
@@ -722,7 +724,8 @@ def _generate_maximal_case(
 
             fixing.assert_instance_at_path_in_environment(environment, instance, path)
 
-            preserialized_container, instance_to_preserialized = preserialization.preserialize(environment)
+            preserialized_container, instance_to_preserialized = preserialization.preserialize(
+                environment)
 
             return CaseMaximal(
                 container_class=environment_cls,
@@ -762,7 +765,7 @@ def _generate_type_violations(
     replica = maximal_case.replica
 
     for prop in maximal_case.cls.properties:
-        if prop.name not in maximal_case.preserialized_instance:
+        if prop.name not in maximal_case.preserialized_instance.properties:
             continue
 
         # region Replicate
@@ -838,6 +841,9 @@ def _generate_positive_and_negative_pattern_examples(
             if pattern_constraint.pattern
                != "^[\\x09\\x0A\\x0D\\x20-\\uD7FF\\uE000-\\uFFFD\\U00010000-\\U0010FFFF]*$"
         ]
+
+        if len(pattern_constraints_without_xml) == 0:
+            continue
 
         if len(pattern_constraints_without_xml) > 1:
             raise NotImplementedError(
@@ -924,6 +930,168 @@ def _generate_required_violations(
         # endregion
 
 
+def _generate_length_violations(
+        maximal_case: CaseMaximal,
+        constraints_by_property: infer_for_schema.ConstraintsByProperty
+) -> Iterator[Union[CaseMinLengthViolation, CaseMaxLengthViolation]]:
+    """Generate positive and negative pattern examples."""
+    # Abbreviate for readability
+    replica = maximal_case.replica
+
+    for prop in maximal_case.cls.properties:
+        if prop.name not in maximal_case.preserialized_instance.properties:
+            continue
+
+        len_constraints = constraints_by_property.len_constraints_by_property.get(
+            prop, None
+        )
+
+        if len_constraints is None:
+            continue
+
+        if len_constraints.min_value is not None and len_constraints.min_value > 0:
+            # region Replicate
+            preserialized_container, instance_to_preserialized = (
+                preserialization.preserialize(replica.container)
+            )
+            preserialized_instance = instance_to_preserialized[replica.instance]
+            # endregion
+
+            # region Mutate
+            prop_value = preserialized_instance.properties[prop.name]
+            assert isinstance(
+                prop_value,
+                (str, bytes, preserialization.ListOfInstances)
+            ), (
+                f"Only strings, bytes and lists expected with length constraints, "
+                f"but got type {type(prop_value)} "
+                f"for instance: {preserialization.dump(preserialized_instance)}"
+            )
+
+            new_prop_value: Optional[
+                Union[str, bytes, preserialization.ListOfInstances]
+            ] = None
+
+            if isinstance(prop_value, (str, bytes)):
+                new_prop_value = prop_value[:(len_constraints.min_value - 1)]
+
+                assert len(new_prop_value) < len_constraints.min_value, (
+                    f"{len(new_prop_value)=}, {len(prop_value)=}, "
+                    f"{len_constraints.min_value=}"
+                )
+
+            elif isinstance(prop_value, preserialization.ListOfInstances):
+                new_prop_value = preserialization.ListOfInstances(
+                    values=prop_value.values[:(len_constraints.min_value - 1)]
+                )
+            else:
+                assert_never(prop_value)
+
+            assert new_prop_value is not None
+
+            preserialized_instance.properties[prop.name] = new_prop_value
+
+            yield CaseMinLengthViolation(
+                container_class=maximal_case.container_class,
+                preserialized_container=preserialized_container,
+                cls=maximal_case.cls,
+                prop=prop,
+                min_value=len_constraints.min_value
+            )
+            # endregion
+
+        if len_constraints.max_value is not None:
+            # NOTE (mristin, 2023-03-13):
+            # Since we are dealing with a maximal example, we assume that the value
+            # is non-empty, and simply extend it.
+            #
+            # This is quite brutish, and might violate other constraints as well, but
+            # it will *certainly* violate the max value constraint.
+
+            # region Replicate
+            preserialized_container, instance_to_preserialized = (
+                preserialization.preserialize(replica.container)
+            )
+            preserialized_instance = instance_to_preserialized[replica.instance]
+            # endregion
+
+            # region Mutate
+            prop_value = preserialized_instance.properties[prop.name]
+            assert isinstance(
+                prop_value,
+                (str, bytes, preserialization.ListOfInstances)
+            ), (
+                f"Only strings, bytes and lists expected with length constraints, "
+                f"but got type {type(prop_value)} "
+                f"for instance: {preserialization.dump(preserialized_instance)}"
+            )
+
+            new_prop_value: Optional[
+                str, bytes, preserialization.ListOfInstances
+            ] = None
+
+            if isinstance(prop_value, str):
+                # NOTE (mristin, 2023-03-13):
+                # This might violate other constraints as well, but will *certainly*
+                # violate the length constraint.
+                new_prop_value = (
+                        prop_value
+                        + primitiving.generate_str_padding(
+                    len_constraints.max_value - len(prop_value) + 1
+                )
+                )
+
+                assert len(new_prop_value) > len_constraints.max_value, (
+                    f"{len(prop_value)=}, {len(new_prop_value)=}, "
+                    f"{len_constraints.max_value=}"
+                )
+            elif isinstance(prop_value, bytes):
+                # NOTE (mristin, 2023-03-13):
+                # This might violate other constraints as well, but will *certainly*
+                # violate the length constraint.
+                new_prop_value = (
+                        prop_value
+                        + primitiving.generate_bytes_padding(
+                    len_constraints.max_value - len(prop_value) + 1
+                )
+                )
+
+            elif isinstance(prop_value, preserialization.ListOfInstances):
+                assert len(prop_value.values) >= 1, (
+                    f"Maximal instance expected to have non-empty lists "
+                    f"for property {prop.name!r}, "
+                    f"but got: {preserialization.dump(preserialized_instance)}"
+                )
+
+                last_value = prop_value.values[-1]
+
+                new_prop_value = preserialization.ListOfInstances(
+                    values=(
+                            prop_value.values
+                            + [last_value] * (
+                                    len_constraints.max_value
+                                    - len(prop_value.values)
+                                    + 1
+                            )
+                    )
+                )
+
+            else:
+                assert_never(prop_value)
+
+            assert new_prop_value is not None
+
+            preserialized_instance.properties[prop.name] = new_prop_value
+
+            yield CaseMaxLengthViolation(
+                container_class=maximal_case.container_class,
+                preserialized_container=preserialized_container,
+                cls=maximal_case.cls,
+                property_name=prop.name
+            )
+            # endregion
+
+
 def generate(
         symbol_table: intermediate.SymbolTable,
         constraints_by_class: MutableMapping[
@@ -963,5 +1131,10 @@ def generate(
         )
 
         yield from _generate_required_violations(minimal_case=minimal_case)
+
+        yield from _generate_length_violations(
+            maximal_case=maximal_case,
+            constraints_by_property=constraints_by_class[our_type]
+        )
 
         # TODO (mristin, 2023-03-10): implement other cases once debugging done

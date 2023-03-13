@@ -21,13 +21,35 @@ def generate_int(path_hash: common.CanHash) -> int:
 
 def generate_int64(path_hash: common.CanHash) -> int:
     """Return the hexadecimal digest parsed as integer."""
-    return int(path_hash.hexdigest()[:8], base=16) % (2**63 - 1)
+    return int(path_hash.hexdigest()[:8], base=16) % (2 ** 63 - 1)
 
 
 def generate_float(path_hash: common.CanHash) -> float:
     """Return the hexadecimal digest transformed to a float."""
     number = int(path_hash.hexdigest()[:8], base=16)
     return float(number) / 100
+
+
+_RULER_STR = "1234567890"
+
+
+@ensure(lambda length, result: len(result) == length)
+def generate_str_padding(length: int) -> str:
+    """Generate a dummy string padding."""
+    tens = length // 10
+    remainder = length % 10
+    return "".join([_RULER_STR * tens, _RULER_STR[:remainder]])
+
+
+_RULER_BYTES = b"1234567890"
+
+
+@ensure(lambda length, result: len(result) == length)
+def generate_bytes_padding(length: int) -> bytes:
+    """Generate a dummy string padding."""
+    tens = length // 10
+    remainder = length % 10
+    return b"".join([_RULER_BYTES * tens, _RULER_BYTES[:remainder]])
 
 
 # fmt: off
@@ -48,14 +70,7 @@ def generate_str_of_exact_len(hexdigest: str, length: int) -> str:
         return f"something_{hexdigest[:len_hexdigest_part]}"
 
     prefix = f"something_{hexdigest}"
-
-    ruler = "1234567890"
-
-    tens = length // 10
-    remainder = length % 10
-    return "".join(
-        [prefix, ruler[len(prefix) : 10], ruler * (tens - 1), ruler[:remainder]]
-    )
+    return prefix + generate_str_padding(length - len(prefix))
 
 
 # fmt: off
@@ -71,9 +86,9 @@ def generate_str_of_exact_len(hexdigest: str, length: int) -> str:
 )
 # fmt: on
 def generate_str(
-    path_hash: common.CanHash,
-    min_len: Optional[int] = None,
-    max_len: Optional[int] = None,
+        path_hash: common.CanHash,
+        min_len: Optional[int] = None,
+        max_len: Optional[int] = None,
 ) -> str:
     """Transform the digest to a semi-meaningful string value."""
     hexdigest = path_hash.hexdigest()
@@ -129,9 +144,9 @@ def generate_str_satisfying_pattern(path_hash: common.CanHash, pattern: str) -> 
 )
 # fmt: on
 def generate_bytes(
-    path_hash: common.CanHash,
-    min_len: Optional[int] = None,
-    max_len: Optional[int] = None,
+        path_hash: common.CanHash,
+        min_len: Optional[int] = None,
+        max_len: Optional[int] = None,
 ) -> bytes:
     """Transform the digest to a meaningless byte array."""
     digest = path_hash.digest()

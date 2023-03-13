@@ -293,15 +293,9 @@ BY_PATTERN: Mapping[str, Examples] = collections.OrderedDict(
                         ("plus", "application/vnd.apple.installer+xml"),
                         ("number prefix and suffix", "audio/3gpp2"),
                         # Fuzzed
-                        (
-                            "fuzzed_01",
-                            '7/6qwqh6g   ;\t  \t\t\tSfY`0%T$j="\\£\\-\\z\\ß\\\x83\\n";\t \t\t\t \tafHag\'=Ojk;z6="àø"  \t \t\t\t\t\t;GHaV0^|#=":õsïõv\xad¢¿ÿ\\',
-                        ),
+                        ("fuzzed_01", '7/6qwqh6g'),
                         ("fuzzed_02", "15j/5j"),
-                        (
-                            "fuzzed_03",
-                            '\'VbrwFrYTU/fO7NnLxq   \t; \tMX.`10dB732`X5yRy=I56Ov9Us\t ;\t\t pRb~~hdw_C%2Zf=""\t\t\t    \t\t\t \t \t\t \t  ; h=1t',
-                        ),
+                        ("fuzzed_03", '\'VbrwFrYTU/fO7NnLxq   \t; \tMX.`10dB732`X5yRy=I56Ov9Us\t ;\t\t pRb~~hdw_C%2Zf=""\t\t\t    \t\t\t \t \t\t \t  ; h=1t',),
                     ]
                 ),
                 negatives=collections.OrderedDict(
