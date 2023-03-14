@@ -1,6 +1,6 @@
 """Generate the pre-serialized representation of the test data."""
 import copy
-from typing import Union, MutableMapping, Iterator, Sequence, Tuple, List, Optional
+from typing import Union, MutableMapping, Iterator, Sequence, Tuple, List, Optional, Set
 
 import aas_core3.types as aas_types
 import aas_core_codegen.common
@@ -12,7 +12,8 @@ from typing_extensions import assert_never
 from aas_core3_0_testgen import fixing, common, primitiving
 from aas_core3_0_testgen.codegened import creation, wrapping, preserialization
 from aas_core3_0_testgen.frozen_examples import (
-    pattern as frozen_examples_pattern
+    pattern as frozen_examples_pattern,
+    xs_value as frozen_examples_xs_value
 )
 
 
@@ -1134,7 +1135,7 @@ def _generate_enum_violations(
 
 def _generate_unexpected_additional_properties(
         minimal_case: CaseMinimal
-)->Iterator[CaseUnexpectedAdditionalProperty]:
+) -> Iterator[CaseUnexpectedAdditionalProperty]:
     """Generate invalid cases with unexpected properties in the preserialization."""
     # region Replicate
     preserialized_container, instance_to_preserialized = (
@@ -1161,7 +1162,7 @@ def _generate_unexpected_additional_properties(
 def _generate_date_time_utc_violation_on_february_29th(
         minimal_case: CaseMinimal,
         date_time_utc_constrained_primitive: intermediate.ConstrainedPrimitive
-)->Iterator[CaseDateTimeUtcViolationOnFebruary29th]:
+) -> Iterator[CaseDateTimeUtcViolationOnFebruary29th]:
     """Generate the cases where an invalid date-time satisfies the pattern."""
     # Abbreviate for readability
     replica = minimal_case.replica
@@ -1192,6 +1193,360 @@ def _generate_date_time_utc_violation_on_february_29th(
             # endregion
 
 
+def _generate_outside_set_of_primitives(
+        constraint: infer_for_schema.SetOfPrimitivesConstraint,
+) -> Union[bool, int, float, str, bytearray]:
+    """Generate the value outside the constant set of primitive values."""
+    if constraint.a_type in (
+            intermediate.PrimitiveType.BOOL,
+            intermediate.PrimitiveType.INT,
+            intermediate.PrimitiveType.FLOAT,
+            intermediate.PrimitiveType.BYTEARRAY,
+    ):
+        raise NotImplementedError(
+            "We haven't implemented the generation of non-strings "
+            "outside a set of primitives. Please contact the developers"
+        )
+
+    assert constraint.a_type is intermediate.PrimitiveType.STR
+
+    value_set = set()  # type: Set[str]
+    for literal in constraint.literals:
+        assert isinstance(literal.value, str)
+        value_set.add(literal.value)
+
+    value = "unexpected value"
+    while value in value_set:
+        value = f"really {value}"
+
+    return value
+
+
+def _generate_violation_of_set_constraint_on_primitive_property(
+        minimal_case: CaseMinimal,
+        constraints_by_property: infer_for_schema.ConstraintsByProperty
+) -> Iterator[CaseSetViolation]:
+    """Generate examples which violate the set constraint on a primitive property."""
+    # Abbreviate for readability
+    replica = minimal_case.replica
+
+    for prop in minimal_case.cls.properties:
+        # fmt: off
+        constraint = (
+            constraints_by_property
+            .set_of_primitives_by_property
+            .get(prop, None)
+        )
+        # fmt: on
+
+        if constraint is None:
+            continue
+
+        # region Replicate
+        preserialized_container, instance_to_preserialized = (
+            preserialization.preserialize(replica.container)
+        )
+        preserialized_instance = instance_to_preserialized[replica.instance]
+        # endregion
+
+        # region Mutate
+        # fmt: off
+        preserialized_instance.properties[prop.name] = (
+            _generate_outside_set_of_primitives(
+                constraint=constraint
+            )
+        )
+        # fmt: on
+
+        yield CaseSetViolation(
+            container_class=minimal_case.container_class,
+            preserialized_container=preserialized_container,
+            cls=minimal_case.cls,
+            property_name=prop.name
+        )
+        # endregion
+
+
+@require(
+    lambda constraint: len(constraint.enumeration.literals) > len(constraint.literals),
+    "At least one literal left outside",
+)
+def _generate_outside_set_of_enumeration_literals(
+        constraint: infer_for_schema.SetOfEnumerationLiteralsConstraint,
+) -> str:
+    """Generate a literal value for the enumeration outside the set of literals."""
+    literal_id_set = set()  # type: Set[int]
+
+    for literal in constraint.literals:
+        literal_id_set.add(id(literal))
+
+    # NOTE (mristin, 2022-07-10):
+    # We pick the first to make the generation deterministic.
+
+    for literal in constraint.enumeration.literals:
+        if id(literal) not in literal_id_set:
+            return literal.value
+
+    raise AssertionError(
+        f"No literals of the enumeration {constraint.enumeration.name!r} "
+        f"are outside of the constraint"
+    )
+
+
+def _generate_violation_of_set_constraint_on_enum_property(
+        minimal_case: CaseMinimal,
+        constraints_by_property: infer_for_schema.ConstraintsByProperty
+) -> Iterator[CaseSetViolation]:
+    """Generate examples which violate the set constraint on a primitive property."""
+    # Abbreviate for readability
+    replica = minimal_case.replica
+
+    for prop in minimal_case.cls.properties:
+        # fmt: off
+        constraint = (
+            constraints_by_property
+            .set_of_enumeration_literals_by_property
+            .get(prop, None)
+        )
+        # fmt: on
+
+        if constraint is None:
+            continue
+
+        if len(constraint.enumeration.literals) == len(constraint.literals):
+            continue
+
+        # region Replicate
+        preserialized_container, instance_to_preserialized = (
+            preserialization.preserialize(replica.container)
+        )
+        preserialized_instance = instance_to_preserialized[replica.instance]
+        # endregion
+
+        # region Mutate
+        # fmt: off
+        preserialized_instance.properties[prop.name] = (
+            _generate_outside_set_of_enumeration_literals(constraint=constraint)
+        )
+        # fmt: on
+
+        yield CaseSetViolation(
+            container_class=minimal_case.container_class,
+            preserialized_container=preserialized_container,
+            cls=minimal_case.cls,
+            property_name=prop.name
+        )
+        # endregion
+
+
+def _generate_cases_for_value_and_value_types(
+        minimal_case: CaseMinimal,
+        data_type_def_xsd_enum: intermediate.Enumeration
+) -> Iterator[Union[CasePositiveValueExample, CaseInvalidValueExample]]:
+    """Generate cases for different ``value``'s of XSD data type."""
+    for literal in aas_types.DataTypeDefXSD:
+        examples = frozen_examples_xs_value.BY_VALUE_TYPE.get(literal.value, None)
+
+        if examples is None:
+            raise NotImplementedError(
+                f"The entry is missing "
+                f"in the {frozen_examples_xs_value.__name__!r} "
+                f"for the value type {literal.value!r}"
+            )
+
+        for example_name, example_value in examples.positives.items():
+            # Replicate
+            replica = minimal_case.replica.deepcopy()
+
+            assert isinstance(
+                replica.instance,
+                (aas_types.Extension, aas_types.Qualifier, aas_types.Property)
+            )
+
+            # Mutate
+            replica.instance.value_type = literal
+            replica.instance.value = example_value
+
+            preserialized_container, _ = (
+                preserialization.preserialize(replica.container)
+            )
+
+            yield CasePositiveValueExample(
+                container_class=minimal_case.container_class,
+                preserialized_container=preserialized_container,
+                cls=minimal_case.cls,
+                data_type_def_literal=data_type_def_xsd_enum.literals_by_value[
+                    literal.value
+                ],
+                example_name=example_name
+            )
+
+        for example_name, example_value in examples.negatives.items():
+            # Replicate
+            replica = minimal_case.replica.deepcopy()
+
+            assert isinstance(
+                replica.instance,
+                (aas_types.Extension, aas_types.Qualifier, aas_types.Property)
+            )
+
+            # Mutate
+            replica.instance.value_type = literal
+            replica.instance.value = example_value
+
+            preserialized_container, _ = (
+                preserialization.preserialize(replica.container)
+            )
+
+            yield CaseInvalidValueExample(
+                container_class=minimal_case.container_class,
+                preserialized_container=preserialized_container,
+                cls=minimal_case.cls,
+                data_type_def_literal=data_type_def_xsd_enum.literals_by_value[
+                    literal.value
+                ],
+                example_name=example_name
+            )
+
+
+def _generate_cases_for_min_max_of_range(
+        minimal_case: CaseMinimal,
+        data_type_def_xsd_enum: intermediate.Enumeration
+) -> Iterator[Union[CasePositiveMinMaxExample, CaseInvalidMinMaxExample]]:
+    """Generate examples of valid and invalid ranges."""
+    for literal in aas_types.DataTypeDefXSD:
+        examples = frozen_examples_xs_value.BY_VALUE_TYPE.get(literal.value, None)
+
+        if examples is None:
+            raise NotImplementedError(
+                f"The entry is missing "
+                f"in the {frozen_examples_xs_value.__name__!r} "
+                f"for the value type {literal.value!r}"
+            )
+
+        for example_name, example_value in examples.positives.items():
+            # Replicate
+            replica = minimal_case.replica.deepcopy()
+
+            assert isinstance(replica.instance, aas_types.Range)
+
+            # Mutate
+            replica.instance.value_type = literal
+            replica.instance.min = example_value
+            replica.instance.max = example_value
+
+            preserialized_container, _ = (
+                preserialization.preserialize(replica.container)
+            )
+
+            yield CasePositiveMinMaxExample(
+                container_class=minimal_case.container_class,
+                preserialized_container=preserialized_container,
+                cls=minimal_case.cls,
+                data_type_def_literal=data_type_def_xsd_enum.literals_by_value[
+                    literal.value
+                ],
+                example_name=example_name
+            )
+
+        for example_name, example_value in examples.negatives.items():
+            # Replicate
+            replica = minimal_case.replica.deepcopy()
+
+            assert isinstance(replica.instance, aas_types.Range)
+
+            # Mutate
+            replica.instance.value_type = literal
+            replica.instance.min = example_value
+            replica.instance.max = example_value
+
+            preserialized_container, _ = (
+                preserialization.preserialize(replica.container)
+            )
+
+            yield CaseInvalidMinMaxExample(
+                container_class=minimal_case.container_class,
+                preserialized_container=preserialized_container,
+                cls=minimal_case.cls,
+                data_type_def_literal=data_type_def_xsd_enum.literals_by_value[
+                    literal.value
+                ],
+                example_name=example_name
+            )
+
+
+def _generate_additional_cases_for_submodel_element_list(
+        minimal_case: CaseMinimal
+) -> Iterator[Union[CasePositiveManual, CaseConstraintViolation]]:
+    """
+    Generate custom-tailored test cases for ``Submodel_element_list``.
+
+    These cases are too difficult to be generated automatically.
+    """
+    # Path hash to the submodel element list
+    path_hash = common.hash_path(None, minimal_case.replica.path)
+
+    def set_up_submodel_element_list_of_boolean_properties() -> Replica:
+        """
+        Create a replica as a submodel element list with two items.
+
+        The items are both instances of ``Property`` with the same semantic ID.
+        """
+        replica = minimal_case.replica.deepcopy()
+
+        assert isinstance(replica.instance, aas_types.SubmodelElementList)
+
+        replica.instance.value_type_list_element = aas_types.DataTypeDefXSD.BOOLEAN
+
+        # fmt: off
+        replica.instance.type_value_list_element = (
+            aas_types.AASSubmodelElements.PROPERTY
+        )
+        # fmt: on
+
+        replica.instance.semantic_id_list_element = fixing.generate_external_reference(
+            common.hash_path(path_hash, ["semantic_id_list_element"])
+        )
+
+        replica.instance.value = [
+            aas_types.Property(
+                value_type=aas_types.DataTypeDefXSD.BOOLEAN,
+                semantic_id=replica.instance.semantic_id_list_element
+            ),
+            aas_types.Property(
+                value_type=aas_types.DataTypeDefXSD.BOOLEAN,
+                semantic_id=replica.instance.semantic_id_list_element
+            )
+        ]
+
+        return replica
+
+    def one_child_without_semantic_id() -> CasePositiveManual:
+        """Generate the case where one child does not have the semantic ID set."""
+        replica = set_up_submodel_element_list_of_boolean_properties()
+
+        assert isinstance(replica.instance, aas_types.SubmodelElementList)
+        assert isinstance(replica.instance.value[0], aas_types.Property)
+
+        replica.instance.value[0].semantic_id = None
+
+        preserialized_container, _ = preserialization.preserialize(
+            replica.container
+        )
+
+        return CasePositiveManual(
+            container_class=minimal_case.container_class,
+            preserialized_container=preserialized_container,
+            cls=minimal_case.cls,
+            name="one_child_without_semantic_ID"
+        )
+
+    yield one_child_without_semantic_id()
+
+    # TODO (mristin, 2023-03-14): continue here, no semantic_ID_list_element
+
+
+
 def generate(
         symbol_table: intermediate.SymbolTable,
         constraints_by_class: MutableMapping[
@@ -1204,6 +1559,24 @@ def generate(
     date_time_utc_constrained_primitive = symbol_table.must_find_constrained_primitive(
         Identifier("Date_time_UTC")
     )
+
+    class_set_with_value_value_type = {
+        symbol_table.must_find_concrete_class(Identifier("Property")),
+        symbol_table.must_find_concrete_class(Identifier("Extension")),
+        symbol_table.must_find_concrete_class(Identifier("Qualifier"))
+    }
+
+    data_type_def_xsd_enum = symbol_table.must_find_enumeration(
+        Identifier("Data_type_def_XSD")
+    )
+
+    range_cls = symbol_table.must_find_concrete_class(Identifier("Range"))
+
+    # fmt: off
+    submodel_element_list_cls = (
+        symbol_table.must_find_concrete_class(Identifier("Submodel_element_list"))
+    )
+    # fmt: on
 
     for our_type in sorted(
             symbol_table.our_types,
@@ -1250,4 +1623,30 @@ def generate(
             date_time_utc_constrained_primitive=date_time_utc_constrained_primitive
         )
 
+        yield from _generate_violation_of_set_constraint_on_primitive_property(
+            minimal_case=minimal_case,
+            constraints_by_property=constraints_by_class[our_type]
+        )
+
+        yield from _generate_violation_of_set_constraint_on_enum_property(
+            minimal_case=minimal_case,
+            constraints_by_property=constraints_by_class[our_type]
+        )
+
+        if our_type in class_set_with_value_value_type:
+            yield from _generate_cases_for_value_and_value_types(
+                minimal_case=minimal_case,
+                data_type_def_xsd_enum=data_type_def_xsd_enum
+            )
+
+        if our_type.name is range_cls:
+            yield from _generate_cases_for_min_max_of_range(
+                minimal_case=minimal_case,
+                data_type_def_xsd_enum=data_type_def_xsd_enum
+            )
+
+        if our_type is submodel_element_list_cls:
+            yield from _generate_additional_cases_for_submodel_element_list(
+                minimal_case=minimal_case
+            )
         # TODO (mristin, 2023-03-10): implement other cases once debugging done
