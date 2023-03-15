@@ -15,6 +15,9 @@ from aas_core3_0_testgen.frozen_examples import (
     pattern as frozen_examples_pattern,
     xs_value as frozen_examples_xs_value
 )
+from aas_core3_0_testgen.additional import (
+for_submodel_element_list as additional_for_submodel_element_list
+)
 
 
 class Case(DBC):
@@ -1475,105 +1478,6 @@ def _generate_cases_for_min_max_of_range(
             )
 
 
-def _generate_additional_cases_for_submodel_element_list(
-        minimal_case: CaseMinimal
-) -> Iterator[Union[CasePositiveManual, CaseConstraintViolation]]:
-    """
-    Generate custom-tailored test cases for ``Submodel_element_list``.
-
-    These cases are too difficult to be generated automatically.
-    """
-    # Path hash to the submodel element list
-    path_hash = common.hash_path(None, minimal_case.replica.path)
-
-    def set_up_submodel_element_list_of_boolean_properties() -> Replica:
-        """
-        Create a replica as a submodel element list with two items.
-
-        The items are both instances of ``Property`` with the same semantic ID.
-        """
-        replica = minimal_case.replica.deepcopy()
-
-        assert isinstance(replica.instance, aas_types.SubmodelElementList)
-
-        replica.instance.value_type_list_element = aas_types.DataTypeDefXSD.BOOLEAN
-
-        # fmt: off
-        replica.instance.type_value_list_element = (
-            aas_types.AASSubmodelElements.PROPERTY
-        )
-        # fmt: on
-
-        replica.instance.semantic_id_list_element = fixing.generate_external_reference(
-            common.hash_path(path_hash, ["semantic_id_list_element"])
-        )
-
-        replica.instance.value = [
-            aas_types.Property(
-                value_type=aas_types.DataTypeDefXSD.BOOLEAN,
-                semantic_id=replica.instance.semantic_id_list_element
-            ),
-            aas_types.Property(
-                value_type=aas_types.DataTypeDefXSD.BOOLEAN,
-                semantic_id=replica.instance.semantic_id_list_element
-            )
-        ]
-
-        return replica
-
-    def preserialize_to_positive_manual_case(
-            replica: Replica,
-            name: str
-    )-> CasePositiveManual:
-        """Translate ``replica`` based on ``minimal_case`` into a positive case."""
-        preserialized_container, _ = preserialization.preserialize(
-            replica.container
-        )
-
-        return CasePositiveManual(
-            container_class=minimal_case.container_class,
-            preserialized_container=preserialized_container,
-            cls=minimal_case.cls,
-            name=name
-        )
-
-
-    def one_child_without_semantic_id() -> CasePositiveManual:
-        """Generate the case where one child does not have the semantic ID set."""
-        replica = set_up_submodel_element_list_of_boolean_properties()
-
-        assert isinstance(replica.instance, aas_types.SubmodelElementList)
-        assert isinstance(replica.instance.value[0], aas_types.Property)
-
-        replica.instance.value[0].semantic_id = None
-
-        preserialized_container, _ = preserialization.preserialize(
-            replica.container
-        )
-
-        return CasePositiveManual(
-            container_class=minimal_case.container_class,
-            preserialized_container=preserialized_container,
-            cls=minimal_case.cls,
-            name="one_child_without_semantic_ID"
-        )
-
-    yield one_child_without_semantic_id()
-
-    def no_semantic_id_list_element() -> CasePositiveManual:
-        """Generate the case where the list does not mandate the semantic ID."""
-        replica = set_up_submodel_element_list_of_boolean_properties()
-
-        assert isinstance(replica.instance, aas_types.SubmodelElementList)
-        assert isinstance(replica.instance.value[0], aas_types.Property)
-
-
-
-
-    # TODO (mristin, 2023-03-14): continue here, no semantic_ID_list_element
-
-
-
 def generate(
         symbol_table: intermediate.SymbolTable,
         constraints_by_class: MutableMapping[
@@ -1673,7 +1577,7 @@ def generate(
             )
 
         if our_type is submodel_element_list_cls:
-            yield from _generate_additional_cases_for_submodel_element_list(
+            yield from additional_for_submodel_element_list.generate_cases(
                 minimal_case=minimal_case
             )
         # TODO (mristin, 2023-03-10): implement other cases once debugging done

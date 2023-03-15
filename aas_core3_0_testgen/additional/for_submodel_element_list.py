@@ -6,6 +6,7 @@
 # list the dependencies between the functions. In particular, in the beginning, all
 # the functions were nested in a generation function, so the dependencies were difficult
 # to trace between the local scope and the non-local scope.
+from typing import Iterator, Union, cast
 
 from aas_core3 import types as aas_types
 from aas_core_codegen import intermediate
@@ -15,7 +16,7 @@ from aas_core3_0_testgen import fixing, common
 from aas_core3_0_testgen.codegened import preserialization
 from aas_core3_0_testgen.generation import (
     Replica,
-    CaseMinimal, CasePositiveManual
+    CaseMinimal, CasePositiveManual, CaseConstraintViolation
 )
 
 
@@ -60,21 +61,35 @@ def _set_up_submodel_element_list_of_boolean_properties(
     return replica
 
 
-# fmt: off
-@require(
-    lambda environment_cls:
-    environment_cls.name == "Environment"
-)
-@require(
-    lambda submodel_element_list_cls:
-    submodel_element_list_cls.name == "Submodel_element_list"
-)
-# fmt: on
+class EnvironmentClass(intermediate.ConcreteClass):
+    """Represent the environment class."""
+
+    @require(lambda that: that.name == "Environment")
+    def __new__(
+            cls,
+            that: intermediate.ConcreteClass,
+            **kwargs
+    ) -> "EnvironmentClass":
+        return cast(EnvironmentClass, that)
+
+
+class SubmodelElementListClass(intermediate.ConcreteClass):
+    """Represent the submodel element list class."""
+
+    @require(lambda that: that.name == "Submodel_element_list")
+    def __new__(
+            cls,
+            that: intermediate.ConcreteClass,
+            **kwargs
+    ) -> "SubmodelElementListClass":
+        return cast(SubmodelElementListClass, that)
+
+
 def _preserialize_to_positive_manual_case(
         replica: Replica,
         name: str,
-        environment_cls: intermediate.ConcreteClass,
-        submodel_element_list_cls: intermediate.ConcreteClass
+        environment_cls: EnvironmentClass,
+        submodel_element_list_cls: SubmodelElementListClass
 ) -> CasePositiveManual:
     """Translate ``replica`` into a positive manual case."""
     preserialized_container, _ = preserialization.preserialize(
@@ -91,4 +106,95 @@ def _preserialize_to_positive_manual_case(
         name=name
     )
 
-# TODO (mristin, 2023-03-15): continue refactoring here
+
+def _generate_one_child_without_semantic_id(
+        minimal_replica: Replica,
+        path_hash_to_instance: common.CanHash,
+        environment_cls: EnvironmentClass,
+        submodel_element_list_cls: SubmodelElementListClass
+) -> CasePositiveManual:
+    """Generate the case where one child does not have the semantic ID set."""
+    replica = _set_up_submodel_element_list_of_boolean_properties(
+        minimal_replica=minimal_replica,
+        path_hash_to_instance=path_hash_to_instance
+    )
+
+    assert isinstance(replica.instance, aas_types.SubmodelElementList)
+    assert isinstance(replica.instance.value[0], aas_types.Property)
+
+    replica.instance.value[0].semantic_id = None
+
+    return _preserialize_to_positive_manual_case(
+        replica=replica,
+        name="one_child_without_semantic_ID",
+        environment_cls=environment_cls,
+        submodel_element_list_cls=submodel_element_list_cls
+    )
+
+
+def _generate_no_semantic_id_list_element(
+        minimal_replica: Replica,
+        path_hash_to_instance: common.CanHash,
+        environment_cls: EnvironmentClass,
+        submodel_element_list_cls: SubmodelElementListClass
+) -> CasePositiveManual:
+    """Generate the case where semantic ID is unset in the list."""
+    replica = _set_up_submodel_element_list_of_boolean_properties(
+        minimal_replica=minimal_replica,
+        path_hash_to_instance=path_hash_to_instance
+    )
+
+    assert isinstance(replica.instance, aas_types.SubmodelElementList)
+
+    replica.instance.semantic_id_list_element = None
+
+    return _preserialize_to_positive_manual_case(
+        replica=replica,
+        name="no_semantic_ID_list_element",
+        environment_cls=environment_cls,
+        submodel_element_list_cls=submodel_element_list_cls
+    )
+
+
+# fmt: off
+@require(
+    lambda minimal_case:
+    isinstance(minimal_case.replica.instance, aas_types.SubmodelElementList)
+)
+@require(
+    lambda minimal_case:
+    isinstance(minimal_case.replica.container, aas_types.Environment)
+)
+@require(
+    lambda minimal_case:
+    minimal_case.container_class.name == "Environment"
+)
+@require(
+    lambda minimal_case:
+    minimal_case.cls == "Submodel_element_list"
+)
+# fmt: on
+def generate_cases(
+        minimal_case: CaseMinimal
+) -> Iterator[Union[CasePositiveManual, CaseConstraintViolation]]:
+    """Generate additional custom-tailored cases for submodel element list."""
+    path_hash_to_instance = common.hash_path(None, minimal_case.replica.path)
+
+    environment_cls = EnvironmentClass(minimal_case.container_class)
+    submodel_element_list_cls = SubmodelElementListClass(minimal_case.cls)
+
+    yield _generate_one_child_without_semantic_id(
+        minimal_replica=minimal_case.replica,
+        path_hash_to_instance=path_hash_to_instance,
+        environment_cls=environment_cls,
+        submodel_element_list_cls=submodel_element_list_cls
+    )
+
+    yield _generate_no_semantic_id_list_element(
+        minimal_replica=minimal_case.replica,
+        path_hash_to_instance=path_hash_to_instance,
+        environment_cls=environment_cls,
+        submodel_element_list_cls=submodel_element_list_cls
+    )
+
+    # TODO (mristin, 2023-03-15): continue here
