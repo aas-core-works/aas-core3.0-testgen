@@ -1521,6 +1521,23 @@ def _generate_additional_cases_for_submodel_element_list(
 
         return replica
 
+    def preserialize_to_positive_manual_case(
+            replica: Replica,
+            name: str
+    )-> CasePositiveManual:
+        """Translate ``replica`` based on ``minimal_case`` into a positive case."""
+        preserialized_container, _ = preserialization.preserialize(
+            replica.container
+        )
+
+        return CasePositiveManual(
+            container_class=minimal_case.container_class,
+            preserialized_container=preserialized_container,
+            cls=minimal_case.cls,
+            name=name
+        )
+
+
     def one_child_without_semantic_id() -> CasePositiveManual:
         """Generate the case where one child does not have the semantic ID set."""
         replica = set_up_submodel_element_list_of_boolean_properties()
@@ -1542,6 +1559,16 @@ def _generate_additional_cases_for_submodel_element_list(
         )
 
     yield one_child_without_semantic_id()
+
+    def no_semantic_id_list_element() -> CasePositiveManual:
+        """Generate the case where the list does not mandate the semantic ID."""
+        replica = set_up_submodel_element_list_of_boolean_properties()
+
+        assert isinstance(replica.instance, aas_types.SubmodelElementList)
+        assert isinstance(replica.instance.value[0], aas_types.Property)
+
+
+
 
     # TODO (mristin, 2023-03-14): continue here, no semantic_ID_list_element
 
