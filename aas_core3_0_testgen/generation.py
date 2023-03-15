@@ -1,6 +1,9 @@
 """Generate the pre-serialized representation of the test data."""
+import ast
 import copy
-from typing import Union, MutableMapping, Iterator, Sequence, Tuple, List, Optional, Set
+import inspect
+from typing import Union, MutableMapping, Iterator, Sequence, Tuple, List, Optional, \
+    Set, cast
 
 import aas_core3.types as aas_types
 import aas_core_codegen.common
@@ -14,9 +17,6 @@ from aas_core3_0_testgen.codegened import creation, wrapping, preserialization
 from aas_core3_0_testgen.frozen_examples import (
     pattern as frozen_examples_pattern,
     xs_value as frozen_examples_xs_value
-)
-from aas_core3_0_testgen.additional import (
-for_submodel_element_list as additional_for_submodel_element_list
 )
 
 
@@ -55,7 +55,7 @@ class Replica:
         self.instance = instance
         self.path = path
 
-    def deepcopy(self) -> "Replica":
+    def replicate(self) -> "Replica":
         """Make another deep copy of the replica."""
 
         container = copy.deepcopy(self.container)
@@ -1359,7 +1359,7 @@ def _generate_cases_for_value_and_value_types(
 
         for example_name, example_value in examples.positives.items():
             # Replicate
-            replica = minimal_case.replica.deepcopy()
+            replica = minimal_case.replica.replicate()
 
             assert isinstance(
                 replica.instance,
@@ -1386,7 +1386,7 @@ def _generate_cases_for_value_and_value_types(
 
         for example_name, example_value in examples.negatives.items():
             # Replicate
-            replica = minimal_case.replica.deepcopy()
+            replica = minimal_case.replica.replicate()
 
             assert isinstance(
                 replica.instance,
@@ -1429,7 +1429,7 @@ def _generate_cases_for_min_max_of_range(
 
         for example_name, example_value in examples.positives.items():
             # Replicate
-            replica = minimal_case.replica.deepcopy()
+            replica = minimal_case.replica.replicate()
 
             assert isinstance(replica.instance, aas_types.Range)
 
@@ -1454,7 +1454,7 @@ def _generate_cases_for_min_max_of_range(
 
         for example_name, example_value in examples.negatives.items():
             # Replicate
-            replica = minimal_case.replica.deepcopy()
+            replica = minimal_case.replica.replicate()
 
             assert isinstance(replica.instance, aas_types.Range)
 
@@ -1478,6 +1478,452 @@ def _generate_cases_for_min_max_of_range(
             )
 
 
+class EnvironmentClass(intermediate.ConcreteClass):
+    """Represent the environment class."""
+
+    @require(lambda that: that.name == "Environment")
+    def __new__(
+            cls,
+            that: intermediate.ConcreteClass,
+            **kwargs
+    ) -> "EnvironmentClass":
+        return cast(EnvironmentClass, that)
+
+
+class SubmodelElementListClass(intermediate.ConcreteClass):
+    """Represent the submodel element list class."""
+
+    @require(lambda that: that.name == "Submodel_element_list")
+    def __new__(
+            cls,
+            that: intermediate.ConcreteClass,
+            **kwargs
+    ) -> "SubmodelElementListClass":
+        return cast(SubmodelElementListClass, that)
+
+
+# TODO (mristin, 2023-03-15): refactor this
+class _AdditionalForSubmodelElementList:
+    """Modularize generation for additional test cases for submodel element list."""
+
+    @staticmethod
+    def _set_up_submodel_element_list_of_boolean_properties(
+            minimal_replica: Replica,
+            path_hash_to_instance: common.CanHash
+    ) -> Replica:
+        """
+        Create a replica as a submodel element list with two items.
+
+        The items are both instances of ``Property`` with the same semantic ID.
+
+        The given ``minimal_replica`` should not be modified.
+        """
+        replica = minimal_replica.replicate()
+
+        assert isinstance(replica.instance, aas_types.SubmodelElementList)
+
+        replica.instance.value_type_list_element = aas_types.DataTypeDefXSD.BOOLEAN
+
+        # fmt: off
+        replica.instance.type_value_list_element = (
+            aas_types.AASSubmodelElements.PROPERTY
+        )
+        # fmt: on
+
+        replica.instance.semantic_id_list_element = fixing.generate_external_reference(
+            common.hash_path(path_hash_to_instance, ["semantic_id_list_element"])
+        )
+
+        replica.instance.value = [
+            aas_types.Property(
+                value_type=aas_types.DataTypeDefXSD.BOOLEAN,
+                semantic_id=replica.instance.semantic_id_list_element
+            ),
+            aas_types.Property(
+                value_type=aas_types.DataTypeDefXSD.BOOLEAN,
+                semantic_id=replica.instance.semantic_id_list_element
+            )
+        ]
+
+        return replica
+
+    @staticmethod
+    def _preserialize_to_positive_manual_case(
+            replica: Replica,
+            name: str,
+            environment_cls: EnvironmentClass,
+            submodel_element_list_cls: SubmodelElementListClass
+    ) -> CasePositiveManual:
+        """Translate ``replica`` into a positive manual case."""
+        preserialized_container, _ = preserialization.preserialize(
+            replica.container
+        )
+
+        assert isinstance(replica.container, aas_types.Environment)
+        assert isinstance(replica.instance, aas_types.SubmodelElementList)
+
+        return CasePositiveManual(
+            container_class=environment_cls,
+            preserialized_container=preserialized_container,
+            cls=submodel_element_list_cls,
+            name=name
+        )
+
+    @staticmethod
+    def _preserialize_to_constraint_violation(
+            replica: Replica,
+            name: str,
+            environment_cls: EnvironmentClass,
+            submodel_element_list_cls: SubmodelElementListClass
+    ) -> CaseConstraintViolation:
+        """Translate ``replica`` into a case of constraint violation."""
+        preserialized_container, _ = preserialization.preserialize(
+            replica.container
+        )
+
+        assert isinstance(replica.container, aas_types.Environment)
+        assert isinstance(replica.instance, aas_types.SubmodelElementList)
+
+        return CaseConstraintViolation(
+            container_class=environment_cls,
+            preserialized_container=preserialized_container,
+            cls=submodel_element_list_cls,
+            name=name
+        )
+
+    @staticmethod
+    def _test_name_from_function_name() -> str:
+        """Analyze the call stack and produce the name for the test case."""
+        function_name = inspect.currentframe().f_back.f_code.co_name
+        assert function_name.startswith('_generate_'), f"{function_name=}"
+        return function_name[10:]
+
+    @staticmethod
+    def _generate_one_child_without_semantic_id(
+            minimal_replica: Replica,
+            path_hash_to_instance: common.CanHash,
+            environment_cls: EnvironmentClass,
+            submodel_element_list_cls: SubmodelElementListClass
+    ) -> CasePositiveManual:
+        """Generate the case where one child does not have the semantic ID set."""
+        # Abbreviate for readability
+        static = _AdditionalForSubmodelElementList
+
+        replica = static._set_up_submodel_element_list_of_boolean_properties(
+            minimal_replica=minimal_replica,
+            path_hash_to_instance=path_hash_to_instance
+        )
+
+        assert isinstance(replica.instance, aas_types.SubmodelElementList)
+        assert isinstance(replica.instance.value[0], aas_types.Property)
+
+        replica.instance.value[0].semantic_id = None
+
+        return static._preserialize_to_positive_manual_case(
+            replica=replica,
+            name=static._test_name_from_function_name(),
+            environment_cls=environment_cls,
+            submodel_element_list_cls=submodel_element_list_cls
+        )
+
+    @staticmethod
+    def _generate_no_semantic_id_list_element(
+            minimal_replica: Replica,
+            path_hash_to_instance: common.CanHash,
+            environment_cls: EnvironmentClass,
+            submodel_element_list_cls: SubmodelElementListClass
+    ) -> CasePositiveManual:
+        """Generate the case where semantic ID is unset in the list."""
+        # Abbreviate for readability
+        static = _AdditionalForSubmodelElementList
+
+        replica = static._set_up_submodel_element_list_of_boolean_properties(
+            minimal_replica=minimal_replica,
+            path_hash_to_instance=path_hash_to_instance
+        )
+
+        assert isinstance(replica.instance, aas_types.SubmodelElementList)
+
+        replica.instance.semantic_id_list_element = None
+
+        return static._preserialize_to_positive_manual_case(
+            replica=replica,
+            name=static._test_name_from_function_name(),
+            environment_cls=environment_cls,
+            submodel_element_list_cls=submodel_element_list_cls
+        )
+
+    @staticmethod
+    def _generate_against_type_value_list_element(
+            minimal_replica: Replica,
+            path_hash_to_instance: common.CanHash,
+            environment_cls: EnvironmentClass,
+            submodel_element_list_cls: SubmodelElementListClass
+    ) -> CaseConstraintViolation:
+        """Generate the case where one item violates ``type_value_list_element``."""
+        # Abbreviate for readability
+        static = _AdditionalForSubmodelElementList
+
+        replica = static._set_up_submodel_element_list_of_boolean_properties(
+            minimal_replica=minimal_replica,
+            path_hash_to_instance=path_hash_to_instance
+        )
+
+        assert isinstance(replica.instance, aas_types.SubmodelElementList)
+
+        replica.instance.value = [
+            aas_types.Range(
+                value_type=aas_types.DataTypeDefXSD.BOOLEAN,
+                semantic_id=replica.instance.semantic_id_list_element
+            )
+        ]
+
+        return static._preserialize_to_constraint_violation(
+            replica=replica,
+            name=static._test_name_from_function_name(),
+            environment_cls=environment_cls,
+            submodel_element_list_cls=submodel_element_list_cls
+        )
+
+    @staticmethod
+    def _generate_against_value_type_list_element(
+            minimal_replica: Replica,
+            path_hash_to_instance: common.CanHash,
+            environment_cls: EnvironmentClass,
+            submodel_element_list_cls: SubmodelElementListClass
+    ) -> CaseConstraintViolation:
+        """Generate the case where one item violates ``type_value_list_element``."""
+        # Abbreviate for readability
+        static = _AdditionalForSubmodelElementList
+
+        replica = static._set_up_submodel_element_list_of_boolean_properties(
+            minimal_replica=minimal_replica,
+            path_hash_to_instance=path_hash_to_instance
+        )
+
+        assert isinstance(replica.instance, aas_types.SubmodelElementList)
+
+        value0 = replica.instance.value[0]
+        assert isinstance(value0, aas_types.Property)
+
+        value0.value_type = aas_types.DataTypeDefXSD.INT
+
+        replica.instance.value = [value0]
+
+        return static._preserialize_to_constraint_violation(
+            replica=replica,
+            name=static._test_name_from_function_name(),
+            environment_cls=environment_cls,
+            submodel_element_list_cls=submodel_element_list_cls
+        )
+
+    @staticmethod
+    def _generate_against_semantic_id_list_element(
+            minimal_replica: Replica,
+            path_hash_to_instance: common.CanHash,
+            environment_cls: EnvironmentClass,
+            submodel_element_list_cls: SubmodelElementListClass
+    ) -> CaseConstraintViolation:
+        """Generate the case where one item violates ``semantic_ID_list_element``."""
+        # Abbreviate for readability
+        static = _AdditionalForSubmodelElementList
+
+        replica = static._set_up_submodel_element_list_of_boolean_properties(
+            minimal_replica=minimal_replica,
+            path_hash_to_instance=path_hash_to_instance
+        )
+
+        assert isinstance(replica.instance, aas_types.SubmodelElementList)
+
+        value0 = replica.instance.value[0]
+        assert isinstance(value0, aas_types.Property)
+
+        value0.semantic_id = fixing.generate_external_reference(
+            path_hash=common.hash_path(
+                path_hash_to_instance,
+                ["value", 0, "semantic_id"]
+            )
+        )
+
+        replica.instance.value = [value0]
+
+        return static._preserialize_to_constraint_violation(
+            replica=replica,
+            name=static._test_name_from_function_name(),
+            environment_cls=environment_cls,
+            submodel_element_list_cls=submodel_element_list_cls
+        )
+
+    @staticmethod
+    def _generate_no_semantic_id_list_element_but_semantic_id_mismatch_in_value(
+            minimal_replica: Replica,
+            path_hash_to_instance: common.CanHash,
+            environment_cls: EnvironmentClass,
+            submodel_element_list_cls: SubmodelElementListClass
+    ) -> CaseConstraintViolation:
+        """Generate the case where one item violates ``semantic_ID_list_element``."""
+        # Abbreviate for readability
+        static = _AdditionalForSubmodelElementList
+
+        replica = static._set_up_submodel_element_list_of_boolean_properties(
+            minimal_replica=minimal_replica,
+            path_hash_to_instance=path_hash_to_instance
+        )
+
+        assert isinstance(replica.instance, aas_types.SubmodelElementList)
+
+        value0 = replica.instance.value[0]
+        assert isinstance(value0, aas_types.Property)
+
+        value1 = replica.instance.value[1]
+        assert isinstance(value1, aas_types.Property)
+
+        # The list mandates no semantic ID for the elements.
+        replica.instance.semantic_id_list_element = None
+
+        # ... but the semantic IDs of the elements differ.
+        value0.semantic_id = fixing.generate_external_reference(
+            path_hash=common.hash_path(
+                path_hash_to_instance,
+                ["value", 0, "semantic_id"]
+            )
+        )
+
+        value1.semantic_id = fixing.generate_external_reference(
+            path_hash=common.hash_path(
+                path_hash_to_instance,
+                ["value", 1, "semantic_id"]
+            )
+        )
+
+        replica.instance.value = [value0, value1]
+
+        return static._preserialize_to_constraint_violation(
+            replica=replica,
+            name=static._test_name_from_function_name(),
+            environment_cls=environment_cls,
+            submodel_element_list_cls=submodel_element_list_cls
+        )
+
+    @staticmethod
+    def _generate_id_short_in_a_value(
+            minimal_replica: Replica,
+            path_hash_to_instance: common.CanHash,
+            environment_cls: EnvironmentClass,
+            submodel_element_list_cls: SubmodelElementListClass
+    ) -> CaseConstraintViolation:
+        """Generate the case where one item violates ``semantic_ID_list_element``."""
+        # Abbreviate for readability
+        static = _AdditionalForSubmodelElementList
+
+        replica = static._set_up_submodel_element_list_of_boolean_properties(
+            minimal_replica=minimal_replica,
+            path_hash_to_instance=path_hash_to_instance
+        )
+
+        assert isinstance(replica.instance, aas_types.SubmodelElementList)
+
+        value0 = replica.instance.value[0]
+        assert isinstance(value0, aas_types.Property)
+        value0.id_short = "unexpected"
+
+        replica.instance.value = [value0]
+
+        return static._preserialize_to_constraint_violation(
+            replica=replica,
+            name=static._test_name_from_function_name(),
+            environment_cls=environment_cls,
+            submodel_element_list_cls=submodel_element_list_cls
+        )
+
+    @staticmethod
+    # fmt: off
+    @require(
+        lambda minimal_case:
+        isinstance(minimal_case.replica.instance, aas_types.SubmodelElementList)
+    )
+    @require(
+        lambda minimal_case:
+        isinstance(minimal_case.replica.container, aas_types.Environment)
+    )
+    @require(
+        lambda minimal_case:
+        minimal_case.container_class.name == "Environment"
+    )
+    @require(
+        lambda minimal_case:
+        minimal_case.cls.name == "Submodel_element_list"
+    )
+    # fmt: on
+    def generate_cases(
+            minimal_case: CaseMinimal
+    ) -> Iterator[Union[CasePositiveManual, CaseConstraintViolation]]:
+        """Generate additional custom-tailored cases for submodel element list."""
+        # Abbreviate for readability
+        static = _AdditionalForSubmodelElementList
+
+        path_hash_to_instance = common.hash_path(None, minimal_case.replica.path)
+
+        environment_cls = EnvironmentClass(minimal_case.container_class)
+        submodel_element_list_cls = SubmodelElementListClass(minimal_case.cls)
+
+        yield static._generate_one_child_without_semantic_id(
+            minimal_replica=minimal_case.replica,
+            path_hash_to_instance=path_hash_to_instance,
+            environment_cls=environment_cls,
+            submodel_element_list_cls=submodel_element_list_cls
+        )
+
+        yield static._generate_no_semantic_id_list_element(
+            minimal_replica=minimal_case.replica,
+            path_hash_to_instance=path_hash_to_instance,
+            environment_cls=environment_cls,
+            submodel_element_list_cls=submodel_element_list_cls
+        )
+
+        yield static._generate_against_type_value_list_element(
+            minimal_replica=minimal_case.replica,
+            path_hash_to_instance=path_hash_to_instance,
+            environment_cls=environment_cls,
+            submodel_element_list_cls=submodel_element_list_cls
+        )
+
+        yield static._generate_against_value_type_list_element(
+            minimal_replica=minimal_case.replica,
+            path_hash_to_instance=path_hash_to_instance,
+            environment_cls=environment_cls,
+            submodel_element_list_cls=submodel_element_list_cls
+        )
+
+        yield static._generate_against_semantic_id_list_element(
+            minimal_replica=minimal_case.replica,
+            path_hash_to_instance=path_hash_to_instance,
+            environment_cls=environment_cls,
+            submodel_element_list_cls=submodel_element_list_cls
+        )
+
+        # fmt: off
+        yield (
+            static
+            ._generate_no_semantic_id_list_element_but_semantic_id_mismatch_in_value(
+                minimal_replica=minimal_case.replica,
+                path_hash_to_instance=path_hash_to_instance,
+                environment_cls=environment_cls,
+                submodel_element_list_cls=submodel_element_list_cls
+            )
+        )
+        # fmt: on
+
+        yield static._generate_id_short_in_a_value(
+            minimal_replica=minimal_case.replica,
+            path_hash_to_instance=path_hash_to_instance,
+            environment_cls=environment_cls,
+            submodel_element_list_cls=submodel_element_list_cls
+        )
+
+        # TODO (mristin, 2023-03-15): continue here
+
+
 def generate(
         symbol_table: intermediate.SymbolTable,
         constraints_by_class: MutableMapping[
@@ -1491,7 +1937,7 @@ def generate(
         Identifier("Date_time_UTC")
     )
 
-    class_set_with_value_value_type = {
+    class_set_with_value_and_value_type = {
         symbol_table.must_find_concrete_class(Identifier("Property")),
         symbol_table.must_find_concrete_class(Identifier("Extension")),
         symbol_table.must_find_concrete_class(Identifier("Qualifier"))
@@ -1564,20 +2010,20 @@ def generate(
             constraints_by_property=constraints_by_class[our_type]
         )
 
-        if our_type in class_set_with_value_value_type:
+        if our_type in class_set_with_value_and_value_type:
             yield from _generate_cases_for_value_and_value_types(
                 minimal_case=minimal_case,
                 data_type_def_xsd_enum=data_type_def_xsd_enum
             )
 
-        if our_type.name is range_cls:
+        if our_type is range_cls:
             yield from _generate_cases_for_min_max_of_range(
                 minimal_case=minimal_case,
                 data_type_def_xsd_enum=data_type_def_xsd_enum
             )
 
         if our_type is submodel_element_list_cls:
-            yield from additional_for_submodel_element_list.generate_cases(
+            yield from _AdditionalForSubmodelElementList.generate_cases(
                 minimal_case=minimal_case
             )
         # TODO (mristin, 2023-03-10): implement other cases once debugging done
