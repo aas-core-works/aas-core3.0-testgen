@@ -29,7 +29,17 @@
 							<levelType>
 								<min>true</min>
 								<nom>true</nom>
-								<typ/>
+								<typ>
+									<reference>
+										<type>ExternalReference</type>
+										<keys>
+											<key>
+												<type>GlobalReference</type>
+												<value>unexpected instance</value>
+											</key>
+										</keys>
+									</reference>
+								</typ>
 								<max>true</max>
 							</levelType>
 						</dataSpecificationIec61360>

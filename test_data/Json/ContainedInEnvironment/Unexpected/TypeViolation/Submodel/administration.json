@@ -1,7 +1,17 @@
 {
   "submodels": [
     {
-      "administration": "Unexpected string value",
+      "administration": [
+        {
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "unexpected instance"
+            }
+          ],
+          "type": "ExternalReference"
+        }
+      ],
       "category": "something_91042c92",
       "description": [
         {

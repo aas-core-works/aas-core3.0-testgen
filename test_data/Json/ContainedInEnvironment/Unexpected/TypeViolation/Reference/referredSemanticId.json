@@ -12,7 +12,17 @@
             "value": "urn:an-example08:f3f73640"
           }
         ],
-        "referredSemanticId": "Unexpected string value",
+        "referredSemanticId": [
+          {
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "unexpected instance"
+              }
+            ],
+            "type": "ExternalReference"
+          }
+        ],
         "type": "ModelReference"
       },
       "id": "something_142922d6",

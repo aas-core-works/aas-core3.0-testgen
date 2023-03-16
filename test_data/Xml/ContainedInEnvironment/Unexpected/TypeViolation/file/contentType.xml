@@ -78,7 +78,17 @@
 						</embeddedDataSpecification>
 					</embeddedDataSpecifications>
 					<value>file:/path/to/somewhere</value>
-					<contentType/>
+					<contentType>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</contentType>
 				</file>
 			</submodelElements>
 		</submodel>

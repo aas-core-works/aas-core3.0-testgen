@@ -8,7 +8,17 @@
     ],
     "type": "ModelReference"
   },
-  "observableSemanticId": "Unexpected string value",
+  "observableSemanticId": [
+    {
+      "keys": [
+        {
+          "type": "GlobalReference",
+          "value": "unexpected instance"
+        }
+      ],
+      "type": "ExternalReference"
+    }
+  ],
   "payload": "/TsF2AbyQb1dIa0=",
   "source": {
     "keys": [

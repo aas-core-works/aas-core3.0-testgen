@@ -60,7 +60,17 @@
               "type": "ModelReference"
             },
             "value": "something_13759f45",
-            "valueFormat": []
+            "valueFormat": [
+              {
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "unexpected instance"
+                  }
+                ],
+                "type": "ExternalReference"
+              }
+            ]
           }
         }
       ],

@@ -19,7 +19,17 @@
               "type": "ModelReference"
             }
           ],
-          "semanticId": "Unexpected string value",
+          "semanticId": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "supplementalSemanticIds": [
             {
               "keys": [

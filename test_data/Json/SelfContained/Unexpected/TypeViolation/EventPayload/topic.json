@@ -50,5 +50,15 @@
     "type": "ExternalReference"
   },
   "timeStamp": "2022-04-01T24:00:00-00:00",
-  "topic": []
+  "topic": [
+    {
+      "keys": [
+        {
+          "type": "GlobalReference",
+          "value": "unexpected instance"
+        }
+      ],
+      "type": "ExternalReference"
+    }
+  ]
 }

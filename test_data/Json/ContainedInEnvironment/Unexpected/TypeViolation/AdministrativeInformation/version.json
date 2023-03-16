@@ -40,7 +40,17 @@
         ],
         "revision": "0",
         "templateId": "something_cb08d136",
-        "version": []
+        "version": [
+          {
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "unexpected instance"
+              }
+            ],
+            "type": "ExternalReference"
+          }
+        ]
       },
       "assetInformation": {
         "assetKind": "NotApplicable",

@@ -40,7 +40,17 @@
     ],
     "type": "ModelReference"
   },
-  "subjectId": "Unexpected string value",
+  "subjectId": [
+    {
+      "keys": [
+        {
+          "type": "GlobalReference",
+          "value": "unexpected instance"
+        }
+      ],
+      "type": "ExternalReference"
+    }
+  ],
   "timeStamp": "2022-04-01T24:00:00-00:00",
   "topic": "something_8f13d2dd"
 }

@@ -99,7 +99,17 @@
 						</keys>
 					</messageBroker>
 					<lastUpdate>-3020-08-21T24:00:00.0Z</lastUpdate>
-					<minInterval/>
+					<minInterval>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</minInterval>
 					<maxInterval>PT130S</maxInterval>
 				</basicEventElement>
 			</submodelElements>

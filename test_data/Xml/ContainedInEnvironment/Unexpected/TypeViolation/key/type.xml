@@ -6,7 +6,17 @@
 				<type>ModelReference</type>
 				<keys>
 					<key>
-						<type/>
+						<type>
+							<reference>
+								<type>ExternalReference</type>
+								<keys>
+									<key>
+										<type>GlobalReference</type>
+										<value>unexpected instance</value>
+									</key>
+								</keys>
+							</reference>
+						</type>
 						<value>urn:an-example08:f3f73640</value>
 					</key>
 				</keys>

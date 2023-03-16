@@ -31,7 +31,17 @@
 					</embeddedDataSpecification>
 				</embeddedDataSpecifications>
 				<version>1230</version>
-				<revision/>
+				<revision>
+					<reference>
+						<type>ExternalReference</type>
+						<keys>
+							<key>
+								<type>GlobalReference</type>
+								<value>unexpected instance</value>
+							</key>
+						</keys>
+					</reference>
+				</revision>
 				<creator>
 					<type>ModelReference</type>
 					<keys>

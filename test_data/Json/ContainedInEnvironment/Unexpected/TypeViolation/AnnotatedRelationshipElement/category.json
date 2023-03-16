@@ -10,7 +10,17 @@
               "modelType": "MultiLanguageProperty"
             }
           ],
-          "category": [],
+          "category": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "description": [
             {
               "language": "en",

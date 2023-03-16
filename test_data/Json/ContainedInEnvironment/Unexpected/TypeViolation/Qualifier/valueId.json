@@ -29,7 +29,17 @@
           ],
           "type": "something_5964ab43",
           "value": "001",
-          "valueId": "Unexpected string value",
+          "valueId": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "valueType": "xs:integer"
         }
       ]

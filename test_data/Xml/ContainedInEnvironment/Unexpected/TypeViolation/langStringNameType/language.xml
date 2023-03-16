@@ -3,7 +3,17 @@
 		<assetAdministrationShell>
 			<displayName>
 				<langStringNameType>
-					<language/>
+					<language>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</language>
 					<text>something_09c304fd</text>
 				</langStringNameType>
 			</displayName>

@@ -7,7 +7,17 @@
 				</extension>
 			</extensions>
 			<category>something_91042c92</category>
-			<idShort/>
+			<idShort>
+				<reference>
+					<type>ExternalReference</type>
+					<keys>
+						<key>
+							<type>GlobalReference</type>
+							<value>unexpected instance</value>
+						</key>
+					</keys>
+				</reference>
+			</idShort>
 			<displayName>
 				<langStringNameType>
 					<language>en</language>

@@ -4,7 +4,17 @@
 			<displayName>
 				<langStringNameType>
 					<language>en</language>
-					<text/>
+					<text>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</text>
 				</langStringNameType>
 			</displayName>
 			<id>something_142922d6</id>

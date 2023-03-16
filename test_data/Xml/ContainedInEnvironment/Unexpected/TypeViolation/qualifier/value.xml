@@ -28,7 +28,17 @@
 					<kind>TemplateQualifier</kind>
 					<type>something_5964ab43</type>
 					<valueType>xs:integer</valueType>
-					<value/>
+					<value>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</value>
 					<valueId>
 						<type>ModelReference</type>
 						<keys>

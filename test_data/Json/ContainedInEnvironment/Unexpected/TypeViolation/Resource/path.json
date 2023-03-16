@@ -5,7 +5,17 @@
         "assetKind": "NotApplicable",
         "defaultThumbnail": {
           "contentType": "application/x-abiword",
-          "path": []
+          "path": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ]
         },
         "globalAssetId": "something_eea66fa1"
       },

@@ -26,7 +26,17 @@
 						</reference>
 					</supplementalSemanticIds>
 					<kind>TemplateQualifier</kind>
-					<type/>
+					<type>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</type>
 					<valueType>xs:integer</valueType>
 					<value>001</value>
 					<valueId>

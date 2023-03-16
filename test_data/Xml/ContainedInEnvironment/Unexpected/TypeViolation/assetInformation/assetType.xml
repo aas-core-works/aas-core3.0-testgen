@@ -5,7 +5,17 @@
 			<assetInformation>
 				<assetKind>NotApplicable</assetKind>
 				<globalAssetId>something_c71f0c8f</globalAssetId>
-				<assetType/>
+				<assetType>
+					<reference>
+						<type>ExternalReference</type>
+						<keys>
+							<key>
+								<type>GlobalReference</type>
+								<value>unexpected instance</value>
+							</key>
+						</keys>
+					</reference>
+				</assetType>
 				<defaultThumbnail>
 					<path>file:/M5/%bA:'%9c%6b%ed%00Y*/%4C=4h:d:</path>
 				</defaultThumbnail>

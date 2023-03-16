@@ -6,7 +6,17 @@
       "modelType": "Submodel",
       "qualifiers": [
         {
-          "kind": [],
+          "kind": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "semanticId": {
             "keys": [
               {

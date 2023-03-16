@@ -31,7 +31,17 @@
 									<text>something_65af8271</text>
 								</langStringShortNameTypeIec61360>
 							</shortName>
-							<unit/>
+							<unit>
+								<reference>
+									<type>ExternalReference</type>
+									<keys>
+										<key>
+											<type>GlobalReference</type>
+											<value>unexpected instance</value>
+										</key>
+									</keys>
+								</reference>
+							</unit>
 							<unitId>
 								<type>ModelReference</type>
 								<keys>

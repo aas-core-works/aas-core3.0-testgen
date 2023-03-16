@@ -20,7 +20,17 @@
             "levelType": {
               "max": true,
               "min": true,
-              "nom": [],
+              "nom": [
+                {
+                  "keys": [
+                    {
+                      "type": "GlobalReference",
+                      "value": "unexpected instance"
+                    }
+                  ],
+                  "type": "ExternalReference"
+                }
+              ],
               "typ": true
             },
             "modelType": "DataSpecificationIec61360",

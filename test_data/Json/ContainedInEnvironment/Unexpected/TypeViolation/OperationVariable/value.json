@@ -8,7 +8,17 @@
           "idShort": "something3fdd3eb4",
           "inputVariables": [
             {
-              "value": "Unexpected string value"
+              "value": [
+                {
+                  "keys": [
+                    {
+                      "type": "GlobalReference",
+                      "value": "unexpected instance"
+                    }
+                  ],
+                  "type": "ExternalReference"
+                }
+              ]
             }
           ],
           "modelType": "Operation"

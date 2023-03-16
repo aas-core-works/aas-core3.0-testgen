@@ -7,7 +7,17 @@
 					<idShort>something3fdd3eb4</idShort>
 					<inputVariables>
 						<operationVariable>
-							<value>Unexpected string value</value>
+							<value>
+								<reference>
+									<type>ExternalReference</type>
+									<keys>
+										<key>
+											<type>GlobalReference</type>
+											<value>unexpected instance</value>
+										</key>
+									</keys>
+								</reference>
+							</value>
 						</operationVariable>
 					</inputVariables>
 				</operation>

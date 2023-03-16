@@ -16,7 +16,17 @@
             ],
             "type": "ExternalReference"
           },
-          "dataSpecificationContent": "Unexpected string value"
+          "dataSpecificationContent": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ]
         }
       ],
       "id": "something_142922d6",

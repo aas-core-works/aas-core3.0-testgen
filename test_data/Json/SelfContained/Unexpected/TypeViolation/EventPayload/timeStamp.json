@@ -49,6 +49,16 @@
     ],
     "type": "ExternalReference"
   },
-  "timeStamp": [],
+  "timeStamp": [
+    {
+      "keys": [
+        {
+          "type": "GlobalReference",
+          "value": "unexpected instance"
+        }
+      ],
+      "type": "ExternalReference"
+    }
+  ],
   "topic": "something_8f13d2dd"
 }

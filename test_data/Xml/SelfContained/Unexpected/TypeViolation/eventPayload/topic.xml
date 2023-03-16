@@ -39,7 +39,17 @@
 			</key>
 		</keys>
 	</observableSemanticId>
-	<topic/>
+	<topic>
+		<reference>
+			<type>ExternalReference</type>
+			<keys>
+				<key>
+					<type>GlobalReference</type>
+					<value>unexpected instance</value>
+				</key>
+			</keys>
+		</reference>
+	</topic>
 	<subjectId>
 		<type>ExternalReference</type>
 		<keys>

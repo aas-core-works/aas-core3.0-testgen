@@ -52,7 +52,17 @@
             }
           ],
           "idShort": "PiXO1wyHierj",
-          "lastUpdate": [],
+          "lastUpdate": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "maxInterval": "PT130S",
           "messageBroker": {
             "keys": [

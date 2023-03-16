@@ -47,7 +47,17 @@
           "name": "something_5b2d373a"
         }
       ],
-      "id": [],
+      "id": [
+        {
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "unexpected instance"
+            }
+          ],
+          "type": "ExternalReference"
+        }
+      ],
       "idShort": "fiZ",
       "kind": "Instance",
       "modelType": "Submodel",

@@ -17,7 +17,17 @@
     ],
     "type": "ModelReference"
   },
-  "payload": [],
+  "payload": [
+    {
+      "keys": [
+        {
+          "type": "GlobalReference",
+          "value": "unexpected instance"
+        }
+      ],
+      "type": "ExternalReference"
+    }
+  ],
   "source": {
     "keys": [
       {

@@ -6,7 +6,17 @@
 					<name>something_5b2d373a</name>
 				</extension>
 			</extensions>
-			<category/>
+			<category>
+				<reference>
+					<type>ExternalReference</type>
+					<keys>
+						<key>
+							<type>GlobalReference</type>
+							<value>unexpected instance</value>
+						</key>
+					</keys>
+				</reference>
+			</category>
 			<idShort>fiZ</idShort>
 			<displayName>
 				<langStringNameType>

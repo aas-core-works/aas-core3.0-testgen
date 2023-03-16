@@ -88,7 +88,17 @@
 					</observed>
 					<direction>output</direction>
 					<state>off</state>
-					<messageTopic/>
+					<messageTopic>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</messageTopic>
 					<messageBroker>
 						<type>ModelReference</type>
 						<keys>

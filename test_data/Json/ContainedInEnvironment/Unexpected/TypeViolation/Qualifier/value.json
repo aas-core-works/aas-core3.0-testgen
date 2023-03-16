@@ -28,7 +28,17 @@
             }
           ],
           "type": "something_5964ab43",
-          "value": [],
+          "value": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "valueId": {
             "keys": [
               {

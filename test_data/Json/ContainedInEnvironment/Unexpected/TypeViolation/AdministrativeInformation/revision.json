@@ -38,7 +38,17 @@
             }
           }
         ],
-        "revision": [],
+        "revision": [
+          {
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "unexpected instance"
+              }
+            ],
+            "type": "ExternalReference"
+          }
+        ],
         "templateId": "something_cb08d136",
         "version": "1230"
       },

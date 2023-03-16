@@ -6,7 +6,17 @@
         "assetKind": "NotApplicable",
         "globalAssetId": "something_eea66fa1"
       },
-      "category": [],
+      "category": [
+        {
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "unexpected instance"
+            }
+          ],
+          "type": "ExternalReference"
+        }
+      ],
       "derivedFrom": {
         "keys": [
           {

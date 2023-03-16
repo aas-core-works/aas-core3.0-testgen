@@ -17,7 +17,17 @@
 						<dataSpecificationIec61360>
 							<preferredName>
 								<langStringPreferredNameTypeIec61360>
-									<language/>
+									<language>
+										<reference>
+											<type>ExternalReference</type>
+											<keys>
+												<key>
+													<type>GlobalReference</type>
+													<value>unexpected instance</value>
+												</key>
+											</keys>
+										</reference>
+									</language>
 									<text>something_c98d9907</text>
 								</langStringPreferredNameTypeIec61360>
 								<langStringPreferredNameTypeIec61360>

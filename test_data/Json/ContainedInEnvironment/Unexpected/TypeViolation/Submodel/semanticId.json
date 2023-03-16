@@ -57,7 +57,17 @@
           "valueType": "xs:int"
         }
       ],
-      "semanticId": "Unexpected string value",
+      "semanticId": [
+        {
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "unexpected instance"
+            }
+          ],
+          "type": "ExternalReference"
+        }
+      ],
       "submodelElements": [
         {
           "first": {

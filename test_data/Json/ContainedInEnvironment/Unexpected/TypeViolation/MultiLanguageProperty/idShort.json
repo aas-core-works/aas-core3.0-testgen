@@ -50,7 +50,17 @@
               "name": "something_aa1af8b3"
             }
           ],
-          "idShort": [],
+          "idShort": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "modelType": "MultiLanguageProperty",
           "qualifiers": [
             {

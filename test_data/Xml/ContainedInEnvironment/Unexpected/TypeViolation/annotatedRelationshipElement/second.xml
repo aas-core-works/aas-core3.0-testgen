@@ -86,7 +86,17 @@
 							</key>
 						</keys>
 					</first>
-					<second>Unexpected string value</second>
+					<second>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</second>
 					<annotations>
 						<multiLanguageProperty/>
 					</annotations>

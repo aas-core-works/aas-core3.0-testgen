@@ -13,7 +13,17 @@
 							</key>
 						</keys>
 					</dataSpecification>
-					<dataSpecificationContent>Unexpected string value</dataSpecificationContent>
+					<dataSpecificationContent>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</dataSpecificationContent>
 				</embeddedDataSpecification>
 			</embeddedDataSpecifications>
 			<assetInformation>

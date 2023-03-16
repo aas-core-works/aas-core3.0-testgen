@@ -27,7 +27,17 @@
               "type": "ExternalReference"
             }
           ],
-          "type": [],
+          "type": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "value": "001",
           "valueId": {
             "keys": [

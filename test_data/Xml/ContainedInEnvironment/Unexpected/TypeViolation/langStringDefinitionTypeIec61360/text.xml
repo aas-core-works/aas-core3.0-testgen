@@ -28,7 +28,17 @@
 							<definition>
 								<langStringDefinitionTypeIec61360>
 									<language>X-33DQI-g</language>
-									<text/>
+									<text>
+										<reference>
+											<type>ExternalReference</type>
+											<keys>
+												<key>
+													<type>GlobalReference</type>
+													<value>unexpected instance</value>
+												</key>
+											</keys>
+										</reference>
+									</text>
 								</langStringDefinitionTypeIec61360>
 							</definition>
 							<value>something_13759f45</value>

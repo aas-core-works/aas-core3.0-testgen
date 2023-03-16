@@ -20,7 +20,17 @@
             "definition": [
               {
                 "language": "X-33DQI-g",
-                "text": []
+                "text": [
+                  {
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "unexpected instance"
+                      }
+                    ],
+                    "type": "ExternalReference"
+                  }
+                ]
               }
             ],
             "modelType": "DataSpecificationIec61360",

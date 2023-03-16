@@ -1,5 +1,15 @@
 {
-  "observableReference": "Unexpected string value",
+  "observableReference": [
+    {
+      "keys": [
+        {
+          "type": "GlobalReference",
+          "value": "unexpected instance"
+        }
+      ],
+      "type": "ExternalReference"
+    }
+  ],
   "observableSemanticId": {
     "keys": [
       {

@@ -51,7 +51,17 @@
             }
           ],
           "idShort": "PiXO1wyHierj",
-          "max": [],
+          "max": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "modelType": "Range",
           "qualifiers": [
             {

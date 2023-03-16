@@ -31,7 +31,17 @@
             "valueList": {
               "valueReferencePairs": [
                 {
-                  "value": [],
+                  "value": [
+                    {
+                      "keys": [
+                        {
+                          "type": "GlobalReference",
+                          "value": "unexpected instance"
+                        }
+                      ],
+                      "type": "ExternalReference"
+                    }
+                  ],
                   "valueId": {
                     "keys": [
                       {

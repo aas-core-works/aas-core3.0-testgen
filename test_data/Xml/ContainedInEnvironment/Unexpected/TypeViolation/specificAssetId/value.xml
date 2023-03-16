@@ -27,7 +27,17 @@
 							</reference>
 						</supplementalSemanticIds>
 						<name>something_b0b6ce88</name>
-						<value/>
+						<value>
+							<reference>
+								<type>ExternalReference</type>
+								<keys>
+									<key>
+										<type>GlobalReference</type>
+										<value>unexpected instance</value>
+									</key>
+								</keys>
+							</reference>
+						</value>
 						<externalSubjectId>
 							<type>ExternalReference</type>
 							<keys>

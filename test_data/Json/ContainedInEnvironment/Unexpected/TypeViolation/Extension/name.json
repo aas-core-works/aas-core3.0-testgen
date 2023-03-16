@@ -7,7 +7,17 @@
       },
       "extensions": [
         {
-          "name": [],
+          "name": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "refersTo": [
             {
               "keys": [

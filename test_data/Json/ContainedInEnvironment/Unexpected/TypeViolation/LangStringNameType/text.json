@@ -8,7 +8,17 @@
       "displayName": [
         {
           "language": "en",
-          "text": []
+          "text": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ]
         }
       ],
       "id": "something_142922d6",

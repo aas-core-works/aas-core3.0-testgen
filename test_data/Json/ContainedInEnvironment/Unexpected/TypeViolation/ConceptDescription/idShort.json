@@ -48,7 +48,17 @@
         }
       ],
       "id": "something_8ccad77f",
-      "idShort": [],
+      "idShort": [
+        {
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "unexpected instance"
+            }
+          ],
+          "type": "ExternalReference"
+        }
+      ],
       "isCaseOf": [
         {
           "keys": [
