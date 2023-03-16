@@ -39,7 +39,17 @@
           }
         ],
         "revision": "0",
-        "templateId": [],
+        "templateId": [
+          {
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "unexpected instance"
+              }
+            ],
+            "type": "ExternalReference"
+          }
+        ],
         "version": "1230"
       },
       "assetInformation": {

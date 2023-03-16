@@ -90,7 +90,17 @@
             ],
             "type": "ExternalReference"
           },
-          "state": [],
+          "state": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "supplementalSemanticIds": [
             {
               "keys": [

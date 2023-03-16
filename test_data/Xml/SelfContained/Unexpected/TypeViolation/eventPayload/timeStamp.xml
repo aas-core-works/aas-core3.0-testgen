@@ -49,6 +49,16 @@
 			</key>
 		</keys>
 	</subjectId>
-	<timeStamp/>
+	<timeStamp>
+		<reference>
+			<type>ExternalReference</type>
+			<keys>
+				<key>
+					<type>GlobalReference</type>
+					<value>unexpected instance</value>
+				</key>
+			</keys>
+		</reference>
+	</timeStamp>
 	<payload>/TsF2AbyQb1dIa0=</payload>
 </eventPayload>

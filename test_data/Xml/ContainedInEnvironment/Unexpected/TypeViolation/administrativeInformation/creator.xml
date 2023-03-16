@@ -32,7 +32,17 @@
 				</embeddedDataSpecifications>
 				<version>1230</version>
 				<revision>0</revision>
-				<creator>Unexpected string value</creator>
+				<creator>
+					<reference>
+						<type>ExternalReference</type>
+						<keys>
+							<key>
+								<type>GlobalReference</type>
+								<value>unexpected instance</value>
+							</key>
+						</keys>
+					</reference>
+				</creator>
 				<templateId>something_cb08d136</templateId>
 			</administration>
 			<id>something_142922d6</id>

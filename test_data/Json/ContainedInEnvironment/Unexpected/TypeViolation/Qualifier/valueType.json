@@ -38,7 +38,17 @@
             ],
             "type": "ModelReference"
           },
-          "valueType": []
+          "valueType": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ]
         }
       ]
     }

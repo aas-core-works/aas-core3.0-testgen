@@ -28,7 +28,17 @@
 							<valueList>
 								<valueReferencePairs>
 									<valueReferencePair>
-										<value/>
+										<value>
+											<reference>
+												<type>ExternalReference</type>
+												<keys>
+													<key>
+														<type>GlobalReference</type>
+														<value>unexpected instance</value>
+													</key>
+												</keys>
+											</reference>
+										</value>
 										<valueId>
 											<type>ExternalReference</type>
 											<keys>

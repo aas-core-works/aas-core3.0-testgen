@@ -50,7 +50,17 @@
               "name": "something_aa1af8b3"
             }
           ],
-          "first": "Unexpected string value",
+          "first": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "idShort": "PiXO1wyHierj",
           "modelType": "RelationshipElement",
           "qualifiers": [

@@ -64,7 +64,17 @@
             "type": "ModelReference"
           },
           "messageTopic": "something_99f1a7ac",
-          "minInterval": [],
+          "minInterval": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "modelType": "BasicEventElement",
           "observed": {
             "keys": [

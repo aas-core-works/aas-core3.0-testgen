@@ -21,7 +21,17 @@
               "max": true,
               "min": true,
               "nom": true,
-              "typ": []
+              "typ": [
+                {
+                  "keys": [
+                    {
+                      "type": "GlobalReference",
+                      "value": "unexpected instance"
+                    }
+                  ],
+                  "type": "ExternalReference"
+                }
+              ]
             },
             "modelType": "DataSpecificationIec61360",
             "preferredName": [

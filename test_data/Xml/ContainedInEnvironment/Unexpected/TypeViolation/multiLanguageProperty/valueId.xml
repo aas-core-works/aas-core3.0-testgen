@@ -83,7 +83,17 @@
 							<text>something_cd7e6587</text>
 						</langStringTextType>
 					</value>
-					<valueId>Unexpected string value</valueId>
+					<valueId>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</valueId>
 				</multiLanguageProperty>
 			</submodelElements>
 		</submodel>

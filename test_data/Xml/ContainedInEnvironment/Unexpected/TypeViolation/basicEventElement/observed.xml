@@ -77,7 +77,17 @@
 							</dataSpecificationContent>
 						</embeddedDataSpecification>
 					</embeddedDataSpecifications>
-					<observed>Unexpected string value</observed>
+					<observed>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</observed>
 					<direction>output</direction>
 					<state>off</state>
 					<messageTopic>something_99f1a7ac</messageTopic>

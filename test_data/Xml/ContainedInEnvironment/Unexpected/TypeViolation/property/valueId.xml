@@ -79,7 +79,17 @@
 					</embeddedDataSpecifications>
 					<valueType>xs:decimal</valueType>
 					<value>0061707</value>
-					<valueId>Unexpected string value</valueId>
+					<valueId>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</valueId>
 				</property>
 			</submodelElements>
 		</submodel>

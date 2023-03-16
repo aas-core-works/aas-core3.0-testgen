@@ -1,5 +1,15 @@
 <eventPayload xmlns="https://admin-shell.io/aas/3/0">
-	<source>Unexpected string value</source>
+	<source>
+		<reference>
+			<type>ExternalReference</type>
+			<keys>
+				<key>
+					<type>GlobalReference</type>
+					<value>unexpected instance</value>
+				</key>
+			</keys>
+		</reference>
+	</source>
 	<sourceSemanticId>
 		<type>ModelReference</type>
 		<keys>

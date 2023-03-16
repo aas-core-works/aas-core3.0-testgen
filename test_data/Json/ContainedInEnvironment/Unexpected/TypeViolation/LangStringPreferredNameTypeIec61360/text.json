@@ -21,7 +21,17 @@
             "preferredName": [
               {
                 "language": "X-33DQI-g",
-                "text": []
+                "text": [
+                  {
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "unexpected instance"
+                      }
+                    ],
+                    "type": "ExternalReference"
+                  }
+                ]
               },
               {
                 "language": "en-UK",

@@ -59,7 +59,17 @@
             ],
             "type": "ExternalReference"
           },
-          "idShort": [],
+          "idShort": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "modelType": "RelationshipElement",
           "qualifiers": [
             {

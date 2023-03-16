@@ -8,7 +8,17 @@
       "derivedFrom": {
         "keys": [
           {
-            "type": [],
+            "type": [
+              {
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "unexpected instance"
+                  }
+                ],
+                "type": "ExternalReference"
+              }
+            ],
             "value": "urn:an-example08:f3f73640"
           }
         ],

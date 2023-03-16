@@ -41,7 +41,17 @@
 									</key>
 								</keys>
 							</unitId>
-							<sourceOfDefinition/>
+							<sourceOfDefinition>
+								<reference>
+									<type>ExternalReference</type>
+									<keys>
+										<key>
+											<type>GlobalReference</type>
+											<value>unexpected instance</value>
+										</key>
+									</keys>
+								</reference>
+							</sourceOfDefinition>
 							<symbol>something_c13116d7</symbol>
 							<dataType>DATE</dataType>
 							<definition>

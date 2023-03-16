@@ -12,7 +12,17 @@
 			</key>
 		</keys>
 	</source>
-	<sourceSemanticId>Unexpected string value</sourceSemanticId>
+	<sourceSemanticId>
+		<reference>
+			<type>ExternalReference</type>
+			<keys>
+				<key>
+					<type>GlobalReference</type>
+					<value>unexpected instance</value>
+				</key>
+			</keys>
+		</reference>
+	</sourceSemanticId>
 	<observableReference>
 		<type>ModelReference</type>
 		<keys>

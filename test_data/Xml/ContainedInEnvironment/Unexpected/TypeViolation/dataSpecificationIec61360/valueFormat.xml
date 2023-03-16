@@ -50,7 +50,17 @@
 									<text>something_2ae95f9f</text>
 								</langStringDefinitionTypeIec61360>
 							</definition>
-							<valueFormat/>
+							<valueFormat>
+								<reference>
+									<type>ExternalReference</type>
+									<keys>
+										<key>
+											<type>GlobalReference</type>
+											<value>unexpected instance</value>
+										</key>
+									</keys>
+								</reference>
+							</valueFormat>
 							<value>something_13759f45</value>
 							<levelType>
 								<min>true</min>

@@ -818,22 +818,24 @@ def _generate_type_violations(maximal_case: CaseMaximal) -> Iterator[CaseTypeVio
         # region Mutate
         type_anno = intermediate.beneath_optional(prop.type_annotation)
 
-        # NOTE (mristin, 2023-03-13):
-        # If it is a primitive property or an enumeration, set it to a list. If it
-        # is not a primitive property, set it to an unexpected string.
-        #
-        # This way we are sure that we will have a type violation according to
-        # the schema.
+        if not isinstance(type_anno, intermediate.ListTypeAnnotation):
+            unexpected_instance, _ = preserialization.preserialize(
+                aas_types.Reference(
+                    type=aas_types.ReferenceTypes.EXTERNAL_REFERENCE,
+                    keys=[
+                        aas_types.Key(
+                            type=aas_types.KeyTypes.GLOBAL_REFERENCE,
+                            value="unexpected instance",
+                        )
+                    ],
+                )
+            )
 
-        maybe_primitive_type = intermediate.try_primitive_type(type_anno)
-
-        if maybe_primitive_type is not None or (
-            isinstance(type_anno, intermediate.OurTypeAnnotation)
-            and isinstance(type_anno.our_type, intermediate.Enumeration)
-        ):
             # fmt: off
             preserialized_instance.properties[prop.name] = (
-                preserialization.ListOfInstances(values=[])
+                preserialization.ListOfInstances(
+                    values=[unexpected_instance]
+                )
             )
             # fmt: on
         else:

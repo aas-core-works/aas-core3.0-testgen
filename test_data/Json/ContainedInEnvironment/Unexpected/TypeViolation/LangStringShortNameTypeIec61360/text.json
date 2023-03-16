@@ -31,7 +31,17 @@
             "shortName": [
               {
                 "language": "X-33DQI-g",
-                "text": []
+                "text": [
+                  {
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "unexpected instance"
+                      }
+                    ],
+                    "type": "ExternalReference"
+                  }
+                ]
               }
             ],
             "value": "something_13759f45"

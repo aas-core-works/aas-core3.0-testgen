@@ -4,7 +4,17 @@
 			<description>
 				<langStringTextType>
 					<language>de-CH</language>
-					<text/>
+					<text>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</text>
 				</langStringTextType>
 			</description>
 			<id>something_142922d6</id>

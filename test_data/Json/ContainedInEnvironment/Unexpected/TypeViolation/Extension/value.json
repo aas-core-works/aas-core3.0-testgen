@@ -39,7 +39,17 @@
               "type": "ExternalReference"
             }
           ],
-          "value": [],
+          "value": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "valueType": "xs:unsignedShort"
         }
       ],

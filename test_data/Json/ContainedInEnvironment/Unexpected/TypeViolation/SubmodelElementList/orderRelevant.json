@@ -52,7 +52,17 @@
           ],
           "idShort": "PiXO1wyHierj",
           "modelType": "SubmodelElementList",
-          "orderRelevant": [],
+          "orderRelevant": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "qualifiers": [
             {
               "type": "something_500f973e",

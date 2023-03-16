@@ -68,7 +68,17 @@
             ],
             "type": "ExternalReference"
           },
-          "semanticIdListElement": "Unexpected string value",
+          "semanticIdListElement": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "supplementalSemanticIds": [
             {
               "keys": [

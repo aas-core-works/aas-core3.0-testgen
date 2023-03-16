@@ -30,7 +30,17 @@
 								<min>true</min>
 								<nom>true</nom>
 								<typ>true</typ>
-								<max/>
+								<max>
+									<reference>
+										<type>ExternalReference</type>
+										<keys>
+											<key>
+												<type>GlobalReference</type>
+												<value>unexpected instance</value>
+											</key>
+										</keys>
+									</reference>
+								</max>
 							</levelType>
 						</dataSpecificationIec61360>
 					</dataSpecificationContent>

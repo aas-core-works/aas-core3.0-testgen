@@ -27,7 +27,17 @@
 							</preferredName>
 							<value>something_13759f45</value>
 							<levelType>
-								<min/>
+								<min>
+									<reference>
+										<type>ExternalReference</type>
+										<keys>
+											<key>
+												<type>GlobalReference</type>
+												<value>unexpected instance</value>
+											</key>
+										</keys>
+									</reference>
+								</min>
 								<nom>true</nom>
 								<typ>true</typ>
 								<max>true</max>

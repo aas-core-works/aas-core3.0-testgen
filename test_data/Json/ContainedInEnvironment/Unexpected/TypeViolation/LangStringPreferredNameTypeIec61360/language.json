@@ -20,7 +20,17 @@
             "modelType": "DataSpecificationIec61360",
             "preferredName": [
               {
-                "language": [],
+                "language": [
+                  {
+                    "keys": [
+                      {
+                        "type": "GlobalReference",
+                        "value": "unexpected instance"
+                      }
+                    ],
+                    "type": "ExternalReference"
+                  }
+                ],
                 "text": "something_c98d9907"
               },
               {

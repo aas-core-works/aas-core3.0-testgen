@@ -47,7 +47,17 @@
           "name": "something_4b532e77"
         }
       ],
-      "id": [],
+      "id": [
+        {
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "unexpected instance"
+            }
+          ],
+          "type": "ExternalReference"
+        }
+      ],
       "idShort": "fiZ",
       "isCaseOf": [
         {

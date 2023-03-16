@@ -50,5 +50,15 @@
 		</keys>
 	</subjectId>
 	<timeStamp>2022-04-01T24:00:00-00:00</timeStamp>
-	<payload/>
+	<payload>
+		<reference>
+			<type>ExternalReference</type>
+			<keys>
+				<key>
+					<type>GlobalReference</type>
+					<value>unexpected instance</value>
+				</key>
+			</keys>
+		</reference>
+	</payload>
 </eventPayload>

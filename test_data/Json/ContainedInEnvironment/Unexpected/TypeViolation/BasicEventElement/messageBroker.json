@@ -54,7 +54,17 @@
           "idShort": "PiXO1wyHierj",
           "lastUpdate": "-3020-08-21T24:00:00.0Z",
           "maxInterval": "PT130S",
-          "messageBroker": "Unexpected string value",
+          "messageBroker": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "messageTopic": "something_99f1a7ac",
           "minInterval": "-P1Y",
           "modelType": "BasicEventElement",

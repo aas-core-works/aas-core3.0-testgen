@@ -6,7 +6,17 @@
 					<name>something_94548e46</name>
 				</extension>
 			</extensions>
-			<category/>
+			<category>
+				<reference>
+					<type>ExternalReference</type>
+					<keys>
+						<key>
+							<type>GlobalReference</type>
+							<value>unexpected instance</value>
+						</key>
+					</keys>
+				</reference>
+			</category>
 			<idShort>PiXO1wyHierj</idShort>
 			<displayName>
 				<langStringNameType>

@@ -25,7 +25,17 @@
 					</supplementalSemanticIds>
 					<name>something_aae6caf4</name>
 					<valueType>xs:unsignedShort</valueType>
-					<value/>
+					<value>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</value>
 					<refersTo>
 						<reference>
 							<type>ModelReference</type>

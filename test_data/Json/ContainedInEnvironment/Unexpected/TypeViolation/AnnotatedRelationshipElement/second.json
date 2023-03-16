@@ -72,7 +72,17 @@
               "valueType": "xs:long"
             }
           ],
-          "second": "Unexpected string value",
+          "second": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "semanticId": {
             "keys": [
               {

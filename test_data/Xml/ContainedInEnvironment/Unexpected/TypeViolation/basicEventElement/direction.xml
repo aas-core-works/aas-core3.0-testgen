@@ -86,7 +86,17 @@
 							</key>
 						</keys>
 					</observed>
-					<direction/>
+					<direction>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</direction>
 					<state>off</state>
 					<messageTopic>something_99f1a7ac</messageTopic>
 					<messageBroker>

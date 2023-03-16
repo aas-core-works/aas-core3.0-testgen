@@ -60,7 +60,17 @@
           "name": "something_94548e46"
         }
       ],
-      "id": [],
+      "id": [
+        {
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "unexpected instance"
+            }
+          ],
+          "type": "ExternalReference"
+        }
+      ],
       "idShort": "PiXO1wyHierj",
       "modelType": "AssetAdministrationShell",
       "submodels": [

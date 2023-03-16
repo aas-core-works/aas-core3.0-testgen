@@ -4,7 +4,17 @@
       "assetInformation": {
         "assetKind": "NotApplicable",
         "assetType": "something_9f4c5692",
-        "defaultThumbnail": "Unexpected string value",
+        "defaultThumbnail": [
+          {
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "unexpected instance"
+              }
+            ],
+            "type": "ExternalReference"
+          }
+        ],
         "globalAssetId": "something_c71f0c8f"
       },
       "id": "something_142922d6",

@@ -4,7 +4,17 @@
 			<id>something_142922d6</id>
 			<assetInformation>
 				<assetKind>NotApplicable</assetKind>
-				<globalAssetId/>
+				<globalAssetId>
+					<reference>
+						<type>ExternalReference</type>
+						<keys>
+							<key>
+								<type>GlobalReference</type>
+								<value>unexpected instance</value>
+							</key>
+						</keys>
+					</reference>
+				</globalAssetId>
 				<assetType>something_9f4c5692</assetType>
 				<defaultThumbnail>
 					<path>file:/M5/%bA:'%9c%6b%ed%00Y*/%4C=4h:d:</path>

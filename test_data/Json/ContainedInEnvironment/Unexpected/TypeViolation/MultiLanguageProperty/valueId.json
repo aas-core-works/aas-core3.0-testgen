@@ -84,7 +84,17 @@
               "text": "something_cd7e6587"
             }
           ],
-          "valueId": "Unexpected string value"
+          "valueId": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ]
         }
       ]
     }

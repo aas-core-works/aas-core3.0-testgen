@@ -22,7 +22,17 @@
 			</description>
 			<administration/>
 			<id>something_48c66017</id>
-			<kind/>
+			<kind>
+				<reference>
+					<type>ExternalReference</type>
+					<keys>
+						<key>
+							<type>GlobalReference</type>
+							<value>unexpected instance</value>
+						</key>
+					</keys>
+				</reference>
+			</kind>
 			<semanticId>
 				<type>ExternalReference</type>
 				<keys>

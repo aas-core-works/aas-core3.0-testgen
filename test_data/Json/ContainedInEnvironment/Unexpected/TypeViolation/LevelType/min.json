@@ -19,7 +19,17 @@
           "dataSpecificationContent": {
             "levelType": {
               "max": true,
-              "min": [],
+              "min": [
+                {
+                  "keys": [
+                    {
+                      "type": "GlobalReference",
+                      "value": "unexpected instance"
+                    }
+                  ],
+                  "type": "ExternalReference"
+                }
+              ],
               "nom": true,
               "typ": true
             },

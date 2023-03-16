@@ -98,7 +98,17 @@
 							</key>
 						</keys>
 					</messageBroker>
-					<lastUpdate/>
+					<lastUpdate>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</lastUpdate>
 					<minInterval>-P1Y</minInterval>
 					<maxInterval>PT130S</maxInterval>
 				</basicEventElement>

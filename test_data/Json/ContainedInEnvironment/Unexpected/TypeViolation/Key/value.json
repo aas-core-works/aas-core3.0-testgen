@@ -9,7 +9,17 @@
         "keys": [
           {
             "type": "AssetAdministrationShell",
-            "value": []
+            "value": [
+              {
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "unexpected instance"
+                  }
+                ],
+                "type": "ExternalReference"
+              }
+            ]
           }
         ],
         "type": "ModelReference"

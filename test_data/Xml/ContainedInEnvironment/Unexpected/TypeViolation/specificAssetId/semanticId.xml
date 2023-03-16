@@ -6,7 +6,17 @@
 				<assetKind>NotApplicable</assetKind>
 				<specificAssetIds>
 					<specificAssetId>
-						<semanticId>Unexpected string value</semanticId>
+						<semanticId>
+							<reference>
+								<type>ExternalReference</type>
+								<keys>
+									<key>
+										<type>GlobalReference</type>
+										<value>unexpected instance</value>
+									</key>
+								</keys>
+							</reference>
+						</semanticId>
 						<supplementalSemanticIds>
 							<reference>
 								<type>ModelReference</type>

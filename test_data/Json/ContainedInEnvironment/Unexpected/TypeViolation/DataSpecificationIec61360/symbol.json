@@ -48,7 +48,17 @@
               }
             ],
             "sourceOfDefinition": "something_1bd907c8",
-            "symbol": [],
+            "symbol": [
+              {
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "unexpected instance"
+                  }
+                ],
+                "type": "ExternalReference"
+              }
+            ],
             "unit": "something_a6bd9450",
             "unitId": {
               "keys": [

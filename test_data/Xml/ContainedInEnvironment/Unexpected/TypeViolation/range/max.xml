@@ -78,7 +78,17 @@
 						</embeddedDataSpecification>
 					</embeddedDataSpecifications>
 					<valueType>xs:decimal</valueType>
-					<max/>
+					<max>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</max>
 				</range>
 			</submodelElements>
 		</submodel>

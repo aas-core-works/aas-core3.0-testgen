@@ -23,7 +23,17 @@
 							</keys>
 						</reference>
 					</supplementalSemanticIds>
-					<name/>
+					<name>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</name>
 					<valueType>xs:unsignedShort</valueType>
 					<value>10233</value>
 					<refersTo>

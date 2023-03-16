@@ -21,7 +21,17 @@
 				</langStringTextType>
 			</description>
 			<administration/>
-			<id/>
+			<id>
+				<reference>
+					<type>ExternalReference</type>
+					<keys>
+						<key>
+							<type>GlobalReference</type>
+							<value>unexpected instance</value>
+						</key>
+					</keys>
+				</reference>
+			</id>
 			<kind>Instance</kind>
 			<semanticId>
 				<type>ExternalReference</type>

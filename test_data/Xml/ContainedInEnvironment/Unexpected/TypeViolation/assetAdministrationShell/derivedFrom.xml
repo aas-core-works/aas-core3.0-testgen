@@ -50,7 +50,17 @@
 					</dataSpecificationContent>
 				</embeddedDataSpecification>
 			</embeddedDataSpecifications>
-			<derivedFrom>Unexpected string value</derivedFrom>
+			<derivedFrom>
+				<reference>
+					<type>ExternalReference</type>
+					<keys>
+						<key>
+							<type>GlobalReference</type>
+							<value>unexpected instance</value>
+						</key>
+					</keys>
+				</reference>
+			</derivedFrom>
 			<assetInformation>
 				<assetKind>NotApplicable</assetKind>
 				<globalAssetId>something_eea66fa1</globalAssetId>
