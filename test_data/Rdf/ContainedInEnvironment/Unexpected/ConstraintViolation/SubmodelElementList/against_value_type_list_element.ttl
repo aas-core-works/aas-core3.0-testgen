@@ -4,11 +4,12 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xs: <http://www.w3.org/2001/XMLSchema#> .
 
-<something_48c66017> rdf:type aas:Submodel ;
-    <https://admin-shell.io/aas/3/0/Identifiable/id> "something_48c66017"^^xs:string ;
+<https://example.com/some-submodel> rdf:type aas:Submodel ;
+    <https://admin-shell.io/aas/3/0/Referable/idShort> "someSubmodel"^^xs:string ;
+    <https://admin-shell.io/aas/3/0/Identifiable/id> "https://example.com/some-submodel"^^xs:string ;
     <https://admin-shell.io/aas/3/0/Submodel/submodelElements> [
         rdf:type aas:SubmodelElementList ;
-        <https://admin-shell.io/aas/3/0/Referable/idShort> "something3fdd3eb4"^^xs:string ;
+        <https://admin-shell.io/aas/3/0/Referable/idShort> "someList"^^xs:string ;
         <https://admin-shell.io/aas/3/0/SubmodelElementList/semanticIDListElement> [
             rdf:type aas:Reference ;
             <https://admin-shell.io/aas/3/0/Reference/type> <https://admin-shell.io/aas/3/0/ReferenceTypes/ExternalReference> ;

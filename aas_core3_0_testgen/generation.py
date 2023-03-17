@@ -13,14 +13,14 @@ from typing import (
     cast,
 )
 
-import aas_core3.constants as aas_constants
-import aas_core3.types as aas_types
 import aas_core_codegen.common
 from aas_core_codegen import intermediate, infer_for_schema
 from aas_core_codegen.common import Identifier
 from icontract import require, DBC
 from typing_extensions import assert_never
 
+import aas_core3.constants as aas_constants
+import aas_core3.types as aas_types
 from aas_core3_0_testgen import fixing, common, primitiving
 from aas_core3_0_testgen.codegened import creation, wrapping, preserialization
 from aas_core3_0_testgen.frozen_examples import (
@@ -33,11 +33,11 @@ class Case(DBC):
     """Represent an abstract test case."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            expected: bool,
-            cls: intermediate.ConcreteClass,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        expected: bool,
+        cls: intermediate.ConcreteClass,
     ) -> None:
         """Initialize with the given values."""
         self.container_class = container_class
@@ -54,10 +54,10 @@ class Replica:
     """
 
     def __init__(
-            self,
-            container: aas_types.Class,
-            instance: aas_types.Class,
-            path: Sequence[Union[str, int]],
+        self,
+        container: aas_types.Class,
+        instance: aas_types.Class,
+        path: Sequence[Union[str, int]],
     ) -> None:
         """Initialize with the given values."""
         self.container = container
@@ -87,12 +87,12 @@ class CaseMinimal(Case):
     """Represent a minimal test case."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            preserialized_instance: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            replica: "Replica",
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        preserialized_instance: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        replica: "Replica",
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -110,12 +110,12 @@ class CaseMaximal(Case):
     """Represent a maximal test case."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            preserialized_instance: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            replica: "Replica",
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        preserialized_instance: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        replica: "Replica",
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -133,11 +133,11 @@ class CaseTypeViolation(Case):
     """Represent a test case where a property has invalid type."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            property_name: Identifier,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        property_name: Identifier,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -154,12 +154,12 @@ class CasePositivePatternExample(Case):
     """Represent a test case with a property set to a pattern example."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            property_name: Identifier,
-            example_name: str,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        property_name: Identifier,
+        example_name: str,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -177,12 +177,12 @@ class CasePatternViolation(Case):
     """Represent a test case with a property set to a pattern example."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            property_name: Identifier,
-            example_name: str,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        property_name: Identifier,
+        example_name: str,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -200,11 +200,11 @@ class CaseRequiredViolation(Case):
     """Represent a test case where a required property is missing."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            property_name: Identifier,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        property_name: Identifier,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -221,11 +221,11 @@ class CaseNullViolation(Case):
     """Represent an unexpected case where values are set to None instead of removed."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            property_name: Identifier,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        property_name: Identifier,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -243,12 +243,12 @@ class CaseMinLengthViolation(Case):
 
     @require(lambda cls, prop: id(prop) in cls.property_id_set)
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            prop: intermediate.Property,
-            min_value: int,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        prop: intermediate.Property,
+        min_value: int,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -266,11 +266,11 @@ class CaseMaxLengthViolation(Case):
     """Represent a test case where a max. len constraint is violated."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            property_name: Identifier,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        property_name: Identifier,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -287,10 +287,10 @@ class CaseUnexpectedAdditionalProperty(Case):
     """Represent a test case where there is an unexpected property in the instance."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -306,11 +306,11 @@ class CaseDateTimeUtcViolationOnFebruary29th(Case):
     """Represent a test case where we supply an invalid UTC date time stamp."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            property_name: Identifier,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        property_name: Identifier,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -327,12 +327,12 @@ class CasePositiveValueExample(Case):
     """Represent a test case with a XSD value set to a positive example."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            data_type_def_literal: intermediate.EnumerationLiteral,
-            example_name: str,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        data_type_def_literal: intermediate.EnumerationLiteral,
+        example_name: str,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -350,12 +350,12 @@ class CaseInvalidValueExample(Case):
     """Represent a test case with a XSD value set to a negative example."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            data_type_def_literal: intermediate.EnumerationLiteral,
-            example_name: str,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        data_type_def_literal: intermediate.EnumerationLiteral,
+        example_name: str,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -373,12 +373,12 @@ class CasePositiveMinMaxExample(Case):
     """Represent a test case with a min/max XSD values set to a positive example."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            data_type_def_literal: intermediate.EnumerationLiteral,
-            example_name: str,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        data_type_def_literal: intermediate.EnumerationLiteral,
+        example_name: str,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -396,12 +396,12 @@ class CaseInvalidMinMaxExample(Case):
     """Represent a test case with a min/max XSD values set to a negative example."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            data_type_def_literal: intermediate.EnumerationLiteral,
-            example_name: str,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        data_type_def_literal: intermediate.EnumerationLiteral,
+        example_name: str,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -433,12 +433,12 @@ class CaseEnumViolation(Case):
     )
     # fmt: on
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            enum: intermediate.Enumeration,
-            cls: intermediate.ConcreteClass,
-            prop: intermediate.Property,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        enum: intermediate.Enumeration,
+        cls: intermediate.ConcreteClass,
+        prop: intermediate.Property,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -456,11 +456,11 @@ class CasePositiveManual(Case):
     """Represent a custom-tailored positive case."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            name: str,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        name: str,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -477,11 +477,11 @@ class CaseSetViolation(Case):
     """Represent a case where a property is outside a constrained set."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            property_name: Identifier,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        property_name: Identifier,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -498,11 +498,11 @@ class CaseConstraintViolation(Case):
     """Represent a custom-tailored negative case that violates a constraint."""
 
     def __init__(
-            self,
-            container_class: intermediate.ConcreteClass,
-            preserialized_container: preserialization.Instance,
-            cls: intermediate.ConcreteClass,
-            name: str,
+        self,
+        container_class: intermediate.ConcreteClass,
+        preserialized_container: preserialization.Instance,
+        cls: intermediate.ConcreteClass,
+        name: str,
     ) -> None:
         """Initialize with the given values."""
         Case.__init__(
@@ -675,7 +675,7 @@ def _generate_customized_environment_and_maximal_instance_for_reference() -> Tup
 
 @require(lambda environment_cls: environment_cls.name == "Environment")
 def _generate_minimal_case(
-        cls: intermediate.ConcreteClass, environment_cls: intermediate.ConcreteClass
+    cls: intermediate.ConcreteClass, environment_cls: intermediate.ConcreteClass
 ) -> CaseMinimal:
     """Generate the example of a minimal instance ready for serialization."""
     try:
@@ -738,7 +738,7 @@ def _generate_minimal_case(
 
 @require(lambda environment_cls: environment_cls.name == "Environment")
 def _generate_maximal_case(
-        cls: intermediate.ConcreteClass, environment_cls: intermediate.ConcreteClass
+    cls: intermediate.ConcreteClass, environment_cls: intermediate.ConcreteClass
 ) -> CaseMaximal:
     """Generate the example of a minimal instance ready for serialization."""
     try:
@@ -851,8 +851,8 @@ def _generate_type_violations(maximal_case: CaseMaximal) -> Iterator[CaseTypeVio
 
 
 def _generate_positive_and_negative_pattern_examples(
-        maximal_case: CaseMaximal,
-        constraints_by_property: infer_for_schema.ConstraintsByProperty,
+    maximal_case: CaseMaximal,
+    constraints_by_property: infer_for_schema.ConstraintsByProperty,
 ) -> Iterator[Union[CasePositivePatternExample, CasePatternViolation]]:
     """Generate positive and negative pattern examples."""
     # Abbreviate for readability
@@ -878,7 +878,7 @@ def _generate_positive_and_negative_pattern_examples(
             pattern_constraint
             for pattern_constraint in pattern_constraints
             if pattern_constraint.pattern
-               != "^[\\x09\\x0A\\x0D\\x20-\\uD7FF\\uE000-\\uFFFD\\U00010000-\\U0010FFFF]*$"
+            != "^[\\x09\\x0A\\x0D\\x20-\\uD7FF\\uE000-\\uFFFD\\U00010000-\\U0010FFFF]*$"
         ]
 
         if len(pattern_constraints_without_xml) == 0:
@@ -939,7 +939,7 @@ def _generate_positive_and_negative_pattern_examples(
 
 
 def _generate_required_violations(
-        minimal_case: CaseMinimal,
+    minimal_case: CaseMinimal,
 ) -> Iterator[CaseRequiredViolation]:
     """Generate violations where required properties are removed."""
     # Abbreviate for readability
@@ -1005,8 +1005,8 @@ def _generate_null_violations(minimal_case: CaseMinimal) -> Iterator[CaseNullVio
 
 
 def _generate_length_violations(
-        maximal_case: CaseMaximal,
-        constraints_by_property: infer_for_schema.ConstraintsByProperty,
+    maximal_case: CaseMaximal,
+    constraints_by_property: infer_for_schema.ConstraintsByProperty,
 ) -> Iterator[Union[CaseMinLengthViolation, CaseMaxLengthViolation]]:
     """Generate positive and negative pattern examples."""
     # Abbreviate for readability
@@ -1133,9 +1133,9 @@ def _generate_length_violations(
 
                 new_prop_value = preserialization.ListOfInstances(
                     values=(
-                            prop_value.values
-                            + [last_value]
-                            * (len_constraints.max_value - len(prop_value.values) + 1)
+                        prop_value.values
+                        + [last_value]
+                        * (len_constraints.max_value - len(prop_value.values) + 1)
                     )
                 )
 
@@ -1164,7 +1164,7 @@ def _generate_enum_violations(maximal_case: CaseMaximal) -> Iterator[CaseEnumVio
         type_anno = intermediate.beneath_optional(prop.type_annotation)
 
         if not isinstance(type_anno, intermediate.OurTypeAnnotation) or not isinstance(
-                type_anno.our_type, intermediate.Enumeration
+            type_anno.our_type, intermediate.Enumeration
         ):
             continue
 
@@ -1194,7 +1194,7 @@ def _generate_enum_violations(maximal_case: CaseMaximal) -> Iterator[CaseEnumVio
 
 
 def _generate_unexpected_additional_properties(
-        minimal_case: CaseMinimal,
+    minimal_case: CaseMinimal,
 ) -> Iterator[CaseUnexpectedAdditionalProperty]:
     """Generate invalid cases with unexpected properties in the preserialization."""
     # region Replicate
@@ -1220,8 +1220,8 @@ def _generate_unexpected_additional_properties(
 
 
 def _generate_date_time_utc_violation_on_february_29th(
-        minimal_case: CaseMinimal,
-        date_time_utc_constrained_primitive: intermediate.ConstrainedPrimitive,
+    minimal_case: CaseMinimal,
+    date_time_utc_constrained_primitive: intermediate.ConstrainedPrimitive,
 ) -> Iterator[CaseDateTimeUtcViolationOnFebruary29th]:
     """Generate the cases where an invalid date-time satisfies the pattern."""
     # Abbreviate for readability
@@ -1231,8 +1231,8 @@ def _generate_date_time_utc_violation_on_february_29th(
         type_anno = intermediate.beneath_optional(prop.type_annotation)
 
         if (
-                isinstance(type_anno, intermediate.OurTypeAnnotation)
-                and type_anno.our_type is date_time_utc_constrained_primitive
+            isinstance(type_anno, intermediate.OurTypeAnnotation)
+            and type_anno.our_type is date_time_utc_constrained_primitive
         ):
             # region Replicate
             (
@@ -1255,14 +1255,14 @@ def _generate_date_time_utc_violation_on_february_29th(
 
 
 def _generate_outside_set_of_primitives(
-        constraint: infer_for_schema.SetOfPrimitivesConstraint,
+    constraint: infer_for_schema.SetOfPrimitivesConstraint,
 ) -> Union[bool, int, float, str, bytearray]:
     """Generate the value outside the constant set of primitive values."""
     if constraint.a_type in (
-            intermediate.PrimitiveType.BOOL,
-            intermediate.PrimitiveType.INT,
-            intermediate.PrimitiveType.FLOAT,
-            intermediate.PrimitiveType.BYTEARRAY,
+        intermediate.PrimitiveType.BOOL,
+        intermediate.PrimitiveType.INT,
+        intermediate.PrimitiveType.FLOAT,
+        intermediate.PrimitiveType.BYTEARRAY,
     ):
         raise NotImplementedError(
             "We haven't implemented the generation of non-strings "
@@ -1284,8 +1284,8 @@ def _generate_outside_set_of_primitives(
 
 
 def _generate_violation_of_set_constraint_on_primitive_property(
-        minimal_case: CaseMinimal,
-        constraints_by_property: infer_for_schema.ConstraintsByProperty,
+    minimal_case: CaseMinimal,
+    constraints_by_property: infer_for_schema.ConstraintsByProperty,
 ) -> Iterator[CaseSetViolation]:
     """Generate examples which violate the set constraint on a primitive property."""
     # Abbreviate for readability
@@ -1334,7 +1334,7 @@ def _generate_violation_of_set_constraint_on_primitive_property(
     "At least one literal left outside",
 )
 def _generate_outside_set_of_enumeration_literals(
-        constraint: infer_for_schema.SetOfEnumerationLiteralsConstraint,
+    constraint: infer_for_schema.SetOfEnumerationLiteralsConstraint,
 ) -> str:
     """Generate a literal value for the enumeration outside the set of literals."""
     literal_id_set = set()  # type: Set[int]
@@ -1356,8 +1356,8 @@ def _generate_outside_set_of_enumeration_literals(
 
 
 def _generate_violation_of_set_constraint_on_enum_property(
-        minimal_case: CaseMinimal,
-        constraints_by_property: infer_for_schema.ConstraintsByProperty,
+    minimal_case: CaseMinimal,
+    constraints_by_property: infer_for_schema.ConstraintsByProperty,
 ) -> Iterator[CaseSetViolation]:
     """Generate examples which violate the set constraint on a primitive property."""
     # Abbreviate for readability
@@ -1403,7 +1403,7 @@ def _generate_violation_of_set_constraint_on_enum_property(
 
 
 def _generate_cases_for_value_and_value_types(
-        minimal_case: CaseMinimal, data_type_def_xsd_enum: intermediate.Enumeration
+    minimal_case: CaseMinimal, data_type_def_xsd_enum: intermediate.Enumeration
 ) -> Iterator[Union[CasePositiveValueExample, CaseInvalidValueExample]]:
     """Generate cases for different ``value``'s of XSD data type."""
     for literal in aas_types.DataTypeDefXSD:
@@ -1472,7 +1472,7 @@ def _generate_cases_for_value_and_value_types(
 
 
 def _generate_cases_for_min_max_of_range(
-        minimal_case: CaseMinimal, data_type_def_xsd_enum: intermediate.Enumeration
+    minimal_case: CaseMinimal, data_type_def_xsd_enum: intermediate.Enumeration
 ) -> Iterator[Union[CasePositiveMinMaxExample, CaseInvalidMinMaxExample]]:
     """Generate examples of valid and invalid ranges."""
     for literal in aas_types.DataTypeDefXSD:
@@ -1579,15 +1579,17 @@ class _AdditionalForSubmodelElementList:
     @staticmethod
     def _create_replica_with_two_boolean_properties() -> Replica:
         """Create a replica of a submodel element list with two boolean properties."""
-        path_to_instance = ["submodels", 0, "submodel_elements", 0]
+        path_to_instance = [
+            "submodels",
+            0,
+            "submodel_elements",
+            0,
+        ]  # type: List[Union[str, int]]
 
         path_hash_to_instance = common.hash_path(None, path_to_instance)
 
         semantic_id_list_element = fixing.generate_external_reference(
-            common.hash_path(
-                path_hash_to_instance,
-                ["semantic_id_list_element"]
-            )
+            common.hash_path(path_hash_to_instance, ["semantic_id_list_element"])
         )
 
         submodel_element_list = aas_types.SubmodelElementList(
@@ -1604,7 +1606,7 @@ class _AdditionalForSubmodelElementList:
                     value_type=aas_types.DataTypeDefXSD.BOOLEAN,
                     semantic_id=semantic_id_list_element,
                 ),
-            ]
+            ],
         )
 
         submodel = aas_types.Submodel(
@@ -1616,17 +1618,15 @@ class _AdditionalForSubmodelElementList:
         environment = aas_types.Environment(submodels=[submodel])
 
         return Replica(
-            container=environment,
-            instance=submodel_element_list,
-            path=path_to_instance
+            container=environment, instance=submodel_element_list, path=path_to_instance
         )
 
     @staticmethod
     def _preserialize_to_positive_manual_case(
-            replica: Replica,
-            name: str,
-            environment_cls: EnvironmentClass,
-            submodel_element_list_cls: SubmodelElementListClass,
+        replica: Replica,
+        name: str,
+        environment_cls: EnvironmentClass,
+        submodel_element_list_cls: SubmodelElementListClass,
     ) -> CasePositiveManual:
         """Translate ``replica`` into a positive manual case."""
         preserialized_container, _ = preserialization.preserialize(replica.container)
@@ -1643,10 +1643,10 @@ class _AdditionalForSubmodelElementList:
 
     @staticmethod
     def _preserialize_to_constraint_violation(
-            replica: Replica,
-            name: str,
-            environment_cls: EnvironmentClass,
-            submodel_element_list_cls: SubmodelElementListClass,
+        replica: Replica,
+        name: str,
+        environment_cls: EnvironmentClass,
+        submodel_element_list_cls: SubmodelElementListClass,
     ) -> CaseConstraintViolation:
         """Translate ``replica`` into a case of constraint violation."""
         preserialized_container, _ = preserialization.preserialize(replica.container)
@@ -1663,8 +1663,8 @@ class _AdditionalForSubmodelElementList:
 
     @staticmethod
     def _generate_one_child_without_semantic_id(
-            environment_cls: EnvironmentClass,
-            submodel_element_list_cls: SubmodelElementListClass,
+        environment_cls: EnvironmentClass,
+        submodel_element_list_cls: SubmodelElementListClass,
     ) -> CasePositiveManual:
         """Generate the case where one child does not have the semantic ID set."""
         # Abbreviate for readability
@@ -1687,8 +1687,8 @@ class _AdditionalForSubmodelElementList:
 
     @staticmethod
     def _generate_no_semantic_id_list_element(
-            environment_cls: EnvironmentClass,
-            submodel_element_list_cls: SubmodelElementListClass,
+        environment_cls: EnvironmentClass,
+        submodel_element_list_cls: SubmodelElementListClass,
     ) -> CasePositiveManual:
         """Generate the case where semantic ID is unset in the list."""
         # Abbreviate for readability
@@ -1709,8 +1709,8 @@ class _AdditionalForSubmodelElementList:
 
     @staticmethod
     def _generate_against_type_value_list_element(
-            environment_cls: EnvironmentClass,
-            submodel_element_list_cls: SubmodelElementListClass,
+        environment_cls: EnvironmentClass,
+        submodel_element_list_cls: SubmodelElementListClass,
     ) -> CaseConstraintViolation:
         """Generate the case where one item violates ``type_value_list_element``."""
         # Abbreviate for readability
@@ -1736,8 +1736,8 @@ class _AdditionalForSubmodelElementList:
 
     @staticmethod
     def _generate_against_value_type_list_element(
-            environment_cls: EnvironmentClass,
-            submodel_element_list_cls: SubmodelElementListClass,
+        environment_cls: EnvironmentClass,
+        submodel_element_list_cls: SubmodelElementListClass,
     ) -> CaseConstraintViolation:
         """Generate the case where one item violates ``type_value_list_element``."""
         # Abbreviate for readability
@@ -1764,8 +1764,8 @@ class _AdditionalForSubmodelElementList:
 
     @staticmethod
     def _generate_against_semantic_id_list_element(
-            environment_cls: EnvironmentClass,
-            submodel_element_list_cls: SubmodelElementListClass,
+        environment_cls: EnvironmentClass,
+        submodel_element_list_cls: SubmodelElementListClass,
     ) -> CaseConstraintViolation:
         """Generate the case where one item violates ``semantic_ID_list_element``."""
         # Abbreviate for readability
@@ -1797,8 +1797,8 @@ class _AdditionalForSubmodelElementList:
 
     @staticmethod
     def _generate_no_semantic_id_list_element_but_semantic_id_mismatch_in_value(
-            environment_cls: EnvironmentClass,
-            submodel_element_list_cls: SubmodelElementListClass,
+        environment_cls: EnvironmentClass,
+        submodel_element_list_cls: SubmodelElementListClass,
     ) -> CaseConstraintViolation:
         """Generate the case where one item violates ``semantic_ID_list_element``."""
         # Abbreviate for readability
@@ -1843,8 +1843,8 @@ class _AdditionalForSubmodelElementList:
 
     @staticmethod
     def _generate_id_short_in_a_value(
-            environment_cls: EnvironmentClass,
-            submodel_element_list_cls: SubmodelElementListClass,
+        environment_cls: EnvironmentClass,
+        submodel_element_list_cls: SubmodelElementListClass,
     ) -> CaseConstraintViolation:
         """Generate the case where one item violates ``semantic_ID_list_element``."""
         # Abbreviate for readability
@@ -1870,8 +1870,8 @@ class _AdditionalForSubmodelElementList:
 
     @staticmethod
     def generate_cases(
-            environment_cls: EnvironmentClass,
-            submodel_element_list_cls: SubmodelElementListClass
+        environment_cls: EnvironmentClass,
+        submodel_element_list_cls: SubmodelElementListClass,
     ) -> Iterator[Union[CasePositiveManual, CaseConstraintViolation]]:
         """Generate additional custom-tailored cases for submodel element list."""
         # Abbreviate for readability
@@ -1997,10 +1997,10 @@ class _AdditionalForReference:
 
     @staticmethod
     def _preserialize_to_positive_manual_case(
-            replica: Replica,
-            name: str,
-            environment_cls: EnvironmentClass,
-            reference_cls: ReferenceClass,
+        replica: Replica,
+        name: str,
+        environment_cls: EnvironmentClass,
+        reference_cls: ReferenceClass,
     ) -> CasePositiveManual:
         """Translate ``replica`` into a positive manual case."""
         preserialized_container, _ = preserialization.preserialize(replica.container)
@@ -2017,10 +2017,10 @@ class _AdditionalForReference:
 
     @staticmethod
     def _preserialize_to_constraint_violation(
-            replica: Replica,
-            name: str,
-            environment_cls: EnvironmentClass,
-            reference_cls: ReferenceClass,
+        replica: Replica,
+        name: str,
+        environment_cls: EnvironmentClass,
+        reference_cls: ReferenceClass,
     ) -> CaseConstraintViolation:
         """Translate ``replica`` into a case of constraint violation."""
         preserialized_container, _ = preserialization.preserialize(replica.container)
@@ -2037,7 +2037,7 @@ class _AdditionalForReference:
 
     @staticmethod
     def _first_key_type_outside_set(
-            the_set: Set[aas_types.KeyTypes],
+        the_set: Set[aas_types.KeyTypes],
     ) -> aas_types.KeyTypes:
         """
         Find the first key type among ``KeyTypes`` not in ``the_set``.
@@ -2055,9 +2055,9 @@ class _AdditionalForReference:
 
     @staticmethod
     def _generate_first_key_not_in_globally_identifiables(
-            model_reference_replica: Replica,
-            environment_cls: EnvironmentClass,
-            reference_cls: ReferenceClass,
+        model_reference_replica: Replica,
+        environment_cls: EnvironmentClass,
+        reference_cls: ReferenceClass,
     ) -> CaseConstraintViolation:
         static = _AdditionalForReference
 
@@ -2082,9 +2082,9 @@ class _AdditionalForReference:
 
     @staticmethod
     def _generate_for_an_external_reference_first_key_not_in_generic_globally_identifiables(
-            external_reference_replica: Replica,
-            environment_cls: EnvironmentClass,
-            reference_cls: ReferenceClass,
+        external_reference_replica: Replica,
+        environment_cls: EnvironmentClass,
+        reference_cls: ReferenceClass,
     ) -> CaseConstraintViolation:
         static = _AdditionalForReference
 
@@ -2109,14 +2109,14 @@ class _AdditionalForReference:
 
     @staticmethod
     def _generate_for_a_model_reference_first_key_not_in_aas_identifiables(
-            model_reference_replica: Replica,
-            environment_cls: EnvironmentClass,
-            reference_cls: ReferenceClass,
+        model_reference_replica: Replica,
+        environment_cls: EnvironmentClass,
+        reference_cls: ReferenceClass,
     ) -> CaseConstraintViolation:
         static = _AdditionalForReference
 
         assert (
-                aas_types.KeyTypes.GLOBAL_REFERENCE not in aas_constants.AAS_IDENTIFIABLES
+            aas_types.KeyTypes.GLOBAL_REFERENCE not in aas_constants.AAS_IDENTIFIABLES
         )
 
         replica = model_reference_replica.replicate()
@@ -2139,14 +2139,14 @@ class _AdditionalForReference:
 
     @staticmethod
     def _generate_for_an_external_reference_invalid_last_key(
-            external_reference_replica: Replica,
-            environment_cls: EnvironmentClass,
-            reference_cls: ReferenceClass,
+        external_reference_replica: Replica,
+        environment_cls: EnvironmentClass,
+        reference_cls: ReferenceClass,
     ) -> CaseConstraintViolation:
         static = _AdditionalForReference
 
         assert (
-                aas_types.KeyTypes.BLOB not in aas_constants.GENERIC_GLOBALLY_IDENTIFIABLES
+            aas_types.KeyTypes.BLOB not in aas_constants.GENERIC_GLOBALLY_IDENTIFIABLES
         )
 
         assert aas_types.KeyTypes.BLOB not in aas_constants.GENERIC_FRAGMENT_KEYS
@@ -2172,9 +2172,9 @@ class _AdditionalForReference:
 
     @staticmethod
     def _generate_for_a_model_reference_second_key_not_in_fragment_keys(
-            model_reference_replica: Replica,
-            environment_cls: EnvironmentClass,
-            reference_cls: ReferenceClass,
+        model_reference_replica: Replica,
+        environment_cls: EnvironmentClass,
+        reference_cls: ReferenceClass,
     ) -> CaseConstraintViolation:
         static = _AdditionalForReference
 
@@ -2202,14 +2202,14 @@ class _AdditionalForReference:
 
     @staticmethod
     def _generate_for_a_model_reference_fragment_reference_in_the_middle(
-            model_reference_replica: Replica,
-            environment_cls: EnvironmentClass,
-            reference_cls: ReferenceClass,
+        model_reference_replica: Replica,
+        environment_cls: EnvironmentClass,
+        reference_cls: ReferenceClass,
     ) -> CaseConstraintViolation:
         static = _AdditionalForReference
 
         assert (
-                aas_types.KeyTypes.FRAGMENT_REFERENCE in aas_constants.GENERIC_FRAGMENT_KEYS
+            aas_types.KeyTypes.FRAGMENT_REFERENCE in aas_constants.GENERIC_FRAGMENT_KEYS
         )
 
         replica = model_reference_replica.replicate()
@@ -2235,14 +2235,14 @@ class _AdditionalForReference:
 
     @staticmethod
     def _generate_for_a_model_reference_fragment_reference_not_after_file_or_blob(
-            model_reference_replica: Replica,
-            environment_cls: EnvironmentClass,
-            reference_cls: ReferenceClass,
+        model_reference_replica: Replica,
+        environment_cls: EnvironmentClass,
+        reference_cls: ReferenceClass,
     ) -> CaseConstraintViolation:
         static = _AdditionalForReference
 
         assert (
-                aas_types.KeyTypes.FRAGMENT_REFERENCE in aas_constants.GENERIC_FRAGMENT_KEYS
+            aas_types.KeyTypes.FRAGMENT_REFERENCE in aas_constants.GENERIC_FRAGMENT_KEYS
         )
 
         replica = model_reference_replica.replicate()
@@ -2268,14 +2268,14 @@ class _AdditionalForReference:
 
     @staticmethod
     def _generate_for_a_model_reference_invalid_key_value_after_submodel_element_list(
-            model_reference_replica: Replica,
-            environment_cls: EnvironmentClass,
-            reference_cls: ReferenceClass,
+        model_reference_replica: Replica,
+        environment_cls: EnvironmentClass,
+        reference_cls: ReferenceClass,
     ) -> CaseConstraintViolation:
         static = _AdditionalForReference
 
         assert (
-                aas_types.KeyTypes.FRAGMENT_REFERENCE in aas_constants.GENERIC_FRAGMENT_KEYS
+            aas_types.KeyTypes.FRAGMENT_REFERENCE in aas_constants.GENERIC_FRAGMENT_KEYS
         )
 
         replica = model_reference_replica.replicate()
@@ -2301,14 +2301,14 @@ class _AdditionalForReference:
 
     @staticmethod
     def _generate_for_an_external_reference_first_key_in_generic_globally_identifiables(
-            external_reference_replica: Replica,
-            environment_cls: EnvironmentClass,
-            reference_cls: ReferenceClass,
+        external_reference_replica: Replica,
+        environment_cls: EnvironmentClass,
+        reference_cls: ReferenceClass,
     ) -> CasePositiveManual:
         static = _AdditionalForReference
 
         assert (
-                aas_types.KeyTypes.GLOBAL_REFERENCE in aas_constants.GLOBALLY_IDENTIFIABLES
+            aas_types.KeyTypes.GLOBAL_REFERENCE in aas_constants.GLOBALLY_IDENTIFIABLES
         )
 
         replica = external_reference_replica.replicate()
@@ -2331,9 +2331,9 @@ class _AdditionalForReference:
 
     @staticmethod
     def _generate_for_a_model_reference_first_key_in_globally_and_aas_identifiables(
-            model_reference_replica: Replica,
-            environment_cls: EnvironmentClass,
-            reference_cls: ReferenceClass,
+        model_reference_replica: Replica,
+        environment_cls: EnvironmentClass,
+        reference_cls: ReferenceClass,
     ) -> CasePositiveManual:
         static = _AdditionalForReference
 
@@ -2360,14 +2360,14 @@ class _AdditionalForReference:
 
     @staticmethod
     def _generate_for_an_external_reference_last_key_in_generic_globally_identifiable(
-            external_reference_replica: Replica,
-            environment_cls: EnvironmentClass,
-            reference_cls: ReferenceClass,
+        external_reference_replica: Replica,
+        environment_cls: EnvironmentClass,
+        reference_cls: ReferenceClass,
     ) -> CasePositiveManual:
         static = _AdditionalForReference
 
         assert (
-                aas_types.KeyTypes.GLOBAL_REFERENCE in aas_constants.GLOBALLY_IDENTIFIABLES
+            aas_types.KeyTypes.GLOBAL_REFERENCE in aas_constants.GLOBALLY_IDENTIFIABLES
         )
 
         replica = external_reference_replica.replicate()
@@ -2393,14 +2393,14 @@ class _AdditionalForReference:
 
     @staticmethod
     def _generate_for_an_external_reference_last_key_in_generic_fragment_keys(
-            external_reference_replica: Replica,
-            environment_cls: EnvironmentClass,
-            reference_cls: ReferenceClass,
+        external_reference_replica: Replica,
+        environment_cls: EnvironmentClass,
+        reference_cls: ReferenceClass,
     ) -> CasePositiveManual:
         static = _AdditionalForReference
 
         assert (
-                aas_types.KeyTypes.FRAGMENT_REFERENCE in aas_constants.GENERIC_FRAGMENT_KEYS
+            aas_types.KeyTypes.FRAGMENT_REFERENCE in aas_constants.GENERIC_FRAGMENT_KEYS
         )
 
         replica = external_reference_replica.replicate()
@@ -2426,9 +2426,9 @@ class _AdditionalForReference:
 
     @staticmethod
     def _generate_for_a_model_reference_fragment_after_blob(
-            model_reference_replica: Replica,
-            environment_cls: EnvironmentClass,
-            reference_cls: ReferenceClass,
+        model_reference_replica: Replica,
+        environment_cls: EnvironmentClass,
+        reference_cls: ReferenceClass,
     ) -> CasePositiveManual:
         static = _AdditionalForReference
 
@@ -2455,9 +2455,9 @@ class _AdditionalForReference:
 
     @staticmethod
     def _generate_for_a_model_reference_valid_key_value_after_submodel_element_list(
-            model_reference_replica: Replica,
-            environment_cls: EnvironmentClass,
-            reference_cls: ReferenceClass,
+        model_reference_replica: Replica,
+        environment_cls: EnvironmentClass,
+        reference_cls: ReferenceClass,
     ) -> CasePositiveManual:
         static = _AdditionalForReference
 
@@ -2484,7 +2484,7 @@ class _AdditionalForReference:
 
     @staticmethod
     def generate_cases(
-            environment_cls: EnvironmentClass, reference_cls: ReferenceClass
+        environment_cls: EnvironmentClass, reference_cls: ReferenceClass
     ) -> Iterator[Union[CasePositiveManual, CaseConstraintViolation]]:
         """Generate additional custom-tailored cases for submodel element list."""
         # Abbreviate for readability
@@ -2641,10 +2641,10 @@ class _AdditionalForReference:
 
 
 def generate(
-        symbol_table: intermediate.SymbolTable,
-        constraints_by_class: MutableMapping[
-            intermediate.ClassUnion, infer_for_schema.ConstraintsByProperty
-        ],
+    symbol_table: intermediate.SymbolTable,
+    constraints_by_class: MutableMapping[
+        intermediate.ClassUnion, infer_for_schema.ConstraintsByProperty
+    ],
 ) -> Iterator[CaseUnion]:
     """Generate the test cases."""
     environment_cls = EnvironmentClass(
@@ -2676,7 +2676,7 @@ def generate(
     )
 
     for our_type in sorted(
-            symbol_table.our_types, key=lambda an_our_type: an_our_type.name
+        symbol_table.our_types, key=lambda an_our_type: an_our_type.name
     ):
         if not isinstance(our_type, intermediate.ConcreteClass):
             continue
@@ -2740,7 +2740,7 @@ def generate(
         if our_type is submodel_element_list_cls:
             yield from _AdditionalForSubmodelElementList.generate_cases(
                 environment_cls=environment_cls,
-                submodel_element_list_cls=submodel_element_list_cls
+                submodel_element_list_cls=submodel_element_list_cls,
             )
 
     yield from _AdditionalForReference.generate_cases(

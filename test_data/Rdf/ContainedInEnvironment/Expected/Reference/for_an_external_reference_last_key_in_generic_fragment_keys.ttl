@@ -5,6 +5,7 @@
 @prefix xs: <http://www.w3.org/2001/XMLSchema#> .
 
 <https://example.com/some-submodel> rdf:type aas:Submodel ;
+    <https://admin-shell.io/aas/3/0/Referable/idShort> "someSubmodel"^^xs:string ;
     <https://admin-shell.io/aas/3/0/Identifiable/id> "https://example.com/some-submodel"^^xs:string ;
     <https://admin-shell.io/aas/3/0/Submodel/submodelElements> [
         rdf:type aas:ReferenceElement ;

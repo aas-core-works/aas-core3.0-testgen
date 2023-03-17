@@ -51,7 +51,6 @@ setup(
             "hypothesis==6.46.3",
             "xmlschema==1.10.0",
             "jsonschema==4.17.3",
-            "aas-core3.0@git+https://github.com/aas-core-works/aas-core3.0-python@2ddbab3#egg=aas-core3.0"
         ]
     },
     # fmt: on

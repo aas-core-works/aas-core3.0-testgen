@@ -11,6 +11,7 @@
         <https://admin-shell.io/aas/3/0/Extension/valueType> <https://admin-shell.io/aas/3/0/DataTypeDefXSD/UnsignedLong> ;
         <https://admin-shell.io/aas/3/0/Extension/value> "0012208354443"^^xs:string ;
     ] ;
+    <https://admin-shell.io/aas/3/0/Referable/idShort> "something_783819f1"^^xs:string ;
     <https://admin-shell.io/aas/3/0/Identifiable/id> "something_142922d6"^^xs:string ;
     <https://admin-shell.io/aas/3/0/AssetAdministrationShell/assetInformation> [
         rdf:type aas:AssetInformation ;

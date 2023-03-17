@@ -1084,10 +1084,9 @@ from typing import (
 {I}Sequence
 )
 
-from aas_core3 import types as aas_types
-
 from aas_core3_0_testgen import common
-from aas_core3_0_testgen import primitiving"""
+from aas_core3_0_testgen import primitiving
+from aas_core3 import types as aas_types"""
         ),
     ]  # type: List[Stripped]
 

@@ -5,6 +5,7 @@
 @prefix xs: <http://www.w3.org/2001/XMLSchema#> .
 
 <something_48c66017> rdf:type aas:Submodel ;
+    <https://admin-shell.io/aas/3/0/Referable/idShort> "something_f8c8ea97"^^xs:string ;
     <https://admin-shell.io/aas/3/0/Identifiable/id> "something_48c66017"^^xs:string ;
     <https://admin-shell.io/aas/3/0/Submodel/submodelElements> [
         rdf:type aas:Operation ;
@@ -13,6 +14,7 @@
             rdf:type aas:OperationVariable ;
             <https://admin-shell.io/aas/3/0/OperationVariable/value> [
                 rdf:type aas:File ;
+                <https://admin-shell.io/aas/3/0/Referable/idShort> "something_c8b0a9a0"^^xs:string ;
                 <https://admin-shell.io/aas/3/0/File/contentType> "15j/5j"^^xs:string ;
             ] ;
         ] ;

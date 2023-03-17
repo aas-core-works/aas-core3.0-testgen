@@ -5,6 +5,7 @@
 @prefix xs: <http://www.w3.org/2001/XMLSchema#> .
 
 <something_0edbd82e> rdf:type aas:AssetAdministrationShell ;
+    <https://admin-shell.io/aas/3/0/Referable/idShort> "something_783819f1"^^xs:string ;
     <https://admin-shell.io/aas/3/0/Identifiable/id> "something_0edbd82e"^^xs:string ;
     <https://admin-shell.io/aas/3/0/AssetAdministrationShell/assetInformation> [
         rdf:type aas:AssetInformation ;
@@ -14,9 +15,11 @@
 .
 
 <something_1e53dcdd> rdf:type aas:Submodel ;
+    <https://admin-shell.io/aas/3/0/Referable/idShort> "something_f8c8ea97"^^xs:string ;
     <https://admin-shell.io/aas/3/0/Identifiable/id> "something_1e53dcdd"^^xs:string ;
 .
 
 <something_ab025d0d> rdf:type aas:ConceptDescription ;
+    <https://admin-shell.io/aas/3/0/Referable/idShort> "something_39468b4f"^^xs:string ;
     <https://admin-shell.io/aas/3/0/Identifiable/id> "something_ab025d0d"^^xs:string ;
 .

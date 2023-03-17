@@ -5,6 +5,7 @@
 @prefix xs: <http://www.w3.org/2001/XMLSchema#> .
 
 <something_48c66017> rdf:type aas:Submodel ;
+    <https://admin-shell.io/aas/3/0/Referable/idShort> "something_f8c8ea97"^^xs:string ;
     <https://admin-shell.io/aas/3/0/Identifiable/id> "something_48c66017"^^xs:string ;
     <https://admin-shell.io/aas/3/0/Submodel/submodelElements> [
         rdf:type aas:Entity ;
@@ -75,6 +76,7 @@
         ] ;
         <https://admin-shell.io/aas/3/0/Entity/statements> [
             rdf:type aas:Range ;
+            <https://admin-shell.io/aas/3/0/Referable/idShort> "something_7cdc9635"^^xs:string ;
             <https://admin-shell.io/aas/3/0/Range/valueType> <https://admin-shell.io/aas/3/0/DataTypeDefXSD/GMonthDay> ;
         ] ;
         <https://admin-shell.io/aas/3/0/Entity/entityType> <https://admin-shell.io/aas/3/0/EntityType/CoManagedEntity> ;
