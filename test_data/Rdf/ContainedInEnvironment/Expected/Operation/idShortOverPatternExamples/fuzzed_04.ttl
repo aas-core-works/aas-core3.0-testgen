@@ -5,6 +5,7 @@
 @prefix xs: <http://www.w3.org/2001/XMLSchema#> .
 
 <something_48c66017> rdf:type aas:Submodel ;
+    <https://admin-shell.io/aas/3/0/Referable/idShort> "something_f8c8ea97"^^xs:string ;
     <https://admin-shell.io/aas/3/0/Identifiable/id> "something_48c66017"^^xs:string ;
     <https://admin-shell.io/aas/3/0/Submodel/submodelElements> [
         rdf:type aas:Operation ;
@@ -77,6 +78,7 @@
             rdf:type aas:OperationVariable ;
             <https://admin-shell.io/aas/3/0/OperationVariable/value> [
                 rdf:type aas:Entity ;
+                <https://admin-shell.io/aas/3/0/Referable/idShort> "something_c8b0a9a0"^^xs:string ;
                 <https://admin-shell.io/aas/3/0/Entity/entityType> <https://admin-shell.io/aas/3/0/EntityType/SelfManagedEntity> ;
             ] ;
         ] ;
@@ -84,6 +86,7 @@
             rdf:type aas:OperationVariable ;
             <https://admin-shell.io/aas/3/0/OperationVariable/value> [
                 rdf:type aas:AnnotatedRelationshipElement ;
+                <https://admin-shell.io/aas/3/0/Referable/idShort> "something_0921a907"^^xs:string ;
                 <https://admin-shell.io/aas/3/0/RelationshipElement/first> [
                     rdf:type aas:Reference ;
                     <https://admin-shell.io/aas/3/0/Reference/type> <https://admin-shell.io/aas/3/0/ReferenceTypes/ModelReference> ;
@@ -108,6 +111,7 @@
             rdf:type aas:OperationVariable ;
             <https://admin-shell.io/aas/3/0/OperationVariable/value> [
                 rdf:type aas:MultiLanguageProperty ;
+                <https://admin-shell.io/aas/3/0/Referable/idShort> "something_89e4ed5f"^^xs:string ;
             ] ;
         ] ;
     ] ;

@@ -187,9 +187,8 @@ def _generate(
         warning,
         Stripped(
             """\
-from aas_core3 import types as aas_types
-
-from aas_core3_0_testgen import common"""
+from aas_core3_0_testgen import common
+from aas_core3 import types as aas_types"""
         ),
         _generate_abstract_handyman(symbol_table=symbol_table),
         warning,

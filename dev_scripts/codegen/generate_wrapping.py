@@ -438,10 +438,9 @@ from typing import (
 {I}Union
 )
 
-from aas_core3 import types as aas_types
-
 from aas_core3_0_testgen import common
-from aas_core3_0_testgen.codegened import creation"""
+from aas_core3_0_testgen.codegened import creation
+from aas_core3 import types as aas_types"""
         ),
     ]
 

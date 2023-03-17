@@ -14,7 +14,6 @@ from typing import (
     Any,
 )
 
-import aas_core3.types as aas_types
 import aas_core_codegen.common
 import aas_core_codegen.parse
 import aas_core_codegen.run
@@ -22,6 +21,8 @@ import aas_core_meta.v3
 from aas_core_codegen import intermediate, infer_for_schema
 from icontract import ensure
 from typing_extensions import assert_never
+
+import aas_core3.types as aas_types
 
 
 def load_symbol_table_and_infer_constraints_for_schema() -> Tuple[

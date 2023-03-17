@@ -10,11 +10,11 @@ import ast
 import inspect
 from typing import TypeVar, List, Type, Sequence, Union, Optional
 
+from typing_extensions import assert_never
+
 import aas_core3.constants as aas_constants
 import aas_core3.types as aas_types
 import aas_core3.verification as aas_verification
-from typing_extensions import assert_never
-
 from aas_core3_0_testgen import common, primitiving
 from aas_core3_0_testgen.codegened import abstract_fixing, preserialization, creation
 from aas_core3_0_testgen.frozen_examples import xs_value as frozen_examples_xs_value
@@ -23,9 +23,9 @@ LangStringT = TypeVar("LangStringT", bound=aas_types.AbstractLangString)
 
 
 def _extend_lang_string_set_to_have_an_entry_at_least_in_english(
-        path_hash: common.CanHash,
-        lang_string_set: List[LangStringT],
-        lang_string_class: Type[LangStringT],
+    path_hash: common.CanHash,
+    lang_string_set: List[LangStringT],
+    lang_string_class: Type[LangStringT],
 ) -> None:
     """Extend ``lang_string_set`` to contain at least one entry in English."""
     has_english = False
@@ -90,8 +90,8 @@ def generate_id_short(path_hash: common.CanHash) -> str:
 
 
 def generate_model_reference(
-        path_hash: common.CanHash,
-        expected_type: aas_types.KeyTypes,
+    path_hash: common.CanHash,
+    expected_type: aas_types.KeyTypes,
 ) -> aas_types.Reference:
     """Generate a model reference to something semi-random of ``expected_type``."""
     if expected_type in aas_constants.AAS_IDENTIFIABLES:
@@ -102,8 +102,8 @@ def generate_model_reference(
             )
         ]
     elif (
-            expected_type in aas_constants.AAS_SUBMODEL_ELEMENTS_AS_KEYS
-            or expected_type is aas_types.KeyTypes.REFERABLE
+        expected_type in aas_constants.AAS_SUBMODEL_ELEMENTS_AS_KEYS
+        or expected_type is aas_types.KeyTypes.REFERABLE
     ):
         keys = [
             aas_types.Key(
@@ -142,7 +142,7 @@ def generate_external_reference(path_hash: common.CanHash) -> aas_types.Referenc
 
 
 def generate_xs_value(
-        path_hash: common.CanHash, value_type: aas_types.DataTypeDefXSD
+    path_hash: common.CanHash, value_type: aas_types.DataTypeDefXSD
 ) -> str:
     """Generate a semi-random value corresponding to the ``value_tyep``."""
     return primitiving.choose_value(
@@ -179,7 +179,7 @@ assert all(
 
 
 def generate_minimal_submodel_element(
-        submodel_element_type: aas_types.AASSubmodelElements, path_hash: common.CanHash
+    submodel_element_type: aas_types.AASSubmodelElements, path_hash: common.CanHash
 ) -> aas_types.SubmodelElement:
     """Generate a minimal instance of the given submodel element type."""
     minimal_function = _AAS_SUBMODEL_ELEMENTS_TO_MINIMAL[submodel_element_type]
@@ -190,8 +190,7 @@ class _Handyman(abstract_fixing.AbstractHandyman):
     """Fix the instances recursively on the best-effort basis."""
 
     def _fix_annotated_relationship_element(
-            self, that: aas_types.AnnotatedRelationshipElement,
-            path_hash: common.CanHash
+        self, that: aas_types.AnnotatedRelationshipElement, path_hash: common.CanHash
     ) -> None:
         # Fix for AASd-117
         if that.annotations is not None:
@@ -202,7 +201,7 @@ class _Handyman(abstract_fixing.AbstractHandyman):
                     )
 
     def _fix_asset_administration_shell(
-            self, that: aas_types.AssetAdministrationShell, path_hash: common.CanHash
+        self, that: aas_types.AssetAdministrationShell, path_hash: common.CanHash
     ) -> None:
         # Fix for AASd-117
         if that.id_short is None:
@@ -227,7 +226,7 @@ class _Handyman(abstract_fixing.AbstractHandyman):
             ]
 
     def _fix_asset_information(
-            self, that: aas_types.AssetInformation, path_hash: common.CanHash
+        self, that: aas_types.AssetInformation, path_hash: common.CanHash
     ) -> None:
         # region Fix for AASd-131
         if that.global_asset_id is None and that.specific_asset_ids is None:
@@ -241,7 +240,7 @@ class _Handyman(abstract_fixing.AbstractHandyman):
         # endregion
 
     def _fix_basic_event_element(
-            self, that: aas_types.BasicEventElement, path_hash: common.CanHash
+        self, that: aas_types.BasicEventElement, path_hash: common.CanHash
     ) -> None:
         # Fix that the observed is a proper model reference
         if that.observed is not None:
@@ -263,7 +262,7 @@ class _Handyman(abstract_fixing.AbstractHandyman):
             )
 
     def _fix_concept_description(
-            self, that: aas_types.ConceptDescription, path_hash: common.CanHash
+        self, that: aas_types.ConceptDescription, path_hash: common.CanHash
     ) -> None:
         # Fix for AASd-117
         if that.id_short is None:
@@ -274,11 +273,11 @@ class _Handyman(abstract_fixing.AbstractHandyman):
         # Fix AASc-3a-008
         if that.embedded_data_specifications is not None:
             if not aas_verification.data_specification_iec_61360s_have_definition_at_least_in_english(
-                    that.embedded_data_specifications
+                that.embedded_data_specifications
             ) and not (
-                    aas_verification.data_specification_iec_61360s_have_value(
-                        that.embedded_data_specifications
-                    )
+                aas_verification.data_specification_iec_61360s_have_value(
+                    that.embedded_data_specifications
+                )
             ):
                 for i, ebd in enumerate(that.embedded_data_specifications):
                     if isinstance(ebd, aas_types.DataSpecificationIEC61360):
@@ -296,7 +295,7 @@ class _Handyman(abstract_fixing.AbstractHandyman):
                         )
 
     def _fix_data_specification_iec_61360(
-            self, that: aas_types.DataSpecificationIEC61360, path_hash: common.CanHash
+        self, that: aas_types.DataSpecificationIEC61360, path_hash: common.CanHash
     ) -> None:
         # Constraint AASc-3a-010: If value and value_list, pick value
         if that.value is not None and that.value_list is not None:
@@ -308,8 +307,8 @@ class _Handyman(abstract_fixing.AbstractHandyman):
 
         # Constraint AASc-3a-009: unit or unit ID must be set if data type requires it
         if (
-                that.data_type is not None
-                and that.data_type in aas_constants.IEC_61360_DATA_TYPES_WITH_UNIT
+            that.data_type is not None
+            and that.data_type in aas_constants.IEC_61360_DATA_TYPES_WITH_UNIT
         ):
             that.unit = primitiving.generate_str(common.hash_path(path_hash, "unit"))
 
@@ -340,10 +339,10 @@ class _Handyman(abstract_fixing.AbstractHandyman):
             that.specific_asset_ids = None
 
     def _fix_event_payload(
-            self, that: aas_types.EventPayload, path_hash: common.CanHash
+        self, that: aas_types.EventPayload, path_hash: common.CanHash
     ) -> None:
         if not aas_verification.is_model_reference_to(
-                that.source, aas_types.KeyTypes.EVENT_ELEMENT
+            that.source, aas_types.KeyTypes.EVENT_ELEMENT
         ) and not aas_verification.is_model_reference_to(
             that.source, aas_types.KeyTypes.BASIC_EVENT_ELEMENT
         ):
@@ -353,7 +352,7 @@ class _Handyman(abstract_fixing.AbstractHandyman):
             )
 
         if not aas_verification.is_model_reference_to_referable(
-                that.observable_reference
+            that.observable_reference
         ):
             that.observable_reference = generate_model_reference(
                 path_hash=common.hash_path(path_hash, "source"),
@@ -361,20 +360,20 @@ class _Handyman(abstract_fixing.AbstractHandyman):
             )
 
     def _fix_extension(
-            self, that: aas_types.Extension, path_hash: common.CanHash
+        self, that: aas_types.Extension, path_hash: common.CanHash
     ) -> None:
         # Fix: The value must match the value type.
         if that.value is not None:
             value_type = that.value_type_or_default()
             if not aas_verification.value_consistent_with_xsd_type(
-                    that.value, value_type
+                that.value, value_type
             ):
                 that.value = generate_xs_value(
                     common.hash_path(path_hash, "value"), value_type
                 )
 
     def _fix_operation(
-            self, that: aas_types.Operation, path_hash: common.CanHash
+        self, that: aas_types.Operation, path_hash: common.CanHash
     ) -> None:
         # Fix for AASd-117
         if that.input_variables is not None:
@@ -407,26 +406,26 @@ class _Handyman(abstract_fixing.AbstractHandyman):
                     )
 
     def _fix_property(
-            self, that: aas_types.Property, path_hash: common.CanHash
+        self, that: aas_types.Property, path_hash: common.CanHash
     ) -> None:
         if (
-                that.value is not None
-                and not aas_verification.value_consistent_with_xsd_type(
-            that.value, that.value_type
-        )
+            that.value is not None
+            and not aas_verification.value_consistent_with_xsd_type(
+                that.value, that.value_type
+            )
         ):
             that.value = generate_xs_value(
                 common.hash_path(path_hash, "value"), that.value_type
             )
 
     def _fix_qualifier(
-            self, that: aas_types.Qualifier, path_hash: common.CanHash
+        self, that: aas_types.Qualifier, path_hash: common.CanHash
     ) -> None:
         if (
-                that.value is not None
-                and not aas_verification.value_consistent_with_xsd_type(
-            that.value, that.value_type
-        )
+            that.value is not None
+            and not aas_verification.value_consistent_with_xsd_type(
+                that.value, that.value_type
+            )
         ):
             that.value = generate_xs_value(
                 common.hash_path(path_hash, "value"), that.value_type
@@ -450,7 +449,7 @@ class _Handyman(abstract_fixing.AbstractHandyman):
             )
 
     def _fix_reference(
-            self, that: aas_types.Reference, path_hash: common.CanHash
+        self, that: aas_types.Reference, path_hash: common.CanHash
     ) -> None:
         # NOTE (mristin, 2023-03-11):
         # We first check if this instance needs fixing at all. It could be
@@ -486,7 +485,7 @@ class _Handyman(abstract_fixing.AbstractHandyman):
             assert_never(that.type)
 
     def _fix_submodel(
-            self, that: aas_types.Submodel, path_hash: common.CanHash
+        self, that: aas_types.Submodel, path_hash: common.CanHash
     ) -> None:
         # Fix for AASd-117
         if that.id_short is None:
@@ -510,9 +509,9 @@ class _Handyman(abstract_fixing.AbstractHandyman):
         must_be_template = False
         if that.qualifiers is not None:
             if any(
-                    qualifier.kind_or_default()
-                    is aas_types.QualifierKind.TEMPLATE_QUALIFIER
-                    for qualifier in that.qualifiers
+                qualifier.kind_or_default()
+                is aas_types.QualifierKind.TEMPLATE_QUALIFIER
+                for qualifier in that.qualifiers
             ):
                 must_be_template = True
 
@@ -522,8 +521,8 @@ class _Handyman(abstract_fixing.AbstractHandyman):
                 if submodel_element.qualifiers is not None:
                     for qualifier in submodel_element.qualifiers:
                         if (
-                                qualifier.kind_or_default()
-                                is aas_types.QualifierKind.TEMPLATE_QUALIFIER
+                            qualifier.kind_or_default()
+                            is aas_types.QualifierKind.TEMPLATE_QUALIFIER
                         ):
                             must_be_template = True
                             break
@@ -537,7 +536,7 @@ class _Handyman(abstract_fixing.AbstractHandyman):
         # endregion
 
     def _fix_submodel_element_collection(
-            self, that: aas_types.SubmodelElementCollection, path_hash: common.CanHash
+        self, that: aas_types.SubmodelElementCollection, path_hash: common.CanHash
     ) -> None:
         # Fix: ID-shorts need to be defined for all the elements.
         if that.value is not None:
@@ -548,7 +547,7 @@ class _Handyman(abstract_fixing.AbstractHandyman):
                     )
 
     def _fix_submodel_element_list(
-            self, that: aas_types.SubmodelElementList, path_hash: common.CanHash
+        self, that: aas_types.SubmodelElementList, path_hash: common.CanHash
     ) -> None:
         if that.value is not None:
             # Fix AASd-107
@@ -574,7 +573,7 @@ class _Handyman(abstract_fixing.AbstractHandyman):
                 new_value = []  # type: List[aas_types.SubmodelElement]
                 for i, item in enumerate(that.value):
                     if aas_verification.submodel_element_is_of_type(
-                            item, that.type_value_list_element
+                        item, that.type_value_list_element
                     ):
                         new_value.append(item)
                         continue
@@ -590,8 +589,8 @@ class _Handyman(abstract_fixing.AbstractHandyman):
 
             # Fix AASd-109
             if that.type_value_list_element in (
-                    aas_types.AASSubmodelElements.PROPERTY,
-                    aas_types.AASSubmodelElements.RANGE,
+                aas_types.AASSubmodelElements.PROPERTY,
+                aas_types.AASSubmodelElements.RANGE,
             ):
                 if that.value_type_list_element is None:
                     that.value_type_list_element = aas_types.DataTypeDefXSD.INT
@@ -633,9 +632,9 @@ _assert_fix_methods_sorted_in_handyman()
 
 
 def assert_instance_at_path_in_environment(
-        environment: aas_types.Environment,
-        instance: aas_types.Class,
-        path: Sequence[Union[str, int]],
+    environment: aas_types.Environment,
+    instance: aas_types.Class,
+    path: Sequence[Union[str, int]],
 ) -> None:
     """Assert that the ``instance`` still resides in ``environment`` at ``path``."""
     something, error = common.dereference_instance(container=environment, path=path)
