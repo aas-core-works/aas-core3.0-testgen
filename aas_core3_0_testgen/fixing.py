@@ -203,12 +203,6 @@ class _Handyman(abstract_fixing.AbstractHandyman):
     def _fix_asset_administration_shell(
         self, that: aas_types.AssetAdministrationShell, path_hash: common.CanHash
     ) -> None:
-        # Fix for AASd-117
-        if that.id_short is None:
-            that.id_short = primitiving.generate_str(
-                common.hash_path(path_hash, "id_short")
-            )
-
         # Fix: Derived-from must be a model reference to an asset administration shell.
         if that.derived_from is not None:
             that.derived_from = generate_model_reference(
@@ -264,12 +258,6 @@ class _Handyman(abstract_fixing.AbstractHandyman):
     def _fix_concept_description(
         self, that: aas_types.ConceptDescription, path_hash: common.CanHash
     ) -> None:
-        # Fix for AASd-117
-        if that.id_short is None:
-            that.id_short = primitiving.generate_str(
-                common.hash_path(path_hash, "id_short")
-            )
-
         # Fix AASc-3a-008
         if that.embedded_data_specifications is not None:
             if not aas_verification.data_specification_iec_61360s_have_definition_at_least_in_english(
@@ -334,6 +322,14 @@ class _Handyman(abstract_fixing.AbstractHandyman):
         if that.entity_type is aas_types.EntityType.SELF_MANAGED_ENTITY:
             if that.global_asset_id is not None and that.specific_asset_ids is not None:
                 that.specific_asset_ids = None
+
+            elif that.global_asset_id is None and that.specific_asset_ids is None:
+                that.global_asset_id = generate_urn(
+                    common.hash_path(path_hash, ["global_asset_id"])
+                )
+            else:
+                pass
+
         else:
             that.global_asset_id = None
             that.specific_asset_ids = None
@@ -487,12 +483,6 @@ class _Handyman(abstract_fixing.AbstractHandyman):
     def _fix_submodel(
         self, that: aas_types.Submodel, path_hash: common.CanHash
     ) -> None:
-        # Fix for AASd-117
-        if that.id_short is None:
-            that.id_short = primitiving.generate_str(
-                common.hash_path(path_hash, "id_short")
-            )
-
         # ID shorts must be defined for all submodel elements
         if that.submodel_elements is not None:
             for i, submodel_element in enumerate(that.submodel_elements):

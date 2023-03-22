@@ -5,5 +5,4 @@
 @prefix xs: <http://www.w3.org/2001/XMLSchema#> .
 
 <ID-UNSPECIFIED> rdf:type aas:Submodel ;
-    <https://admin-shell.io/aas/3/0/Referable/idShort> "something_f8c8ea97"^^xs:string ;
 .
