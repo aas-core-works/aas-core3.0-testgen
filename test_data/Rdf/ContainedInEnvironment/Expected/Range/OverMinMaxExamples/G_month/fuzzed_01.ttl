@@ -9,7 +9,7 @@
     <https://admin-shell.io/aas/3/0/Submodel/submodelElements> [
         rdf:type aas:Range ;
         <https://admin-shell.io/aas/3/0/Referable/idShort> "something3fdd3eb4"^^xs:string ;
-        <https://admin-shell.io/aas/3/0/Range/valueType> <https://admin-shell.io/aas/3/0/DataTypeDefXSD/GMonth> ;
+        <https://admin-shell.io/aas/3/0/Range/valueType> <https://admin-shell.io/aas/3/0/DataTypeDefXsd/GMonth> ;
         <https://admin-shell.io/aas/3/0/Range/min> "--11-13:34"^^xs:string ;
         <https://admin-shell.io/aas/3/0/Range/max> "--11-13:34"^^xs:string ;
     ] ;

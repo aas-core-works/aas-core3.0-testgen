@@ -9,7 +9,7 @@
     <https://admin-shell.io/aas/3/0/Qualifiable/qualifiers> [
         rdf:type aas:Qualifier ;
         <https://admin-shell.io/aas/3/0/Qualifier/type> "something_5964ab43"^^xs:string ;
-        <https://admin-shell.io/aas/3/0/Qualifier/valueType> <https://admin-shell.io/aas/3/0/DataTypeDefXSD/UnsignedByte> ;
+        <https://admin-shell.io/aas/3/0/Qualifier/valueType> <https://admin-shell.io/aas/3/0/DataTypeDefXsd/UnsignedByte> ;
         <https://admin-shell.io/aas/3/0/Qualifier/value> "232"^^xs:string ;
     ] ;
 .

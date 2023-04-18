@@ -9,7 +9,7 @@
     <https://admin-shell.io/aas/3/0/Qualifiable/qualifiers> [
         rdf:type aas:Qualifier ;
         <https://admin-shell.io/aas/3/0/Qualifier/type> "something_5964ab43"^^xs:string ;
-        <https://admin-shell.io/aas/3/0/Qualifier/valueType> <https://admin-shell.io/aas/3/0/DataTypeDefXSD/GYear> ;
+        <https://admin-shell.io/aas/3/0/Qualifier/valueType> <https://admin-shell.io/aas/3/0/DataTypeDefXsd/GYear> ;
         <https://admin-shell.io/aas/3/0/Qualifier/value> "2001+02:00:12"^^xs:string ;
     ] ;
 .
