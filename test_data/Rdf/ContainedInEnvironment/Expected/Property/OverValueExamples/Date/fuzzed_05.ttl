@@ -9,7 +9,7 @@
     <https://admin-shell.io/aas/3/0/Submodel/submodelElements> [
         rdf:type aas:Property ;
         <https://admin-shell.io/aas/3/0/Referable/idShort> "something3fdd3eb4"^^xs:string ;
-        <https://admin-shell.io/aas/3/0/Property/valueType> <https://admin-shell.io/aas/3/0/DataTypeDefXSD/Date> ;
+        <https://admin-shell.io/aas/3/0/Property/valueType> <https://admin-shell.io/aas/3/0/DataTypeDefXsd/Date> ;
         <https://admin-shell.io/aas/3/0/Property/value> "-3637143-04-09"^^xs:string ;
     ] ;
 .

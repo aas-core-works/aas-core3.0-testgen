@@ -9,7 +9,7 @@
     <https://admin-shell.io/aas/3/0/Qualifiable/qualifiers> [
         rdf:type aas:Qualifier ;
         <https://admin-shell.io/aas/3/0/Qualifier/type> "something_5964ab43"^^xs:string ;
-        <https://admin-shell.io/aas/3/0/Qualifier/valueType> <https://admin-shell.io/aas/3/0/DataTypeDefXSD/AnyUri> ;
+        <https://admin-shell.io/aas/3/0/Qualifier/valueType> <https://admin-shell.io/aas/3/0/DataTypeDefXsd/AnyUri> ;
         <https://admin-shell.io/aas/3/0/Qualifier/value> "//%2f%6B!+ď%B6ĶĮ!¸򆴽%9f@252.234.9.112:365//::񪪝%Bc%Ab:,%B6??#Ī?/"^^xs:string ;
     ] ;
 .

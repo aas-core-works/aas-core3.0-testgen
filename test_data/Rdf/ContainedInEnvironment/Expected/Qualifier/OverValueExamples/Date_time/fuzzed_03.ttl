@@ -9,7 +9,7 @@
     <https://admin-shell.io/aas/3/0/Qualifiable/qualifiers> [
         rdf:type aas:Qualifier ;
         <https://admin-shell.io/aas/3/0/Qualifier/type> "something_5964ab43"^^xs:string ;
-        <https://admin-shell.io/aas/3/0/Qualifier/valueType> <https://admin-shell.io/aas/3/0/DataTypeDefXSD/DateTime> ;
+        <https://admin-shell.io/aas/3/0/Qualifier/valueType> <https://admin-shell.io/aas/3/0/DataTypeDefXsd/DateTime> ;
         <https://admin-shell.io/aas/3/0/Qualifier/value> "-665280014-06-30T21:15:16Z"^^xs:string ;
     ] ;
 .
