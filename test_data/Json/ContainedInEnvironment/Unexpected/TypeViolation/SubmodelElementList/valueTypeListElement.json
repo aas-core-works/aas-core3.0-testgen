@@ -96,17 +96,7 @@
               "modelType": "Entity"
             }
           ],
-          "valueTypeListElement": [
-            {
-              "keys": [
-                {
-                  "type": "GlobalReference",
-                  "value": "unexpected instance"
-                }
-              ],
-              "type": "ExternalReference"
-            }
-          ]
+          "valueTypeListElement": "Unexpected string value"
         }
       ]
     }

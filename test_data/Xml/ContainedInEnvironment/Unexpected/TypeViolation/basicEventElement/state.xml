@@ -87,17 +87,7 @@
 						</keys>
 					</observed>
 					<direction>output</direction>
-					<state>
-						<reference>
-							<type>ExternalReference</type>
-							<keys>
-								<key>
-									<type>GlobalReference</type>
-									<value>unexpected instance</value>
-								</key>
-							</keys>
-						</reference>
-					</state>
+					<state>Unexpected string value</state>
 					<messageTopic>something_99f1a7ac</messageTopic>
 					<messageBroker>
 						<type>ModelReference</type>

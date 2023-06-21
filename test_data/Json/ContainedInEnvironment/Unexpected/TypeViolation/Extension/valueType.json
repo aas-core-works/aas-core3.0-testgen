@@ -40,17 +40,7 @@
             }
           ],
           "value": "10233",
-          "valueType": [
-            {
-              "keys": [
-                {
-                  "type": "GlobalReference",
-                  "value": "unexpected instance"
-                }
-              ],
-              "type": "ExternalReference"
-            }
-          ]
+          "valueType": "Unexpected string value"
         }
       ],
       "id": "something_142922d6",

@@ -88,17 +88,7 @@
 						</keys>
 					</semanticIdListElement>
 					<typeValueListElement>Entity</typeValueListElement>
-					<valueTypeListElement>
-						<reference>
-							<type>ExternalReference</type>
-							<keys>
-								<key>
-									<type>GlobalReference</type>
-									<value>unexpected instance</value>
-								</key>
-							</keys>
-						</reference>
-					</valueTypeListElement>
+					<valueTypeListElement>Unexpected string value</valueTypeListElement>
 					<value>
 						<entity>
 							<entityType>SelfManagedEntity</entityType>

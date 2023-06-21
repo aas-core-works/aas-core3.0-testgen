@@ -87,17 +87,7 @@
 							</key>
 						</keys>
 					</semanticIdListElement>
-					<typeValueListElement>
-						<reference>
-							<type>ExternalReference</type>
-							<keys>
-								<key>
-									<type>GlobalReference</type>
-									<value>unexpected instance</value>
-								</key>
-							</keys>
-						</reference>
-					</typeValueListElement>
+					<typeValueListElement>Unexpected string value</typeValueListElement>
 					<valueTypeListElement>xs:byte</valueTypeListElement>
 					<value>
 						<entity>

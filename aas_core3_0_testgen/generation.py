@@ -818,7 +818,9 @@ def _generate_type_violations(maximal_case: CaseMaximal) -> Iterator[CaseTypeVio
         # region Mutate
         type_anno = intermediate.beneath_optional(prop.type_annotation)
 
-        if not isinstance(type_anno, intermediate.ListTypeAnnotation):
+        primitive_type = intermediate.try_primitive_type(type_anno)
+
+        if primitive_type is not None:
             unexpected_instance, _ = preserialization.preserialize(
                 aas_types.Reference(
                     type=aas_types.ReferenceTypes.EXTERNAL_REFERENCE,
