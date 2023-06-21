@@ -25,17 +25,7 @@
 							</keys>
 						</reference>
 					</supplementalSemanticIds>
-					<kind>
-						<reference>
-							<type>ExternalReference</type>
-							<keys>
-								<key>
-									<type>GlobalReference</type>
-									<value>unexpected instance</value>
-								</key>
-							</keys>
-						</reference>
-					</kind>
+					<kind>Unexpected string value</kind>
 					<type>something_5964ab43</type>
 					<valueType>xs:integer</valueType>
 					<value>001</value>

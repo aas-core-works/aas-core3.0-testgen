@@ -49,17 +49,7 @@
       ],
       "id": "something_48c66017",
       "idShort": "fiZ",
-      "kind": [
-        {
-          "keys": [
-            {
-              "type": "GlobalReference",
-              "value": "unexpected instance"
-            }
-          ],
-          "type": "ExternalReference"
-        }
-      ],
+      "kind": "Unexpected string value",
       "modelType": "Submodel",
       "qualifiers": [
         {

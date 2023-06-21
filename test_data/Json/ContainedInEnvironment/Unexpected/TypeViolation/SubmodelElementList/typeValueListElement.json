@@ -88,17 +88,7 @@
               "type": "ModelReference"
             }
           ],
-          "typeValueListElement": [
-            {
-              "keys": [
-                {
-                  "type": "GlobalReference",
-                  "value": "unexpected instance"
-                }
-              ],
-              "type": "ExternalReference"
-            }
-          ],
+          "typeValueListElement": "Unexpected string value",
           "value": [
             {
               "entityType": "SelfManagedEntity",

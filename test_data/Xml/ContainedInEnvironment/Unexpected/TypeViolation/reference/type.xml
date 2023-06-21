@@ -3,17 +3,7 @@
 		<assetAdministrationShell>
 			<id>something_142922d6</id>
 			<derivedFrom>
-				<type>
-					<reference>
-						<type>ExternalReference</type>
-						<keys>
-							<key>
-								<type>GlobalReference</type>
-								<value>unexpected instance</value>
-							</key>
-						</keys>
-					</reference>
-				</type>
+				<type>Unexpected string value</type>
 				<referredSemanticId>
 					<type>ExternalReference</type>
 					<keys>

@@ -83,17 +83,7 @@
 							<valueType>xs:gMonthDay</valueType>
 						</range>
 					</statements>
-					<entityType>
-						<reference>
-							<type>ExternalReference</type>
-							<keys>
-								<key>
-									<type>GlobalReference</type>
-									<value>unexpected instance</value>
-								</key>
-							</keys>
-						</reference>
-					</entityType>
+					<entityType>Unexpected string value</entityType>
 				</entity>
 			</submodelElements>
 		</submodel>

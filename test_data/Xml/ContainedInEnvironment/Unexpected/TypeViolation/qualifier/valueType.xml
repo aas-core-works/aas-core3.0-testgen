@@ -27,17 +27,7 @@
 					</supplementalSemanticIds>
 					<kind>TemplateQualifier</kind>
 					<type>something_5964ab43</type>
-					<valueType>
-						<reference>
-							<type>ExternalReference</type>
-							<keys>
-								<key>
-									<type>GlobalReference</type>
-									<value>unexpected instance</value>
-								</key>
-							</keys>
-						</reference>
-					</valueType>
+					<valueType>Unexpected string value</valueType>
 					<value>001</value>
 					<valueId>
 						<type>ModelReference</type>
