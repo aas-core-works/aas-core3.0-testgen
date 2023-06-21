@@ -77,7 +77,17 @@
 							</dataSpecificationContent>
 						</embeddedDataSpecification>
 					</embeddedDataSpecifications>
-					<valueType>Unexpected string value</valueType>
+					<valueType>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</valueType>
 					<value>0061707</value>
 					<valueId>
 						<type>ModelReference</type>

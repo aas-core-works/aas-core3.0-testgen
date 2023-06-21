@@ -17,7 +17,17 @@
             "type": "ExternalReference"
           },
           "dataSpecificationContent": {
-            "dataType": "Unexpected string value",
+            "dataType": [
+              {
+                "keys": [
+                  {
+                    "type": "GlobalReference",
+                    "value": "unexpected instance"
+                  }
+                ],
+                "type": "ExternalReference"
+              }
+            ],
             "definition": [
               {
                 "language": "X-33DQI-g",

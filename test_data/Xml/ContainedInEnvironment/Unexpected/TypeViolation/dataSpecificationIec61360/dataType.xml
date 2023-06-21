@@ -43,7 +43,17 @@
 							</unitId>
 							<sourceOfDefinition>something_1bd907c8</sourceOfDefinition>
 							<symbol>something_c13116d7</symbol>
-							<dataType>Unexpected string value</dataType>
+							<dataType>
+								<reference>
+									<type>ExternalReference</type>
+									<keys>
+										<key>
+											<type>GlobalReference</type>
+											<value>unexpected instance</value>
+										</key>
+									</keys>
+								</reference>
+							</dataType>
 							<definition>
 								<langStringDefinitionTypeIec61360>
 									<language>X-33DQI-g</language>
