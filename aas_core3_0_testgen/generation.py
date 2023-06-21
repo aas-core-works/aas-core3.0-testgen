@@ -820,7 +820,10 @@ def _generate_type_violations(maximal_case: CaseMaximal) -> Iterator[CaseTypeVio
 
         primitive_type = intermediate.try_primitive_type(type_anno)
 
-        if primitive_type is not None:
+        if primitive_type is not None or (
+            isinstance(type_anno, intermediate.OurTypeAnnotation)
+            and isinstance(type_anno.our_type, intermediate.Enumeration)
+        ):
             unexpected_instance, _ = preserialization.preserialize(
                 aas_types.Reference(
                     type=aas_types.ReferenceTypes.EXTERNAL_REFERENCE,

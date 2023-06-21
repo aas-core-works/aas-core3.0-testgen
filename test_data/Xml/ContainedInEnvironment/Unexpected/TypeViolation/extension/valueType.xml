@@ -24,7 +24,17 @@
 						</reference>
 					</supplementalSemanticIds>
 					<name>something_aae6caf4</name>
-					<valueType>Unexpected string value</valueType>
+					<valueType>
+						<reference>
+							<type>ExternalReference</type>
+							<keys>
+								<key>
+									<type>GlobalReference</type>
+									<value>unexpected instance</value>
+								</key>
+							</keys>
+						</reference>
+					</valueType>
 					<value>10233</value>
 					<refersTo>
 						<reference>

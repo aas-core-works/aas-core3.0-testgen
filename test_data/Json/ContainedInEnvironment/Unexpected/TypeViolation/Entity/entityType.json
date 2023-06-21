@@ -45,7 +45,17 @@
               }
             }
           ],
-          "entityType": "Unexpected string value",
+          "entityType": [
+            {
+              "keys": [
+                {
+                  "type": "GlobalReference",
+                  "value": "unexpected instance"
+                }
+              ],
+              "type": "ExternalReference"
+            }
+          ],
           "extensions": [
             {
               "name": "something_aa1af8b3"

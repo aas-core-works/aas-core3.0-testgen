@@ -2,7 +2,17 @@
   "assetAdministrationShells": [
     {
       "assetInformation": {
-        "assetKind": "Unexpected string value",
+        "assetKind": [
+          {
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "unexpected instance"
+              }
+            ],
+            "type": "ExternalReference"
+          }
+        ],
         "assetType": "something_9f4c5692",
         "defaultThumbnail": {
           "path": "file:/M5/%bA:'%9c%6b%ed%00Y*/%4C=4h:d:"

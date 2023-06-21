@@ -21,7 +21,17 @@
           ],
           "type": "ExternalReference"
         },
-        "type": "Unexpected string value"
+        "type": [
+          {
+            "keys": [
+              {
+                "type": "GlobalReference",
+                "value": "unexpected instance"
+              }
+            ],
+            "type": "ExternalReference"
+          }
+        ]
       },
       "id": "something_142922d6",
       "modelType": "AssetAdministrationShell"
