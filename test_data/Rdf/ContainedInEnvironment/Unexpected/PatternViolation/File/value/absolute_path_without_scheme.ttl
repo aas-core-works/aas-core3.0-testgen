@@ -67,7 +67,7 @@
                 ] ;
                 <https://admin-shell.io/aas/3/0/DataSpecificationIec61360/preferredName> [
                     rdf:type aas:LangStringPreferredNameTypeIec61360 ;
-                    <https://admin-shell.io/aas/3/0/AbstractLangString/language> "en-UK"^^xs:string ;
+                    <https://admin-shell.io/aas/3/0/AbstractLangString/language> "en-GB"^^xs:string ;
                     <https://admin-shell.io/aas/3/0/AbstractLangString/text> "Something random in English c8512bdf"^^xs:string ;
                 ] ;
                 <https://admin-shell.io/aas/3/0/DataSpecificationIec61360/value> "something_4e9c19b7"^^xs:string ;
