@@ -40,7 +40,7 @@ def _extend_lang_string_set_to_have_an_entry_at_least_in_english(
 
         lang_string_set.append(
             lang_string_class(
-                language="en-UK",
+                language="en-GB",
                 text=f"Something random in English {text_path_hash.hexdigest()[:8]}",
             )
         )
