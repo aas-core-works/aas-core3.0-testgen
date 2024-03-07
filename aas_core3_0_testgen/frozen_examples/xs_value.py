@@ -382,7 +382,7 @@ BY_VALUE_TYPE: Mapping[str, Examples] = collections.OrderedDict(
                         ("fuzzed_06", "+76E-86"),
                         ("fuzzed_07", "-.662"),
                         ("fuzzed_08", "1e+7"),
-                        ("fuzzed_09", "-.66E-452289"),
+                        ("fuzzed_09", "-.66E-45"),
                         ("fuzzed_10", "140206134"),
                     ]
                 ),
