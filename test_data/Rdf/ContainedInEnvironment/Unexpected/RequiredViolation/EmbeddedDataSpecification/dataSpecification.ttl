@@ -12,7 +12,7 @@
             rdf:type aas:DataSpecificationIec61360 ;
             <https://admin-shell.io/aas/3/0/DataSpecificationIec61360/preferredName> [
                 rdf:type aas:LangStringPreferredNameTypeIec61360 ;
-                <https://admin-shell.io/aas/3/0/AbstractLangString/language> "X-33DQI-g"^^xs:string ;
+                <https://admin-shell.io/aas/3/0/AbstractLangString/language> "i-enochian"^^xs:string ;
                 <https://admin-shell.io/aas/3/0/AbstractLangString/text> "something_84b0b440"^^xs:string ;
             ] ;
             <https://admin-shell.io/aas/3/0/DataSpecificationIec61360/preferredName> [
