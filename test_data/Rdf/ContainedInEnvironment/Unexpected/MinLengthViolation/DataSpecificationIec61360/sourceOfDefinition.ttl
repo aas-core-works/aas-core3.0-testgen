@@ -21,7 +21,7 @@
             rdf:type aas:DataSpecificationIec61360 ;
             <https://admin-shell.io/aas/3/0/DataSpecificationIec61360/preferredName> [
                 rdf:type aas:LangStringPreferredNameTypeIec61360 ;
-                <https://admin-shell.io/aas/3/0/AbstractLangString/language> "X-33DQI-g"^^xs:string ;
+                <https://admin-shell.io/aas/3/0/AbstractLangString/language> "i-enochian"^^xs:string ;
                 <https://admin-shell.io/aas/3/0/AbstractLangString/text> "something_84b0b440"^^xs:string ;
             ] ;
             <https://admin-shell.io/aas/3/0/DataSpecificationIec61360/preferredName> [
@@ -31,7 +31,7 @@
             ] ;
             <https://admin-shell.io/aas/3/0/DataSpecificationIec61360/shortName> [
                 rdf:type aas:LangStringShortNameTypeIec61360 ;
-                <https://admin-shell.io/aas/3/0/AbstractLangString/language> "X-33DQI-g"^^xs:string ;
+                <https://admin-shell.io/aas/3/0/AbstractLangString/language> "x-whatever"^^xs:string ;
                 <https://admin-shell.io/aas/3/0/AbstractLangString/text> "something_65af8271"^^xs:string ;
             ] ;
             <https://admin-shell.io/aas/3/0/DataSpecificationIec61360/unit> "something_a6bd9450"^^xs:string ;
@@ -49,7 +49,7 @@
             <https://admin-shell.io/aas/3/0/DataSpecificationIec61360/dataType> <https://admin-shell.io/aas/3/0/DataTypeIec61360/Date> ;
             <https://admin-shell.io/aas/3/0/DataSpecificationIec61360/definition> [
                 rdf:type aas:LangStringDefinitionTypeIec61360 ;
-                <https://admin-shell.io/aas/3/0/AbstractLangString/language> "X-33DQI-g"^^xs:string ;
+                <https://admin-shell.io/aas/3/0/AbstractLangString/language> "de-Qaaa"^^xs:string ;
                 <https://admin-shell.io/aas/3/0/AbstractLangString/text> "something_2ae95f9f"^^xs:string ;
             ] ;
             <https://admin-shell.io/aas/3/0/DataSpecificationIec61360/valueFormat> "something_f019e5a8"^^xs:string ;
