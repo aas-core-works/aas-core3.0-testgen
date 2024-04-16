@@ -363,124 +363,43 @@ BY_PATTERN: Mapping[str, Examples] = collections.OrderedDict(
                         ("simple_language_subtag_3", "ja"),
                         (
                             "simple_language_subtag_example_of_a_grandfathered_tag",
-                            "i-enochian"
+                            "i-enochian",
                         ),
-                        (
-                            "language_subtag_plus_script_subtag_1",
-                            "zh-Hant"
-                        ),
-                        (
-                            "language_subtag_plus_script_subtag_2",
-                            "zh-Hans"
-                        ),
-                        (
-                            "language_subtag_plus_script_subtag_3",
-                            "sr-Cyrl"
-                        ),
-                        (
-                            "language_subtag_plus_script_subtag_4",
-                            "sr-Latn"
-                        ),
-                        (
-                            "extended_language_subtags_1",
-                            "zh-cmn-Hans-CN"
-                        ),
-                        (
-                            "extended_language_subtags_2",
-                            "cmn-Hans-CN"
-                        ),
-                        (
-                            "extended_language_subtags_3",
-                            "zh-yue-HK"
-                        ),
-                        (
-                            "extended_language_subtags_4",
-                            "yue-HK"
-                        ),
-                        (
-                            "language_script_region_1",
-                            "zh-Hans-CN"
-                        ),
-                        (
-                            "language_script_region_2",
-                            "sr-Latn-RS"
-                        ),
-                        (
-                            "language_variant_1",
-                            "sl-rozaj"
-                        ),
-                        (
-                            "language_variant_2",
-                            "sl-rozaj-biske"
-                        ),
-                        (
-                            "language_variant_3",
-                            "sl-nedis"
-                        ),
-                        (
-                            "language_region_variant_1",
-                            "de-CH-1901"
-                        ),
-                        (
-                            "language_region_variant_2",
-                            "sl-IT-nedis"
-                        ),
-                        (
-                            "language_script_region_variant",
-                            "hy-Latn-IT-arevela"
-                        ),
-                        (
-                            "language_region_1",
-                            "de-DE"
-                        ),
-                        (
-                            "language_region_2",
-                            "en-US"
-                        ),
-                        (
-                            "language_region_3",
-                            "es-419"
-                        ),
-                        (
-                            "private_use_subtags_1",
-                            "de-CH-x-phonebk"
-                        ),
+                        ("language_subtag_plus_script_subtag_1", "zh-Hant"),
+                        ("language_subtag_plus_script_subtag_2", "zh-Hans"),
+                        ("language_subtag_plus_script_subtag_3", "sr-Cyrl"),
+                        ("language_subtag_plus_script_subtag_4", "sr-Latn"),
+                        ("extended_language_subtags_1", "zh-cmn-Hans-CN"),
+                        ("extended_language_subtags_2", "cmn-Hans-CN"),
+                        ("extended_language_subtags_3", "zh-yue-HK"),
+                        ("extended_language_subtags_4", "yue-HK"),
+                        ("language_script_region_1", "zh-Hans-CN"),
+                        ("language_script_region_2", "sr-Latn-RS"),
+                        ("language_variant_1", "sl-rozaj"),
+                        ("language_variant_2", "sl-rozaj-biske"),
+                        ("language_variant_3", "sl-nedis"),
+                        ("language_region_variant_1", "de-CH-1901"),
+                        ("language_region_variant_2", "sl-IT-nedis"),
+                        ("language_script_region_variant", "hy-Latn-IT-arevela"),
+                        ("language_region_1", "de-DE"),
+                        ("language_region_2", "en-US"),
+                        ("language_region_3", "es-419"),
+                        ("private_use_subtags_1", "de-CH-x-phonebk"),
                         (
                             "private_use_subtags_2",
                             "az-Arab-x-AZE-derbend",
                         ),
-                        (
-                            "private_use_registry_values_1",
-                            "x-whatever"
-                        ),
-                        (
-                            "private_use_registry_values_2",
-                            "qaa-Qaaa-QM-x-southern"
-                        ),
-                        (
-                            "private_use_registry_values_3",
-                            "de-Qaaa"
-                        ),
+                        ("private_use_registry_values_1", "x-whatever"),
+                        ("private_use_registry_values_2", "qaa-Qaaa-QM-x-southern"),
+                        ("private_use_registry_values_3", "de-Qaaa"),
                         (
                             "private_use_registry_values_4",
                             "sr-Latn-QM",
                         ),
-                        (
-                            "private_use_registry_values_5",
-                            "sr-Qaaa-RS"
-                        ),
-                        (
-                            "tag_with_extension_1",
-                            "en-US-u-islamcal"
-                        ),
-                        (
-                            "tag_with_extension_2",
-                            "zh-CN-a-myext-x-private"
-                        ),
-                        (
-                            "tag_with_extension_3",
-                            "en-a-myext-b-another"
-                        )
+                        ("private_use_registry_values_5", "sr-Qaaa-RS"),
+                        ("tag_with_extension_1", "en-US-u-islamcal"),
+                        ("tag_with_extension_2", "zh-CN-a-myext-x-private"),
+                        ("tag_with_extension_3", "en-a-myext-b-another"),
                     ]
                 ),
                 negatives=collections.OrderedDict(
