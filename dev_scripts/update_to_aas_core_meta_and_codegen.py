@@ -328,6 +328,16 @@ def _generate_test_data(our_repo: pathlib.Path) -> Optional[int]:
 
     Return an error code, if any.
     """
+    # NOTE (mristin, 2024-04-16):
+    # We delete first the generated test data since the meta-model influences also
+    # the directory structures.
+    #
+    # For example, required violations will change when a field is made optional.
+    test_data_dir = our_repo / "test_data"
+    shutil.rmtree(test_data_dir / "Json")
+    shutil.rmtree(test_data_dir / "Rdf")
+    shutil.rmtree(test_data_dir / "Xml")
+
     scripts = [
         our_repo / "aas_core3_0_testgen" / name
         for name in ("generate_json.py", "generate_rdf.py", "generate_xml.py")
