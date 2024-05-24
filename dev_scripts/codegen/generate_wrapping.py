@@ -413,7 +413,7 @@ def _generate(
         symbol_table=symbol_table
     )
 
-    warning = dev_scripts.codegen.common.generate_warning(__file__)
+    warning = dev_scripts.codegen.common.generate_warning(os.path.realpath(__file__))
 
     blocks = [
         Stripped(

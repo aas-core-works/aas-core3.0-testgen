@@ -284,7 +284,7 @@ def _generate(
     symbol_table: intermediate.SymbolTable,
 ) -> Tuple[Optional[Stripped], Optional[str]]:
     """Generate the module."""
-    warning = dev_scripts.codegen.common.generate_warning(__file__)
+    warning = dev_scripts.codegen.common.generate_warning(os.path.realpath(__file__))
 
     blocks = [
         Stripped('"""Pre-serialize the instances for further modification."""'),
