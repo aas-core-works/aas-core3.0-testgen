@@ -3,6 +3,8 @@ import collections
 from typing import Mapping
 
 import aas_core_meta.v3
+from aas_core_codegen import intermediate
+from aas_core_codegen.common import Identifier
 
 from aas_core3_0_testgen.frozen_examples._types import Examples
 
@@ -1360,11 +1362,15 @@ BY_VALUE_TYPE: Mapping[str, Examples] = collections.OrderedDict(
 )
 
 
-def _assert_all_covered_and_not_more() -> None:
+def assert_all_covered_and_not_more(symbol_table: intermediate.SymbolTable) -> None:
     """Assert that we covered all the XSD data types."""
     covered = set(BY_VALUE_TYPE.keys())
 
-    literal_values = {literal.value for literal in aas_core_meta.v3.Data_type_def_XSD}
+    data_type_def_xsd = symbol_table.must_find_enumeration(
+        name=Identifier("Data_type_def_XSD")
+    )
+
+    literal_values = {literal.value for literal in data_type_def_xsd.literals}
 
     not_covered = sorted(literal_values.difference(covered))
     surplus = sorted(covered.difference(literal_values))
@@ -1380,6 +1386,3 @@ def _assert_all_covered_and_not_more() -> None:
             f"The following keys in BY_VALUE_TYPE were not present in "
             f"{aas_core_meta.v3.Data_type_def_XSD.__name__} literals: {surplus}"
         )
-
-
-_assert_all_covered_and_not_more()

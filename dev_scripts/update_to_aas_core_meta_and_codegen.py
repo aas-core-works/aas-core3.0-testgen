@@ -17,6 +17,13 @@ import tempfile
 import time
 from typing import Optional, List, Callable, AnyStr, Sequence
 
+# NOTE (mristin):
+# We import the meta-model module here since we do not run this script to generate
+# the test data according to an arbitrary model, but to the concrete one as we pinned
+# it in ``setup.py``. We expect the files in ``test_data/`` directory to correspond to
+# exactly that meta-model version.
+import aas_core_meta.v3
+
 AAS_CORE_META_DEPENDENCY_RE = re.compile(
     r"aas-core-meta@git\+https://github.com/aas-core-works/aas-core-meta@([a-fA-F0-9]+)#egg=aas-core-meta"
 )
@@ -230,7 +237,14 @@ def _generate_code(our_repo: pathlib.Path) -> Optional[int]:
     # pylint: disable=consider-using-with
     calls = [
         lambda a_pth=pth, cwd=our_repo: subprocess.Popen(  # type: ignore
-            [sys.executable, str(a_pth)],
+            [
+                sys.executable,
+                str(a_pth),
+                "--model_path",
+                aas_core_meta.v3.__file__,
+                "--codegened_dir",
+                our_repo / "aas_core3_0_testgen" / "codegen",
+            ],
             cwd=str(cwd),
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
@@ -346,7 +360,14 @@ def _generate_test_data(our_repo: pathlib.Path) -> Optional[int]:
     # pylint: disable=consider-using-with
     calls = [
         lambda a_pth=script, cwd=our_repo: subprocess.Popen(
-            [sys.executable, str(a_pth)],
+            [
+                sys.executable,
+                str(a_pth),
+                "--model_path",
+                aas_core_meta.v3.__file__,
+                "--test_data_dir",
+                test_data_dir,
+            ],
             cwd=str(cwd),
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,

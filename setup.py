@@ -15,9 +15,6 @@ here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, "README.rst"), encoding="utf-8") as fid:
     long_description = fid.read()
 
-with open(os.path.join(here, "requirements.txt"), encoding="utf-8") as fid:
-    install_requires = [line for line in fid.read().splitlines() if line.strip()]
-
 setup(
     name="aas-core3.0-testgen",
     version="0.0.1",
@@ -36,7 +33,12 @@ setup(
     license="License :: OSI Approved :: MIT License",
     keywords="asset administration shell code generation industry 4.0 industrie i4.0",
     packages=find_packages(exclude=["tests", "continuous_integration", "dev_scripts"]),
-    install_requires=install_requires,
+    install_requires=[
+        "icontract>=2.5.2,<3",
+        "networkx==2.8",
+        "typing-extensions==4.5.0",
+        "aas-core-codegen@git+https://github.com/aas-core-works/aas-core-codegen@d06db62b#egg=aas-core-codegen",
+    ],
     # fmt: off
     extras_require={
         "dev": [
@@ -47,7 +49,6 @@ setup(
             "coverage>=6,<7",
             "twine",
             "aas-core-meta@git+https://github.com/aas-core-works/aas-core-meta@6d5411b#egg=aas-core-meta",
-            "aas-core-codegen@git+https://github.com/aas-core-works/aas-core-codegen@d06db62b#egg=aas-core-codegen",
             "hypothesis==6.46.3",
             "xmlschema==1.10.0",
             "jsonschema==4.17.3",
@@ -56,5 +57,5 @@ setup(
     # fmt: on
     py_modules=["aas_core3_0_testgen"],
     package_data={"aas_core3_0_testgen": ["py.typed"]},
-    data_files=[(".", ["LICENSE", "README.rst", "requirements.txt"])],
+    data_files=[(".", ["LICENSE", "README.rst"])],
 )

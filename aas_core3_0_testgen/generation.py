@@ -2652,6 +2652,12 @@ def generate(
     ],
 ) -> Iterator[CaseUnion]:
     """Generate the test cases."""
+    frozen_examples_pattern.assert_all_pattern_verification_functions_covered_and_not_more(
+        symbol_table=symbol_table, constraints_by_class=constraints_by_class
+    )
+
+    frozen_examples_xs_value.assert_all_covered_and_not_more(symbol_table=symbol_table)
+
     environment_cls = EnvironmentClass(
         symbol_table.must_find_concrete_class(Identifier("Environment"))
     )

@@ -10,9 +10,8 @@ automatically fuzz the patterns on-the-fly.
 import collections
 from typing import Mapping, MutableMapping, List
 
-from aas_core_codegen import intermediate
+from aas_core_codegen import intermediate, infer_for_schema
 
-from aas_core3_0_testgen import common
 from aas_core3_0_testgen.frozen_examples._types import Examples
 
 # noinspection SpellCheckingInspection
@@ -472,13 +471,13 @@ BY_PATTERN: Mapping[str, Examples] = collections.OrderedDict(
 )
 
 
-def _assert_all_pattern_verification_functions_covered_and_not_more() -> None:
+def assert_all_pattern_verification_functions_covered_and_not_more(
+    symbol_table: intermediate.SymbolTable,
+    constraints_by_class: Mapping[
+        intermediate.ClassUnion, infer_for_schema.ConstraintsByProperty
+    ],
+) -> None:
     """Assert that we have some pattern for each pattern verification function."""
-    (
-        symbol_table,
-        constraints_by_class,
-    ) = common.load_symbol_table_and_infer_constraints_for_schema()
-
     expected = {
         verification.pattern
         for verification in symbol_table.verification_functions
@@ -531,6 +530,3 @@ def _assert_all_pattern_verification_functions_covered_and_not_more() -> None:
             f"The following patterns could not be traced back to "
             f"any pattern verification function: {surplus}"
         )
-
-
-_assert_all_pattern_verification_functions_covered_and_not_more()

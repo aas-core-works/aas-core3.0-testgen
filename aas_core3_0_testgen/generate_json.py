@@ -1,9 +1,9 @@
 """Generate test data in JSON for the meta-model V3aas-core3.0-testgen."""
+import argparse
 import base64
 import collections
 import collections.abc
 import json
-import os
 import pathlib
 from typing import (
     Union,
@@ -263,12 +263,12 @@ def dereference(
     return cursor
 
 
-def generate(test_data_dir: pathlib.Path) -> None:
+def generate(model_path: pathlib.Path, test_data_dir: pathlib.Path) -> None:
     """Generate the JSON files."""
     (
         symbol_table,
         constraints_by_class,
-    ) = common.load_symbol_table_and_infer_constraints_for_schema()
+    ) = common.load_symbol_table_and_infer_constraints_for_schema(model_path=model_path)
 
     serializer = _Serializer(symbol_table=symbol_table)
 
@@ -292,10 +292,19 @@ def generate(test_data_dir: pathlib.Path) -> None:
 
 def main() -> None:
     """Execute the main routine."""
-    this_path = pathlib.Path(os.path.realpath(__file__))
-    test_data_dir = this_path.parent.parent / "test_data"
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--model_path", help="path to the meta-model", required=True)
+    parser.add_argument(
+        "--test_data_dir",
+        help="path to the directory where the generated data resides",
+        required=True,
+    )
+    args = parser.parse_args()
 
-    generate(test_data_dir=test_data_dir)
+    model_path = pathlib.Path(args.model_path)
+    test_data_dir = pathlib.Path(args.test_data_dir)
+
+    generate(model_path=model_path, test_data_dir=test_data_dir)
 
 
 if __name__ == "__main__":

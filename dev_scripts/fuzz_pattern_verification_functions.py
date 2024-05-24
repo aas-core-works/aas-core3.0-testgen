@@ -1,4 +1,5 @@
 """Generate examples for all the pattern verification functions."""
+import argparse
 import pathlib
 import re
 import warnings
@@ -9,7 +10,6 @@ import hypothesis.errors
 import hypothesis.strategies
 from aas_core_codegen import intermediate
 import aas_core_codegen.run
-import aas_core_meta.v3
 
 warnings.filterwarnings(
     "ignore", category=hypothesis.errors.NonInteractiveExampleWarning
@@ -18,10 +18,13 @@ warnings.filterwarnings(
 
 def main() -> None:
     """Execute the main routine."""
-    (
-        symbol_table_atok,
-        error,
-    ) = aas_core_codegen.run.load_model(pathlib.Path(aas_core_meta.v3.__file__))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--model_path", help="path to the meta-model", required=True)
+    args = parser.parse_args()
+
+    model_path = pathlib.Path(args.model_path)
+
+    symbol_table_atok, error = aas_core_codegen.run.load_model(model_path)
     if error is not None:
         raise RuntimeError(error)
     assert symbol_table_atok is not None
