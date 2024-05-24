@@ -673,3 +673,22 @@ def fix(root: aas_types.Class) -> None:
             f"The dump of the preserialized instance:\n"
             f"{preserialized_dump}"
         )
+
+
+def assert_instance_valid(instance: aas_types.Class) -> None:
+    """Assert that the ``instance`` is valid according to the SDK."""
+    errors = list(aas_verification.verify(instance))
+    if len(errors) > 0:
+        errors_joined = "\n".join(f"* {error.path}: {error.cause}" for error in errors)
+
+        preserialized_root, _ = preserialization.preserialize(instance)
+
+        preserialized_dump = preserialization.dump(preserialized_root)
+
+        raise AssertionError(
+            f"Expected no errors in the instance {instance}, "
+            f"but got errors:\n"
+            f"{errors_joined}\n\n"
+            f"The dump of the preserialized instance:\n"
+            f"{preserialized_dump}"
+        )
