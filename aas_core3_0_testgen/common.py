@@ -17,7 +17,6 @@ from typing import (
 import aas_core_codegen.common
 import aas_core_codegen.parse
 import aas_core_codegen.run
-import aas_core_meta.v3
 from aas_core_codegen import intermediate, infer_for_schema
 from icontract import ensure
 from typing_extensions import assert_never
@@ -25,7 +24,9 @@ from typing_extensions import assert_never
 import aas_core3.types as aas_types
 
 
-def load_symbol_table_and_infer_constraints_for_schema() -> Tuple[
+def load_symbol_table_and_infer_constraints_for_schema(
+    model_path: pathlib.Path,
+) -> Tuple[
     intermediate.SymbolTable,
     MutableMapping[intermediate.ClassUnion, infer_for_schema.ConstraintsByProperty],
 ]:
@@ -37,7 +38,6 @@ def load_symbol_table_and_infer_constraints_for_schema() -> Tuple[
     in the schema constraints. However, this will help us cover *many* classes of the
     meta-model and spare us the work of manually writing many generators.
     """
-    model_path = pathlib.Path(aas_core_meta.v3.__file__)
     assert model_path.exists() and model_path.is_file(), model_path
 
     text = model_path.read_text(encoding="utf-8")

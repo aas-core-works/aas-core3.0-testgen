@@ -535,11 +535,15 @@ def lives_in_environment(
     return Stripped("\n\n\n".join(blocks)), None
 
 
-def generate_and_write() -> Optional[str]:
+def generate_and_write(
+    model_path: pathlib.Path, codegened_dir: pathlib.Path
+) -> Optional[str]:
     """Generate the code and write it to the pre-defined file."""
     # fmt: off
     symbol_table, _ = (
-        aas_core3_0_testgen.common.load_symbol_table_and_infer_constraints_for_schema()
+        aas_core3_0_testgen.common.load_symbol_table_and_infer_constraints_for_schema(
+            model_path=model_path
+        )
     )
     # fmt: on
 
@@ -549,7 +553,7 @@ def generate_and_write() -> Optional[str]:
 
     assert code is not None
 
-    path = _REPO_DIR / "aas_core3_0_testgen" / "codegened" / "wrapping.py"
+    path = codegened_dir / "wrapping.py"
     path.write_text(code + "\n", encoding="utf-8")
 
     return None
@@ -557,10 +561,21 @@ def generate_and_write() -> Optional[str]:
 
 def main() -> int:
     """Execute the main routine."""
-    parser = argparse.ArgumentParser(description=__doc__)
-    _ = parser.parse_args()
+    repo_dir = pathlib.Path(os.path.realpath(__file__)).parent.parent.parent
 
-    error = generate_and_write()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--model_path", help="path to the meta-model", required=True)
+    parser.add_argument(
+        "--codegened_dir",
+        help="path to the directory containing the generated code",
+        default=str(repo_dir / "aas_core3_0_testgen" / "codegened"),
+    )
+    args = parser.parse_args()
+
+    model_path = pathlib.Path(args.model_path)
+    codegened_dir = pathlib.Path(args.codegened_dir)
+
+    error = generate_and_write(model_path=model_path, codegened_dir=codegened_dir)
     if error is not None:
         print(error, file=sys.stderr)
         return 1

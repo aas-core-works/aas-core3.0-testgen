@@ -6,6 +6,8 @@ import tempfile
 import unittest
 from typing import List, Tuple
 
+import aas_core_meta.v3
+
 import aas_core3_0_testgen.generate_rdf
 
 
@@ -14,7 +16,10 @@ class Test_against_recorded(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir_as_str:
             tmp_dir = pathlib.Path(tmp_dir_as_str)
 
-            aas_core3_0_testgen.generate_rdf.generate(test_data_dir=tmp_dir)
+            aas_core3_0_testgen.generate_rdf.generate(
+                model_path=pathlib.Path(aas_core_meta.v3.__file__),
+                test_data_dir=tmp_dir,
+            )
 
             repo_root = pathlib.Path(os.path.realpath(__file__)).parent.parent
             test_data_dir = repo_root / "test_data"
