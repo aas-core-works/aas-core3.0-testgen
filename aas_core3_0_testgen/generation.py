@@ -570,6 +570,7 @@ def _generate_customized_environment_and_minimal_instance_for_key() -> Tuple[
     key = instance_of_aas.derived_from.keys[0]
     path = path_to_aas + ["derived_from", "keys", 0]
 
+    fixing.assert_instance_valid(environment)
     fixing.assert_instance_at_path_in_environment(environment, key, path)
     return environment, key, path
 
@@ -602,6 +603,7 @@ def _generate_customized_environment_and_maximal_instance_for_key() -> Tuple[
     key = instance_of_aas.derived_from.keys[0]
     path = path_to_aas + ["derived_from", "keys", 0]
 
+    fixing.assert_instance_valid(environment)
     fixing.assert_instance_at_path_in_environment(environment, key, path)
     return environment, key, path
 
@@ -634,6 +636,7 @@ def _generate_customized_environment_and_minimal_instance_for_reference() -> Tup
     reference = instance_of_aas.derived_from
     path = path_to_aas + ["derived_from"]
 
+    fixing.assert_instance_valid(environment)
     fixing.assert_instance_at_path_in_environment(environment, reference, path)
     return environment, reference, path
 
@@ -669,6 +672,7 @@ def _generate_customized_environment_and_maximal_instance_for_reference() -> Tup
         common.hash_path(path_hash, "referred_semantic_id")
     )
 
+    fixing.assert_instance_valid(environment)
     fixing.assert_instance_at_path_in_environment(environment, reference, path)
     return environment, reference, path
 
@@ -698,6 +702,7 @@ def _generate_minimal_case(
                 environment, instance, path = wrapping.minimal_in_environment(cls.name)
                 fixing.fix(environment)
 
+            fixing.assert_instance_valid(environment)
             fixing.assert_instance_at_path_in_environment(environment, instance, path)
 
             (
@@ -716,6 +721,7 @@ def _generate_minimal_case(
             path_hash = common.hash_path(None, [])
             instance = creation.exact_concrete_minimal(path_hash, cls.name)
             fixing.fix(instance)
+            fixing.assert_instance_valid(instance)
 
             preserialized_instance, _ = preserialization.preserialize(instance)
 
@@ -761,6 +767,7 @@ def _generate_maximal_case(
                 environment, instance, path = wrapping.maximal_in_environment(cls.name)
                 fixing.fix(environment)
 
+            fixing.assert_instance_valid(environment)
             fixing.assert_instance_at_path_in_environment(environment, instance, path)
 
             (
@@ -779,6 +786,8 @@ def _generate_maximal_case(
             path_hash = common.hash_path(None, [])
             instance = creation.exact_concrete_maximal(path_hash, cls.name)
             fixing.fix(instance)
+
+            fixing.assert_instance_valid(instance)
 
             preserialized_instance, _ = preserialization.preserialize(instance)
 
