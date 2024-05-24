@@ -234,28 +234,33 @@ def _generate_code(our_repo: pathlib.Path) -> Optional[int]:
         if pth.name != "generate_all.py"
     )
 
+    cmds = [
+        [
+            sys.executable,
+            str(pth.relative_to(our_repo)),
+            "--model_path",
+            str(pathlib.Path(aas_core_meta.v3.__file__).relative_to(our_repo)),
+            "--codegened_dir",
+            "aas_core3_0_testgen/codegened",
+        ]
+        for pth in scripts
+    ]  # type: Sequence[Sequence[str]]
+
     # pylint: disable=consider-using-with
     calls = [
-        lambda a_pth=pth, cwd=our_repo: subprocess.Popen(  # type: ignore
-            [
-                sys.executable,
-                str(a_pth),
-                "--model_path",
-                aas_core_meta.v3.__file__,
-                "--codegened_dir",
-                our_repo / "aas_core3_0_testgen" / "codegen",
-            ],
+        lambda cmd=a_cmd, cwd=our_repo: subprocess.Popen(  # type: ignore
+            cmd,
             cwd=str(cwd),
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             encoding="utf-8",
         )
-        for pth in scripts
+        for a_cmd in cmds
     ]  # type: Sequence[Callable[[], subprocess.Popen[str]]]
     # pylint: enable=consider-using-with
 
-    scripts_joined = ",\n".join(str(script) for script in scripts)
-    print(f"Starting to run codegen scripts:\n{scripts_joined}")
+    cmds_joined = "\n".join(" ".join(cmd) for cmd in cmds)
+    print(f"Starting to run codegen scripts:\n{cmds_joined}")
     start = time.perf_counter()
 
     exit_code = _run_in_parallel(
@@ -301,8 +306,10 @@ def _run_tests_in_parallel(our_repo: pathlib.Path) -> Optional[int]:
     ]
 
     # pylint: disable=consider-using-with
+    # fmt: off
     calls = [
-        lambda a_test_qualname=test_qualname, cwd=our_repo: subprocess.Popen(  # type: ignore
+        lambda a_test_qualname=test_qualname, cwd=our_repo:  # type: ignore
+        subprocess.Popen(
             [sys.executable, "-m", "unittest", a_test_qualname],
             cwd=str(cwd),
             stdout=subprocess.DEVNULL,
@@ -311,6 +318,7 @@ def _run_tests_in_parallel(our_repo: pathlib.Path) -> Optional[int]:
         )
         for test_qualname in test_qualnames
     ]  # type: Sequence[Callable[[], subprocess.Popen[str]]]
+    # fmt: on
     # pylint: enable=consider-using-with
 
     test_qualnames_joined = ",\n".join(

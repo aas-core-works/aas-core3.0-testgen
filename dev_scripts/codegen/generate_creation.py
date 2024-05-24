@@ -1067,7 +1067,7 @@ def _generate(
     ],
 ) -> Tuple[Optional[Stripped], Optional[str]]:
     """Generate the creation module."""
-    warning = dev_scripts.codegen.common.generate_warning(__file__)
+    warning = dev_scripts.codegen.common.generate_warning(os.path.realpath(__file__))
 
     blocks = [
         Stripped('"""Create instances which satisfy the type constraints."""'),
