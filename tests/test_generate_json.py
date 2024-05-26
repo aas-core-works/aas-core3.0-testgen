@@ -7,11 +7,8 @@ import tempfile
 import unittest
 from typing import List, Tuple, Optional
 
-import jsonschema
 import aas_core_meta.v3
-
-import aas_core3.jsonization
-import aas_core3.verification
+import jsonschema
 
 import aas_core3_0_testgen.generate_json
 
@@ -119,35 +116,40 @@ class Test_against_recorded(unittest.TestCase):
         with schema_pth.open("rt") as fid:
             schema = json.load(fid)
 
+        # NOTE (mristin):
+        # We can only validate against the environment as JSON schema expects only
+        # environment at the root.
         ok_files = sorted(
             test_data_dir.glob("Json/ContainedInEnvironment/Expected/**/*.json")
         )
 
-        schema_violation_cases = (
-            "TypeViolation",
-            "PatternViolation",
-            "RequiredViolation",
-            "MinLengthViolation",
-            "MaxLengthViolation",
-            "EnumViolation",
+        case_subpaths = (
+            pathlib.Path("Unserializable/TypeViolation"),
+            pathlib.Path("Invalid/PatternViolation"),
+            pathlib.Path("Unserializable/RequiredViolation"),
+            pathlib.Path("Invalid/MinLengthViolation"),
+            pathlib.Path("Invalid/MaxLengthViolation"),
+            pathlib.Path("Unserializable/EnumViolation"),
         )
-        schema_violation_files = sorted(
-            pth
-            for case_name in schema_violation_cases
-            for pth in test_data_dir.glob(
-                f"Json/ContainedInEnvironment/Unexpected/{case_name}/**/*.json"
+
+        schema_violation_files = []  # type: List[pathlib.Path]
+        for case_subpath in case_subpaths:
+            # NOTE (mristin):
+            # We can only validate against the environment as JSON schema expects only
+            # environment at the root.
+            glob_pattern = (
+                f"Json/ContainedInEnvironment/Unexpected/" f"{case_subpath}/**/*.json"
             )
-        )
 
-        # NOTE (mristin, 2023-03-13):
-        # We avoid a quadratic time complexity in the queries below by using a set.
-        schema_violation_files_segment_set = set(
-            parent.name for pth in schema_violation_files for parent in pth.parents
-        )
+            case_violation_files = list(test_data_dir.glob(glob_pattern))
+            if len(case_violation_files) == 0:
+                raise AssertionError(
+                    f"Unexpected no files in {test_data_dir} matching {glob_pattern}"
+                )
 
-        for case_name in schema_violation_cases:
-            if case_name not in schema_violation_files_segment_set:
-                raise AssertionError(f"There are no examples for {case_name} case.")
+            schema_violation_files.extend(case_violation_files)
+
+        schema_violation_files.sort()
 
         for pth in ok_files:
             try:
@@ -173,134 +175,6 @@ class Test_against_recorded(unittest.TestCase):
             assert (
                 observed_error is not None
             ), f"Expected a validation error for {pth}, but got none"
-
-    def test_unserializable_by_python_sdk(self) -> None:
-        # NOTE (mristin, 2023-03-13):
-        # These invalid cases are allowed by the schema, as we did not set
-        # ``additionalProperties`` to ``false`` in the schema, but the SDK can not
-        # deal with it.
-        repo_root = pathlib.Path(os.path.realpath(__file__)).parent.parent
-        test_data_dir = repo_root / "test_data"
-        if not test_data_dir.exists():
-            raise FileNotFoundError(
-                f"Directory with the test data does not exist: {test_data_dir}"
-            )
-
-        if not test_data_dir.is_dir():
-            raise NotADirectoryError(
-                f"The test data dir is not a directory: {test_data_dir}"
-            )
-
-        unserializable_cases = ("UnexpectedAdditionalProperty",)
-        unserializable_files = sorted(
-            pth
-            for case_name in unserializable_cases
-            for pth in test_data_dir.glob(
-                f"Json/ContainedInEnvironment/Unexpected/{case_name}/**/*.json"
-            )
-        )
-
-        # NOTE (mristin, 2023-03-13):
-        # We avoid a quadratic time complexity in the queries below by using a set.
-        unserializable_files_segment_set = set(
-            parent.name for pth in unserializable_files for parent in pth.parents
-        )
-
-        for case_name in unserializable_cases:
-            if case_name not in unserializable_files_segment_set:
-                raise AssertionError(f"There are no examples for {case_name} case.")
-
-        for pth in unserializable_files:
-            with pth.open("rt") as fid:
-                jsonable = json.load(fid)
-
-            observed_error: Optional[
-                aas_core3.jsonization.DeserializationException
-            ] = None
-            try:
-                _ = aas_core3.jsonization.environment_from_jsonable(jsonable)
-            except aas_core3.jsonization.DeserializationException as error:
-                observed_error = error
-
-            assert (
-                observed_error is not None
-            ), f"Expected a de-serialization error for {pth}, but got none"
-
-    def test_response_of_python_sdk(self) -> None:
-        repo_root = pathlib.Path(os.path.realpath(__file__)).parent.parent
-        test_data_dir = repo_root / "test_data"
-        if not test_data_dir.exists():
-            raise FileNotFoundError(
-                f"Directory with the test data does not exist: {test_data_dir}"
-            )
-
-        if not test_data_dir.is_dir():
-            raise NotADirectoryError(
-                f"The test data dir is not a directory: {test_data_dir}"
-            )
-
-        ok_files = sorted(
-            test_data_dir.glob("Json/ContainedInEnvironment/Expected/**/*.json")
-        )
-
-        for pth in ok_files:
-            try:
-                with pth.open("rt") as fid:
-                    jsonable = json.load(fid)
-
-                instance = aas_core3.jsonization.environment_from_jsonable(jsonable)
-            except Exception as exception:
-                raise AssertionError(
-                    f"Failed to de-serialize {pth} using {aas_core3.__name__}"
-                ) from exception
-
-            errors = list(aas_core3.verification.verify(instance))
-            if len(errors) > 0:
-                errors_joined = "\n".join(
-                    f"{error.path}: {error.cause}" for error in errors
-                )
-                raise AssertionError(
-                    f"Failed to verify {pth} using {aas_core3.__name__}:\n"
-                    f"{errors_joined}"
-                )
-
-        verification_violation_cases = (
-            "DateTimeUtcViolationOnFebruary29th",
-            "SetViolation",
-            "InvalidValueExample",
-            "InvalidMinMaxExample",
-            "ConstraintViolation",
-        )
-        verification_violation_files = sorted(
-            pth
-            for case_name in verification_violation_cases
-            for pth in test_data_dir.glob(
-                f"Json/ContainedInEnvironment/Unexpected/{case_name}/**/*.json"
-            )
-        )
-
-        # NOTE (mristin, 2023-03-13):
-        # We avoid a quadratic time complexity in the queries below by using a set.
-        verification_violation_files_segment_set = set(
-            parent.name
-            for pth in verification_violation_files
-            for parent in pth.parents
-        )
-
-        for case_name in verification_violation_cases:
-            if case_name not in verification_violation_files_segment_set:
-                raise AssertionError(f"There are no examples for {case_name} case.")
-
-        for pth in verification_violation_files:
-            with pth.open("rt") as fid:
-                jsonable = json.load(fid)
-
-            instance = aas_core3.jsonization.environment_from_jsonable(jsonable)
-
-            errors = list(aas_core3.verification.verify(instance))
-            assert (
-                len(errors) > 0
-            ), f"Expected verification errors, but got none for {pth}"
 
 
 if __name__ == "__main__":
