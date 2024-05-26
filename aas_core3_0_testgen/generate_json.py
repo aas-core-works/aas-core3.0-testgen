@@ -3,6 +3,7 @@ import argparse
 import base64
 import collections
 import collections.abc
+import enum
 import json
 import pathlib
 from typing import (
@@ -19,11 +20,68 @@ import aas_core_codegen.common
 import aas_core_codegen.naming
 from aas_core_codegen import intermediate
 from aas_core_codegen.common import Identifier
-from icontract import ensure
+from icontract import ensure, require
 from typing_extensions import assert_never
 
+from aas_core3 import jsonization as aasjsonization, verification as aasverification
 from aas_core3_0_testgen import common, generation
 from aas_core3_0_testgen.codegened import preserialization
+
+
+# NOTE (mristin):
+# We explicitly decouple the path generation code from XML and other formats since it
+# is completely accidental that they coincide. We anticipate that there will be
+# differences in the future. For example, we will most probably introduce different
+# kinds of negative examples.
+
+
+class KindOfNegative(enum.Enum):
+    """Define possible kinds of negative examples."""
+
+    UNSERIALIZABLE = "Unserializable"
+    INVALID = "Invalid"
+
+
+@require(lambda relative_path: not relative_path.is_absolute())
+@require(lambda relative_path: relative_path.suffix == ".json")
+def _generate_expected_path(
+    base_path: pathlib.Path, cls_name: str, relative_path: pathlib.Path
+) -> pathlib.Path:
+    """
+    Generate the path to the positive example.
+
+    >>> _generate_expected_path(
+    ...     base_path=pathlib.Path("ContainedInEnvironment"),
+    ...     cls_name="Property",
+    ...     relative_path=pathlib.Path("maximal.json")
+    ... ).as_posix()
+    'ContainedInEnvironment/Expected/Property/maximal.json'
+    """
+    return base_path / "Expected" / cls_name / relative_path
+
+
+@require(lambda relative_path: not relative_path.is_absolute())
+@require(lambda relative_path: relative_path.suffix == ".json")
+def _generate_unexpected_path(
+    base_path: pathlib.Path,
+    kind: KindOfNegative,
+    cause: str,
+    cls_name: str,
+    relative_path: pathlib.Path,
+) -> pathlib.Path:
+    """
+    Generate the path to the negative example.
+
+    >>> _generate_unexpected_path(
+    ...     base_path=pathlib.Path("ContainedInEnvironment"),
+    ...     kind=KindOfNegative.INVALID,
+    ...     cause="MaxLengthViolation",
+    ...     cls_name="Property",
+    ...     relative_path=pathlib.Path("idShort.json")
+    ... ).as_posix()
+    'ContainedInEnvironment/Unexpected/Invalid/MaxLengthViolation/Property/idShort.json'
+    """
+    return base_path / "Unexpected" / kind.value / cause / cls_name / relative_path
 
 
 @ensure(lambda result: not result.is_absolute())
@@ -43,114 +101,220 @@ def _relative_path(test_case: generation.CaseUnion) -> pathlib.Path:
         )
         base_pth /= f"ContainedIn{container_model_type}"
 
-    if test_case.expected:
-        base_pth = base_pth / "Expected" / cls_name
-
-    else:
+    cause = None  # type: Optional[str]
+    if not test_case.expected:
         assert test_case.__class__.__name__.startswith("Case")
         cause = test_case.__class__.__name__[len("Case") :]
 
-        base_pth = base_pth / "Unexpected" / cause / cls_name
-
     if isinstance(test_case, generation.CaseMinimal):
-        return base_pth / "minimal.json"
+        return _generate_expected_path(
+            base_path=base_pth,
+            cls_name=cls_name,
+            relative_path=pathlib.Path("minimal.json"),
+        )
 
     elif isinstance(test_case, generation.CaseMaximal):
-        return base_pth / "maximal.json"
+        return _generate_expected_path(
+            base_path=base_pth,
+            cls_name=cls_name,
+            relative_path=pathlib.Path("maximal.json"),
+        )
 
     elif isinstance(test_case, generation.CaseTypeViolation):
         prop_name = aas_core_codegen.naming.json_property(test_case.property_name)
 
-        return base_pth / f"{prop_name}.json"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.UNSERIALIZABLE,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{prop_name}.json"),
+        )
 
     elif isinstance(test_case, generation.CasePositivePatternExample):
         prop_name = aas_core_codegen.naming.json_property(test_case.property_name)
 
-        return (
-            base_pth
-            / f"{prop_name}OverPatternExamples"
-            / f"{test_case.example_name}.json"
+        return _generate_expected_path(
+            base_path=base_pth,
+            cls_name=cls_name,
+            relative_path=(
+                pathlib.Path(f"{prop_name}OverPatternExamples")
+                / f"{test_case.example_name}.json"
+            ),
         )
 
     elif isinstance(test_case, generation.CasePatternViolation):
         prop_name = aas_core_codegen.naming.json_property(test_case.property_name)
 
-        return base_pth / prop_name / f"{test_case.example_name}.json"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.INVALID,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(prop_name) / f"{test_case.example_name}.json",
+        )
 
     elif isinstance(test_case, generation.CaseRequiredViolation):
         prop_name = aas_core_codegen.naming.json_property(test_case.property_name)
 
-        return base_pth / f"{prop_name}.json"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.UNSERIALIZABLE,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{prop_name}.json"),
+        )
 
     elif isinstance(test_case, generation.CaseNullViolation):
         prop_name = aas_core_codegen.naming.json_property(test_case.property_name)
 
-        return base_pth / f"{prop_name}.json"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.UNSERIALIZABLE,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{prop_name}.json"),
+        )
 
     elif isinstance(test_case, generation.CaseMinLengthViolation):
         prop_name = aas_core_codegen.naming.json_property(test_case.prop.name)
 
-        return base_pth / f"{prop_name}.json"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.INVALID,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{prop_name}.json"),
+        )
 
     elif isinstance(test_case, generation.CaseMaxLengthViolation):
         prop_name = aas_core_codegen.naming.json_property(test_case.property_name)
 
-        return base_pth / f"{prop_name}.json"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.INVALID,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{prop_name}.json"),
+        )
 
     elif isinstance(test_case, generation.CaseDateTimeUtcViolationOnFebruary29th):
         prop_name = aas_core_codegen.naming.json_property(test_case.property_name)
 
-        return base_pth / f"{prop_name}.json"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.INVALID,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{prop_name}.json"),
+        )
 
     elif isinstance(test_case, generation.CasePositiveValueExample):
-        return (
-            base_pth
-            / "OverValueExamples"
-            / test_case.data_type_def_literal.name
-            / f"{test_case.example_name}.json"
+        return _generate_expected_path(
+            base_path=base_pth,
+            cls_name=cls_name,
+            relative_path=(
+                pathlib.Path("OverValueExamples")
+                / test_case.data_type_def_literal.name
+                / f"{test_case.example_name}.json"
+            ),
         )
 
     elif isinstance(test_case, generation.CaseInvalidValueExample):
-        return (
-            base_pth
-            / test_case.data_type_def_literal.name
-            / f"{test_case.example_name}.json"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.INVALID,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=(
+                pathlib.Path(test_case.data_type_def_literal.name)
+                / f"{test_case.example_name}.json"
+            ),
         )
 
     elif isinstance(test_case, generation.CasePositiveMinMaxExample):
-        return (
-            base_pth
-            / "OverMinMaxExamples"
-            / test_case.data_type_def_literal.name
-            / f"{test_case.example_name}.json"
+        return _generate_expected_path(
+            base_path=base_pth,
+            cls_name=cls_name,
+            relative_path=(
+                pathlib.Path("OverMinMaxExamples")
+                / test_case.data_type_def_literal.name
+                / f"{test_case.example_name}.json"
+            ),
         )
 
     elif isinstance(test_case, generation.CaseInvalidMinMaxExample):
-        return (
-            base_pth
-            / test_case.data_type_def_literal.name
-            / f"{test_case.example_name}.json"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.INVALID,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=(
+                pathlib.Path(test_case.data_type_def_literal.name)
+                / f"{test_case.example_name}.json"
+            ),
         )
 
     elif isinstance(test_case, generation.CaseUnexpectedAdditionalProperty):
-        return base_pth / "invalid.json"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.UNSERIALIZABLE,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path("invalid.json"),
+        )
 
     elif isinstance(test_case, generation.CaseEnumViolation):
         enum_name = aas_core_codegen.naming.json_model_type(test_case.enum.name)
         prop_name = aas_core_codegen.naming.json_property(test_case.prop.name)
 
-        return base_pth / f"{prop_name}_as_{enum_name}.json"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.UNSERIALIZABLE,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{prop_name}_as_{enum_name}.json"),
+        )
 
     elif isinstance(test_case, generation.CasePositiveManual):
-        return base_pth / f"{test_case.name}.json"
+        return _generate_expected_path(
+            base_path=base_pth,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{test_case.name}.json"),
+        )
 
     elif isinstance(test_case, generation.CaseSetViolation):
         prop_name = aas_core_codegen.naming.json_property(test_case.property_name)
 
-        return base_pth / f"{prop_name}.json"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.INVALID,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{prop_name}.json"),
+        )
 
     elif isinstance(test_case, generation.CaseConstraintViolation):
-        return base_pth / f"{test_case.name}.json"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.INVALID,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{test_case.name}.json"),
+        )
 
     else:
         aas_core_codegen.common.assert_never(test_case)
@@ -283,8 +447,7 @@ def generate(model_path: pathlib.Path, test_data_dir: pathlib.Path) -> None:
         pth = test_data_dir / relative_pth
 
         parent = pth.parent
-        if not parent.exists():
-            parent.mkdir(parents=True)
+        parent.mkdir(parents=True, exist_ok=True)
 
         with pth.open("wt") as fid:
             json.dump(jsonable, fid, indent=2, sort_keys=True)
@@ -305,6 +468,92 @@ def main() -> None:
     test_data_dir = pathlib.Path(args.test_data_dir)
 
     generate(model_path=model_path, test_data_dir=test_data_dir)
+
+    # NOTE (mristin):
+    # We currently verify only the instances contained in an Environment for simplicity.
+    # If time permits in the future, we will also validate the self-contained instances,
+    # but we need to leverage either reflection or code generation to that end.
+
+    expected_dir = test_data_dir / "Json" / "ContainedInEnvironment" / "Expected"
+    expected_paths = sorted(expected_dir.glob("**/*.json"))
+    if len(expected_paths) == 0:
+        raise AssertionError(f"Unexpected no positive examples in {expected_dir}")
+
+    for pth in expected_paths:
+        with pth.open("rt", encoding="utf-8") as fid:
+            jsonable = json.load(fid)
+
+        try:
+            environment = aasjsonization.environment_from_jsonable(jsonable=jsonable)
+        except aasjsonization.DeserializationException as exception:
+            raise AssertionError(  # pylint: disable=raise-missing-from
+                f"Failed to de-serialize an expected instance from {pth}: {exception}"
+            )
+
+        errors = list(aasverification.verify(environment))
+        if len(errors) != 0:
+            errors_joined = "\n".join(str(error) for error in errors)
+            raise AssertionError(
+                f"Failed to verify an expected instance from {pth}:\n{errors_joined}"
+            )
+
+    unserializable_dir = (
+        test_data_dir
+        / "Json"
+        / "ContainedInEnvironment"
+        / "Unexpected"
+        / "Unserializable"
+    )
+
+    unserializable_paths = sorted(unserializable_dir.glob("**/*.json"))
+    if len(unserializable_paths) == 0:
+        raise AssertionError(
+            f"Unexpected no paths to unserializable instances "
+            f"from {unserializable_dir}"
+        )
+
+    for pth in unserializable_paths:
+        with pth.open("rt", encoding="utf-8") as fid:
+            jsonable = json.load(fid)
+
+        caught = None  # type: Optional[aasjsonization.DeserializationException]
+        try:
+            _ = aasjsonization.environment_from_jsonable(jsonable=jsonable)
+        except aasjsonization.DeserializationException as exception:
+            caught = exception
+
+        if caught is None:
+            raise AssertionError(
+                f"Expected a de-serialization error from {pth}, but caught none"
+            )
+
+    invalid_dir = (
+        test_data_dir / "Json" / "ContainedInEnvironment" / "Unexpected" / "Invalid"
+    )
+
+    invalid_paths = sorted(invalid_dir.glob("**/*.json"))
+    if len(invalid_paths) == 0:
+        raise AssertionError(
+            f"Unexpected no paths to invalid instances in {invalid_dir}"
+        )
+
+    for pth in invalid_paths:
+        with pth.open("rt", encoding="utf-8") as fid:
+            jsonable = json.load(fid)
+
+        try:
+            environment = aasjsonization.environment_from_jsonable(jsonable=jsonable)
+        except aasjsonization.DeserializationException as exception:
+            raise AssertionError(  # pylint: disable=raise-missing-from
+                f"Failed to de-serialize an invalid, but de-serializable "
+                f"instance from {pth}: {exception}"
+            )
+
+        errors = list(aasverification.verify(environment))
+        if len(errors) == 0:
+            raise AssertionError(
+                f"Expected a verification error from {pth}, but got none"
+            )
 
 
 if __name__ == "__main__":

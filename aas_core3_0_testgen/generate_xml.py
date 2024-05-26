@@ -1,6 +1,7 @@
 """Generate test data in XML for the meta-model V3aas-core3.0-testgen."""
 import argparse
 import base64
+import enum
 import math
 import pathlib
 import re
@@ -14,7 +15,8 @@ import aas_core_codegen.common
 import aas_core_codegen.naming
 from aas_core_codegen import intermediate
 from aas_core_codegen.common import Identifier
-from icontract import ensure
+from icontract import ensure, require
+from aas_core3 import xmlization as aasxmlization, verification as aasverification
 
 from aas_core3_0_testgen import common, generation
 from aas_core3_0_testgen.codegened import preserialization
@@ -52,6 +54,62 @@ def _conforms_to_xml_1_0(value: Optional[preserialization.ValueUnion]) -> bool:
         aas_core_codegen.common.assert_never(value)
 
 
+# NOTE (mristin):
+# We explicitly decouple the path generation code from JSON and other formats since it
+# is completely accidental that they coincide. We anticipate that there will be
+# differences in the future. For example, we will most probably introduce different
+# kinds of negative examples.
+
+
+class KindOfNegative(enum.Enum):
+    """Define possible kinds of negative examples."""
+
+    UNSERIALIZABLE = "Unserializable"
+    INVALID = "Invalid"
+
+
+@require(lambda relative_path: not relative_path.is_absolute())
+@require(lambda relative_path: relative_path.suffix == ".xml")
+def _generate_expected_path(
+    base_path: pathlib.Path, cls_name: str, relative_path: pathlib.Path
+) -> pathlib.Path:
+    """
+    Generate the path to the positive example.
+
+    >>> _generate_expected_path(
+    ...     base_path=pathlib.Path("ContainedInEnvironment"),
+    ...     cls_name="property",
+    ...     relative_path=pathlib.Path("maximal.xml")
+    ... ).as_posix()
+    'ContainedInEnvironment/Expected/property/maximal.xml'
+    """
+    return base_path / "Expected" / cls_name / relative_path
+
+
+@require(lambda relative_path: not relative_path.is_absolute())
+@require(lambda relative_path: relative_path.suffix == ".xml")
+def _generate_unexpected_path(
+    base_path: pathlib.Path,
+    kind: KindOfNegative,
+    cause: str,
+    cls_name: str,
+    relative_path: pathlib.Path,
+) -> pathlib.Path:
+    """
+    Generate the path to the negative example.
+
+    >>> _generate_unexpected_path(
+    ...     base_path=pathlib.Path("ContainedInEnvironment"),
+    ...     kind=KindOfNegative.INVALID,
+    ...     cause="MaxLengthViolation",
+    ...     cls_name="property",
+    ...     relative_path=pathlib.Path("idShort.xml")
+    ... ).as_posix()
+    'ContainedInEnvironment/Unexpected/Invalid/MaxLengthViolation/property/idShort.xml'
+    """
+    return base_path / "Unexpected" / kind.value / cause / cls_name / relative_path
+
+
 @ensure(lambda result: not result.is_absolute())
 def _relative_path(test_case: generation.CaseUnion) -> pathlib.Path:
     """Generate the relative path based on the test case."""
@@ -69,44 +127,72 @@ def _relative_path(test_case: generation.CaseUnion) -> pathlib.Path:
         )
         base_pth /= f"ContainedIn{container_class_name}"
 
-    if test_case.expected:
-        base_pth = base_pth / "Expected" / cls_name
-
-    else:
+    cause = None  # type: Optional[str]
+    if not test_case.expected:
         assert test_case.__class__.__name__.startswith("Case")
         cause = test_case.__class__.__name__[len("Case") :]
 
-        base_pth = base_pth / "Unexpected" / cause / cls_name
-
     if isinstance(test_case, generation.CaseMinimal):
-        return base_pth / "minimal.xml"
+        return _generate_expected_path(
+            base_path=base_pth,
+            cls_name=cls_name,
+            relative_path=pathlib.Path("minimal.xml"),
+        )
 
     elif isinstance(test_case, generation.CaseMaximal):
-        return base_pth / "maximal.xml"
+        return _generate_expected_path(
+            base_path=base_pth,
+            cls_name=cls_name,
+            relative_path=pathlib.Path("maximal.xml"),
+        )
 
     elif isinstance(test_case, generation.CaseTypeViolation):
         prop_name = aas_core_codegen.naming.xml_property(test_case.property_name)
 
-        return base_pth / f"{prop_name}.xml"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.UNSERIALIZABLE,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{prop_name}.xml"),
+        )
 
     elif isinstance(test_case, generation.CasePositivePatternExample):
         prop_name = aas_core_codegen.naming.xml_property(test_case.property_name)
 
-        return (
-            base_pth
-            / f"{prop_name}OverPatternExamples"
-            / f"{test_case.example_name}.xml"
+        return _generate_expected_path(
+            base_path=base_pth,
+            cls_name=cls_name,
+            relative_path=(
+                pathlib.Path(f"{prop_name}OverPatternExamples")
+                / f"{test_case.example_name}.xml"
+            ),
         )
 
     elif isinstance(test_case, generation.CasePatternViolation):
         prop_name = aas_core_codegen.naming.xml_property(test_case.property_name)
 
-        return base_pth / prop_name / f"{test_case.example_name}.xml"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.INVALID,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(prop_name) / f"{test_case.example_name}.xml",
+        )
 
     elif isinstance(test_case, generation.CaseRequiredViolation):
         prop_name = aas_core_codegen.naming.xml_property(test_case.property_name)
 
-        return base_pth / f"{prop_name}.xml"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.UNSERIALIZABLE,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{prop_name}.xml"),
+        )
 
     elif isinstance(test_case, generation.CaseNullViolation):
         # NOTE (mristin, 2023-03-15):
@@ -114,72 +200,150 @@ def _relative_path(test_case: generation.CaseUnion) -> pathlib.Path:
         # completeness.
         prop_name = aas_core_codegen.naming.xml_property(test_case.property_name)
 
-        return base_pth / f"{prop_name}.xml"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.UNSERIALIZABLE,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{prop_name}.xml"),
+        )
 
     elif isinstance(test_case, generation.CaseMinLengthViolation):
         prop_name = aas_core_codegen.naming.xml_property(test_case.prop.name)
 
-        return base_pth / f"{prop_name}.xml"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.INVALID,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{prop_name}.xml"),
+        )
 
     elif isinstance(test_case, generation.CaseMaxLengthViolation):
         prop_name = aas_core_codegen.naming.xml_property(test_case.property_name)
 
-        return base_pth / f"{prop_name}.xml"
-
-    elif isinstance(test_case, generation.CaseUnexpectedAdditionalProperty):
-        return base_pth / "invalid.xml"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.INVALID,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{prop_name}.xml"),
+        )
 
     elif isinstance(test_case, generation.CaseDateTimeUtcViolationOnFebruary29th):
         prop_name = aas_core_codegen.naming.xml_property(test_case.property_name)
 
-        return base_pth / f"{prop_name}.xml"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.INVALID,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{prop_name}.xml"),
+        )
 
     elif isinstance(test_case, generation.CasePositiveValueExample):
-        return (
-            base_pth
-            / "OverValueExamples"
-            / test_case.data_type_def_literal.name
-            / f"{test_case.example_name}.xml"
+        return _generate_expected_path(
+            base_path=base_pth,
+            cls_name=cls_name,
+            relative_path=(
+                pathlib.Path("OverValueExamples")
+                / test_case.data_type_def_literal.name
+                / f"{test_case.example_name}.xml"
+            ),
         )
 
     elif isinstance(test_case, generation.CaseInvalidValueExample):
-        return (
-            base_pth
-            / test_case.data_type_def_literal.name
-            / f"{test_case.example_name}.xml"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.INVALID,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=(
+                pathlib.Path(test_case.data_type_def_literal.name)
+                / f"{test_case.example_name}.xml"
+            ),
         )
 
     elif isinstance(test_case, generation.CasePositiveMinMaxExample):
-        return (
-            base_pth
-            / "OverMinMaxExamples"
-            / test_case.data_type_def_literal.name
-            / f"{test_case.example_name}.xml"
+        return _generate_expected_path(
+            base_path=base_pth,
+            cls_name=cls_name,
+            relative_path=(
+                pathlib.Path("OverMinMaxExamples")
+                / test_case.data_type_def_literal.name
+                / f"{test_case.example_name}.xml"
+            ),
         )
 
     elif isinstance(test_case, generation.CaseInvalidMinMaxExample):
-        return (
-            base_pth
-            / test_case.data_type_def_literal.name
-            / f"{test_case.example_name}.xml"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.INVALID,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=(
+                pathlib.Path(test_case.data_type_def_literal.name)
+                / f"{test_case.example_name}.xml"
+            ),
+        )
+
+    elif isinstance(test_case, generation.CaseUnexpectedAdditionalProperty):
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.UNSERIALIZABLE,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path("invalid.xml"),
         )
 
     elif isinstance(test_case, generation.CaseEnumViolation):
         enum_name = aas_core_codegen.naming.xml_class_name(test_case.enum.name)
         prop_name = aas_core_codegen.naming.xml_property(test_case.prop.name)
 
-        return base_pth / f"{prop_name}_as_{enum_name}.xml"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.UNSERIALIZABLE,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{prop_name}_as_{enum_name}.xml"),
+        )
 
     elif isinstance(test_case, generation.CasePositiveManual):
-        return base_pth / f"{test_case.name}.xml"
+        return _generate_expected_path(
+            base_path=base_pth,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{test_case.name}.xml"),
+        )
 
     elif isinstance(test_case, generation.CaseSetViolation):
         prop_name = aas_core_codegen.naming.xml_property(test_case.property_name)
 
-        return base_pth / f"{prop_name}.xml"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.INVALID,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{prop_name}.xml"),
+        )
 
     elif isinstance(test_case, generation.CaseConstraintViolation):
-        return base_pth / f"{test_case.name}.xml"
+        assert cause is not None
+        return _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.INVALID,
+            cause=cause,
+            cls_name=cls_name,
+            relative_path=pathlib.Path(f"{test_case.name}.xml"),
+        )
 
     else:
         aas_core_codegen.common.assert_never(test_case)
@@ -398,6 +562,82 @@ def main() -> None:
     test_data_dir = pathlib.Path(args.test_data_dir)
 
     generate(model_path=model_path, test_data_dir=test_data_dir)
+
+    # NOTE (mristin):
+    # We currently verify only the instances contained in an Environment for simplicity.
+    # If time permits in the future, we will also validate the self-contained instances,
+    # but we need to leverage either reflection or code generation to that end.
+
+    expected_dir = test_data_dir / "Xml" / "ContainedInEnvironment" / "Expected"
+    expected_paths = sorted(expected_dir.glob("**/*.xml"))
+    if len(expected_paths) == 0:
+        raise AssertionError(f"Unexpected no positive examples in {expected_dir}")
+
+    for pth in expected_paths:
+        try:
+            environment = aasxmlization.environment_from_file(path=pth)
+        except aasxmlization.DeserializationException as exception:
+            raise AssertionError(  # pylint: disable=raise-missing-from
+                f"Failed to de-serialize an expected instance from {pth}: {exception}"
+            )
+
+        errors = list(aasverification.verify(environment))
+        if len(errors) != 0:
+            errors_joined = "\n".join(str(error) for error in errors)
+            raise AssertionError(
+                f"Failed to verify an expected instance from {pth}:\n{errors_joined}"
+            )
+
+    unserializable_dir = (
+        test_data_dir
+        / "Xml"
+        / "ContainedInEnvironment"
+        / "Unexpected"
+        / "Unserializable"
+    )
+
+    unserializable_paths = sorted(unserializable_dir.glob("**/*.xml"))
+    if len(unserializable_paths) == 0:
+        raise AssertionError(
+            f"Unexpected no paths to unserializable instances "
+            f"from {unserializable_dir}"
+        )
+
+    for pth in unserializable_paths:
+        caught = None  # type: Optional[aasxmlization.DeserializationException]
+        try:
+            _ = aasxmlization.environment_from_file(path=pth)
+        except aasxmlization.DeserializationException as exception:
+            caught = exception
+
+        if caught is None:
+            raise AssertionError(
+                f"Expected a de-serialization error from {pth}, but caught none"
+            )
+
+    invalid_dir = (
+        test_data_dir / "Xml" / "ContainedInEnvironment" / "Unexpected" / "Invalid"
+    )
+
+    invalid_paths = sorted(invalid_dir.glob("**/*.xml"))
+    if len(invalid_paths) == 0:
+        raise AssertionError(
+            f"Unexpected no paths to invalid instances in {invalid_dir}"
+        )
+
+    for pth in invalid_paths:
+        try:
+            environment = aasxmlization.environment_from_file(path=pth)
+        except aasxmlization.DeserializationException as exception:
+            raise AssertionError(  # pylint: disable=raise-missing-from
+                f"Failed to de-serialize an expected instance from {pth}: {exception}"
+            )
+
+        errors = list(aasverification.verify(environment))
+        if len(errors) == 0:
+            raise AssertionError(
+                f"Expected a verification error from {pth}, but got none"
+            )
 
 
 if __name__ == "__main__":
