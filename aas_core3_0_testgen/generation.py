@@ -678,7 +678,7 @@ def _generate_customized_environment_and_maximal_instance_for_reference() -> Tup
 
 
 @require(lambda environment_cls: environment_cls.name == "Environment")
-def _generate_minimal_case(
+def generate_minimal_case(
     cls: intermediate.ConcreteClass, environment_cls: intermediate.ConcreteClass
 ) -> CaseMinimal:
     """Generate the example of a minimal instance ready for serialization."""
@@ -2701,7 +2701,7 @@ def generate(
         if not isinstance(our_type, intermediate.ConcreteClass):
             continue
 
-        minimal_case = _generate_minimal_case(
+        minimal_case = generate_minimal_case(
             cls=our_type, environment_cls=environment_cls
         )
 

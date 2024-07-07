@@ -73,18 +73,19 @@ def _generate_unexpected_path(
     Generate the path to the negative example.
 
     >>> _generate_unexpected_path(
-    ...     base_path=pathlib.Path("ContainedInEnvironment"),
+    ...     base_path=pathlib.Path("Json/ContainedInEnvironment"),
     ...     kind=KindOfNegative.INVALID,
     ...     cause="MaxLengthViolation",
     ...     cls_name="Property",
     ...     relative_path=pathlib.Path("idShort.json")
     ... ).as_posix()
-    'ContainedInEnvironment/Unexpected/Invalid/MaxLengthViolation/Property/idShort.json'
+    'Json/ContainedInEnvironment/Unexpected/Invalid/MaxLengthViolation/Property/idShort.json'
     """
     return base_path / "Unexpected" / kind.value / cause / cls_name / relative_path
 
 
 @ensure(lambda result: not result.is_absolute())
+@ensure(lambda result: len(result.parts) > 0 and result.parts[0] == "Json")
 def _relative_path(test_case: generation.CaseUnion) -> pathlib.Path:
     """Generate the relative path based on the test case."""
     assert test_case.__class__.__name__.startswith("Case")
@@ -378,6 +379,32 @@ class _Serializer:
         return [self.serialize_instance(value) for value in list_of_instances.values]
 
 
+class _SerializerWithoutModelType(_Serializer):
+    """Serialize a container to a JSON object with a lacking ``modelType``."""
+
+    def __init__(
+        self,
+        symbol_table: intermediate.SymbolTable,
+        target_instance: preserialization.Instance,
+    ) -> None:
+        """Initialize with the given values."""
+        self.target_instance = target_instance
+
+        super().__init__(symbol_table=symbol_table)
+
+    def serialize_instance(
+        self, instance: preserialization.Instance
+    ) -> OrderedDict[str, Any]:
+        """Convert the ``instance`` to a JSON-able data structure."""
+        jsonable = super().serialize_instance(instance)
+
+        if instance is self.target_instance:
+            assert "modelType" in jsonable
+            del jsonable["modelType"]
+
+        return jsonable
+
+
 def to_json_path_segments(
     path: Sequence[Union[int, str]]
 ) -> List[Union[int, Identifier]]:
@@ -427,6 +454,55 @@ def dereference(
     return cursor
 
 
+def _generate_unserializables_without_model_type(
+    symbol_table: intermediate.SymbolTable, test_data_dir: pathlib.Path
+) -> None:
+    """Generate the special cases where the required ``modelType`` is missing."""
+    environment_cls = symbol_table.must_find_concrete_class(Identifier("Environment"))
+
+    for cls in symbol_table.concrete_classes:
+        if not cls.serialization.with_model_type:
+            continue
+
+        minimal_case = generation.generate_minimal_case(
+            cls=cls, environment_cls=environment_cls
+        )
+
+        serializer_without_model_type = _SerializerWithoutModelType(
+            symbol_table=symbol_table,
+            target_instance=minimal_case.preserialized_instance,
+        )
+
+        base_pth: pathlib.Path
+        if minimal_case.container_class is minimal_case.cls:
+            base_pth = pathlib.Path("Json/SelfContained")
+        else:
+            container_model_type = aas_core_codegen.naming.json_model_type(
+                minimal_case.container_class.name
+            )
+            base_pth = pathlib.Path(f"Json/ContainedIn{container_model_type}")
+
+        relative_pth = _generate_unexpected_path(
+            base_path=base_pth,
+            kind=KindOfNegative.UNSERIALIZABLE,
+            cause="MissingModelType",
+            cls_name=aas_core_codegen.naming.json_model_type(minimal_case.cls.name),
+            relative_path=pathlib.Path("withoutModelType.json"),
+        )
+
+        jsonable = serializer_without_model_type.serialize_instance(
+            instance=minimal_case.preserialized_container
+        )
+
+        pth = test_data_dir / relative_pth
+
+        parent = pth.parent
+        parent.mkdir(parents=True, exist_ok=True)
+
+        with pth.open("wt") as fid:
+            json.dump(jsonable, fid, indent=2, sort_keys=True)
+
+
 def generate(model_path: pathlib.Path, test_data_dir: pathlib.Path) -> None:
     """Generate the JSON files."""
     (
@@ -451,6 +527,14 @@ def generate(model_path: pathlib.Path, test_data_dir: pathlib.Path) -> None:
 
         with pth.open("wt") as fid:
             json.dump(jsonable, fid, indent=2, sort_keys=True)
+
+    # NOTE (mristin):
+    # We generate here explicitly cases for missing modelType property. This is
+    # JSON-specific, so we generate it outside the general :py:mod:`generation`
+    # module.
+    _generate_unserializables_without_model_type(
+        symbol_table=symbol_table, test_data_dir=test_data_dir
+    )
 
 
 def main() -> None:
