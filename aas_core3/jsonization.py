@@ -15,6 +15,7 @@ import base64
 import collections.abc
 import sys
 from typing import (
+    cast,
     Any,
     Callable,
     Iterable,
@@ -252,6 +253,58 @@ def _bytes_from_jsonable(
     )
 
 
+def _try_to_cast_to_array_like(
+    jsonable: Jsonable
+) -> Optional[Iterable[Any]]:
+    """
+    Try to cast the ``jsonable`` to something like a JSON array.
+
+    In particular, we explicitly check that the ``jsonable`` is not a mapping, as we
+    do not want to mistake dictionaries (*i.e.* de-serialized JSON objects) for lists.
+
+    >>> assert _try_to_cast_to_array_like(True) is None
+
+    >>> assert _try_to_cast_to_array_like(0) is None
+
+    >>> assert _try_to_cast_to_array_like(2.2) is None
+
+    >>> assert _try_to_cast_to_array_like("hello") is None
+
+    >>> assert _try_to_cast_to_array_like(b"hello") is None
+
+    >>> _try_to_cast_to_array_like([1, 2])
+    [1, 2]
+
+    >>> assert _try_to_cast_to_array_like({"a": 3}) is None
+
+    >>> assert _try_to_cast_to_array_like(collections.OrderedDict()) is None
+
+    >>> _try_to_cast_to_array_like(range(1, 2))
+    range(1, 2)
+
+    >>> _try_to_cast_to_array_like((1, 2))
+    (1, 2)
+
+    >>> assert _try_to_cast_to_array_like({1, 2, 3}) is None
+    """
+    if (
+        
+        not isinstance(jsonable, (str, bytearray, bytes))
+        and hasattr(jsonable, "__iter__")
+        and not hasattr(jsonable, "keys")
+        # NOTE (mristin):
+        # There is no easy way to check for sets as opposed to sequence except
+        # for checking for direct inheritance. A sequence also inherits from
+        # a collection, so both sequences and sets provide ``__contains__`` method.
+        #
+        # See: https://docs.python.org/3/library/collections.abc.html
+        and not isinstance(jsonable, collections.abc.Set)
+    ):
+        return cast(Iterable[Any], jsonable)
+
+    return None
+
+
 def has_semantics_from_jsonable(
         jsonable: Jsonable
 ) -> aas_types.HasSemantics:
@@ -326,15 +379,16 @@ class _SetterForExtension:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -342,7 +396,7 @@ class _SetterForExtension:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -400,15 +454,16 @@ class _SetterForExtension:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -416,7 +471,7 @@ class _SetterForExtension:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -710,15 +765,16 @@ class _SetterForAdministrativeInformation:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -726,7 +782,7 @@ class _SetterForAdministrativeInformation:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -937,15 +993,16 @@ class _SetterForQualifier:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -953,7 +1010,7 @@ class _SetterForQualifier:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -1118,15 +1175,16 @@ class _SetterForAssetAdministrationShell:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -1134,7 +1192,7 @@ class _SetterForAssetAdministrationShell:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -1179,15 +1237,16 @@ class _SetterForAssetAdministrationShell:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -1195,7 +1254,7 @@ class _SetterForAssetAdministrationShell:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -1214,15 +1273,16 @@ class _SetterForAssetAdministrationShell:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -1230,7 +1290,7 @@ class _SetterForAssetAdministrationShell:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -1275,15 +1335,16 @@ class _SetterForAssetAdministrationShell:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -1291,7 +1352,7 @@ class _SetterForAssetAdministrationShell:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -1336,15 +1397,16 @@ class _SetterForAssetAdministrationShell:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -1352,7 +1414,7 @@ class _SetterForAssetAdministrationShell:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -1380,6 +1442,11 @@ def asset_administration_shell_from_jsonable(
         )
 
     setter = _SetterForAssetAdministrationShell()
+
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
 
     for key, jsonable_value in jsonable.items():
         setter_method = (
@@ -1476,15 +1543,16 @@ class _SetterForAssetInformation:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.SpecificAssetID
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = specific_asset_id_from_jsonable(
                     jsonable_item
@@ -1492,7 +1560,7 @@ class _SetterForAssetInformation:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -1732,15 +1800,16 @@ class _SetterForSpecificAssetID:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -1748,7 +1817,7 @@ class _SetterForSpecificAssetID:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -1887,15 +1956,16 @@ class _SetterForSubmodel:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -1903,7 +1973,7 @@ class _SetterForSubmodel:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -1948,15 +2018,16 @@ class _SetterForSubmodel:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -1964,7 +2035,7 @@ class _SetterForSubmodel:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -1983,15 +2054,16 @@ class _SetterForSubmodel:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -1999,7 +2071,7 @@ class _SetterForSubmodel:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -2070,15 +2142,16 @@ class _SetterForSubmodel:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -2086,7 +2159,7 @@ class _SetterForSubmodel:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -2105,15 +2178,16 @@ class _SetterForSubmodel:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Qualifier
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = qualifier_from_jsonable(
                     jsonable_item
@@ -2121,7 +2195,7 @@ class _SetterForSubmodel:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -2140,15 +2214,16 @@ class _SetterForSubmodel:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -2156,7 +2231,7 @@ class _SetterForSubmodel:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -2175,15 +2250,16 @@ class _SetterForSubmodel:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.SubmodelElement
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = submodel_element_from_jsonable(
                     jsonable_item
@@ -2191,7 +2267,7 @@ class _SetterForSubmodel:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -2219,6 +2295,11 @@ def submodel_from_jsonable(
         )
 
     setter = _SetterForSubmodel()
+
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
 
     for key, jsonable_value in jsonable.items():
         setter_method = (
@@ -2364,15 +2445,16 @@ class _SetterForRelationshipElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -2380,7 +2462,7 @@ class _SetterForRelationshipElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -2425,15 +2507,16 @@ class _SetterForRelationshipElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -2441,7 +2524,7 @@ class _SetterForRelationshipElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -2460,15 +2543,16 @@ class _SetterForRelationshipElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -2476,7 +2560,7 @@ class _SetterForRelationshipElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -2508,15 +2592,16 @@ class _SetterForRelationshipElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -2524,7 +2609,7 @@ class _SetterForRelationshipElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -2543,15 +2628,16 @@ class _SetterForRelationshipElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Qualifier
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = qualifier_from_jsonable(
                     jsonable_item
@@ -2559,7 +2645,7 @@ class _SetterForRelationshipElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -2578,15 +2664,16 @@ class _SetterForRelationshipElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -2594,7 +2681,7 @@ class _SetterForRelationshipElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -2760,15 +2847,16 @@ class _SetterForSubmodelElementList:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -2776,7 +2864,7 @@ class _SetterForSubmodelElementList:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -2821,15 +2909,16 @@ class _SetterForSubmodelElementList:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -2837,7 +2926,7 @@ class _SetterForSubmodelElementList:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -2856,15 +2945,16 @@ class _SetterForSubmodelElementList:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -2872,7 +2962,7 @@ class _SetterForSubmodelElementList:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -2904,15 +2994,16 @@ class _SetterForSubmodelElementList:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -2920,7 +3011,7 @@ class _SetterForSubmodelElementList:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -2939,15 +3030,16 @@ class _SetterForSubmodelElementList:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Qualifier
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = qualifier_from_jsonable(
                     jsonable_item
@@ -2955,7 +3047,7 @@ class _SetterForSubmodelElementList:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -2974,15 +3066,16 @@ class _SetterForSubmodelElementList:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -2990,7 +3083,7 @@ class _SetterForSubmodelElementList:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -3061,15 +3154,16 @@ class _SetterForSubmodelElementList:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.SubmodelElement
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = submodel_element_from_jsonable(
                     jsonable_item
@@ -3077,7 +3171,7 @@ class _SetterForSubmodelElementList:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -3105,6 +3199,11 @@ def submodel_element_list_from_jsonable(
         )
 
     setter = _SetterForSubmodelElementList()
+
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
 
     for key, jsonable_value in jsonable.items():
         setter_method = (
@@ -3178,15 +3277,16 @@ class _SetterForSubmodelElementCollection:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -3194,7 +3294,7 @@ class _SetterForSubmodelElementCollection:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -3239,15 +3339,16 @@ class _SetterForSubmodelElementCollection:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -3255,7 +3356,7 @@ class _SetterForSubmodelElementCollection:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -3274,15 +3375,16 @@ class _SetterForSubmodelElementCollection:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -3290,7 +3392,7 @@ class _SetterForSubmodelElementCollection:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -3322,15 +3424,16 @@ class _SetterForSubmodelElementCollection:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -3338,7 +3441,7 @@ class _SetterForSubmodelElementCollection:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -3357,15 +3460,16 @@ class _SetterForSubmodelElementCollection:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Qualifier
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = qualifier_from_jsonable(
                     jsonable_item
@@ -3373,7 +3477,7 @@ class _SetterForSubmodelElementCollection:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -3392,15 +3496,16 @@ class _SetterForSubmodelElementCollection:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -3408,7 +3513,7 @@ class _SetterForSubmodelElementCollection:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -3427,15 +3532,16 @@ class _SetterForSubmodelElementCollection:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.SubmodelElement
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = submodel_element_from_jsonable(
                     jsonable_item
@@ -3443,7 +3549,7 @@ class _SetterForSubmodelElementCollection:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -3471,6 +3577,11 @@ def submodel_element_collection_from_jsonable(
         )
 
     setter = _SetterForSubmodelElementCollection()
+
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
 
     for key, jsonable_value in jsonable.items():
         setter_method = (
@@ -3573,15 +3684,16 @@ class _SetterForProperty:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -3589,7 +3701,7 @@ class _SetterForProperty:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -3634,15 +3746,16 @@ class _SetterForProperty:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -3650,7 +3763,7 @@ class _SetterForProperty:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -3669,15 +3782,16 @@ class _SetterForProperty:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -3685,7 +3799,7 @@ class _SetterForProperty:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -3717,15 +3831,16 @@ class _SetterForProperty:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -3733,7 +3848,7 @@ class _SetterForProperty:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -3752,15 +3867,16 @@ class _SetterForProperty:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Qualifier
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = qualifier_from_jsonable(
                     jsonable_item
@@ -3768,7 +3884,7 @@ class _SetterForProperty:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -3787,15 +3903,16 @@ class _SetterForProperty:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -3803,7 +3920,7 @@ class _SetterForProperty:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -3870,6 +3987,11 @@ def property_from_jsonable(
         )
 
     setter = _SetterForProperty()
+
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
 
     for key, jsonable_value in jsonable.items():
         setter_method = (
@@ -3942,15 +4064,16 @@ class _SetterForMultiLanguageProperty:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -3958,7 +4081,7 @@ class _SetterForMultiLanguageProperty:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4003,15 +4126,16 @@ class _SetterForMultiLanguageProperty:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -4019,7 +4143,7 @@ class _SetterForMultiLanguageProperty:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4038,15 +4162,16 @@ class _SetterForMultiLanguageProperty:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -4054,7 +4179,7 @@ class _SetterForMultiLanguageProperty:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4086,15 +4211,16 @@ class _SetterForMultiLanguageProperty:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -4102,7 +4228,7 @@ class _SetterForMultiLanguageProperty:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4121,15 +4247,16 @@ class _SetterForMultiLanguageProperty:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Qualifier
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = qualifier_from_jsonable(
                     jsonable_item
@@ -4137,7 +4264,7 @@ class _SetterForMultiLanguageProperty:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4156,15 +4283,16 @@ class _SetterForMultiLanguageProperty:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -4172,7 +4300,7 @@ class _SetterForMultiLanguageProperty:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4191,15 +4319,16 @@ class _SetterForMultiLanguageProperty:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -4207,7 +4336,7 @@ class _SetterForMultiLanguageProperty:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4248,6 +4377,11 @@ def multi_language_property_from_jsonable(
         )
 
     setter = _SetterForMultiLanguageProperty()
+
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
 
     for key, jsonable_value in jsonable.items():
         setter_method = (
@@ -4315,15 +4449,16 @@ class _SetterForRange:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -4331,7 +4466,7 @@ class _SetterForRange:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4376,15 +4511,16 @@ class _SetterForRange:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -4392,7 +4528,7 @@ class _SetterForRange:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4411,15 +4547,16 @@ class _SetterForRange:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -4427,7 +4564,7 @@ class _SetterForRange:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4459,15 +4596,16 @@ class _SetterForRange:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -4475,7 +4613,7 @@ class _SetterForRange:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4494,15 +4632,16 @@ class _SetterForRange:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Qualifier
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = qualifier_from_jsonable(
                     jsonable_item
@@ -4510,7 +4649,7 @@ class _SetterForRange:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4529,15 +4668,16 @@ class _SetterForRange:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -4545,7 +4685,7 @@ class _SetterForRange:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4612,6 +4752,11 @@ def range_from_jsonable(
         )
 
     setter = _SetterForRange()
+
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
 
     for key, jsonable_value in jsonable.items():
         setter_method = (
@@ -4683,15 +4828,16 @@ class _SetterForReferenceElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -4699,7 +4845,7 @@ class _SetterForReferenceElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4744,15 +4890,16 @@ class _SetterForReferenceElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -4760,7 +4907,7 @@ class _SetterForReferenceElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4779,15 +4926,16 @@ class _SetterForReferenceElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -4795,7 +4943,7 @@ class _SetterForReferenceElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4827,15 +4975,16 @@ class _SetterForReferenceElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -4843,7 +4992,7 @@ class _SetterForReferenceElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4862,15 +5011,16 @@ class _SetterForReferenceElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Qualifier
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = qualifier_from_jsonable(
                     jsonable_item
@@ -4878,7 +5028,7 @@ class _SetterForReferenceElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4897,15 +5047,16 @@ class _SetterForReferenceElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -4913,7 +5064,7 @@ class _SetterForReferenceElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -4954,6 +5105,11 @@ def reference_element_from_jsonable(
         )
 
     setter = _SetterForReferenceElement()
+
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
 
     for key, jsonable_value in jsonable.items():
         setter_method = (
@@ -5019,15 +5175,16 @@ class _SetterForBlob:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -5035,7 +5192,7 @@ class _SetterForBlob:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5080,15 +5237,16 @@ class _SetterForBlob:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -5096,7 +5254,7 @@ class _SetterForBlob:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5115,15 +5273,16 @@ class _SetterForBlob:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -5131,7 +5290,7 @@ class _SetterForBlob:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5163,15 +5322,16 @@ class _SetterForBlob:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -5179,7 +5339,7 @@ class _SetterForBlob:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5198,15 +5358,16 @@ class _SetterForBlob:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Qualifier
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = qualifier_from_jsonable(
                     jsonable_item
@@ -5214,7 +5375,7 @@ class _SetterForBlob:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5233,15 +5394,16 @@ class _SetterForBlob:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -5249,7 +5411,7 @@ class _SetterForBlob:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5303,6 +5465,11 @@ def blob_from_jsonable(
         )
 
     setter = _SetterForBlob()
+
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
 
     for key, jsonable_value in jsonable.items():
         setter_method = (
@@ -5374,15 +5541,16 @@ class _SetterForFile:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -5390,7 +5558,7 @@ class _SetterForFile:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5435,15 +5603,16 @@ class _SetterForFile:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -5451,7 +5620,7 @@ class _SetterForFile:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5470,15 +5639,16 @@ class _SetterForFile:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -5486,7 +5656,7 @@ class _SetterForFile:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5518,15 +5688,16 @@ class _SetterForFile:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -5534,7 +5705,7 @@ class _SetterForFile:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5553,15 +5724,16 @@ class _SetterForFile:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Qualifier
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = qualifier_from_jsonable(
                     jsonable_item
@@ -5569,7 +5741,7 @@ class _SetterForFile:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5588,15 +5760,16 @@ class _SetterForFile:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -5604,7 +5777,7 @@ class _SetterForFile:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5658,6 +5831,11 @@ def file_from_jsonable(
         )
 
     setter = _SetterForFile()
+
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
 
     for key, jsonable_value in jsonable.items():
         setter_method = (
@@ -5730,15 +5908,16 @@ class _SetterForAnnotatedRelationshipElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -5746,7 +5925,7 @@ class _SetterForAnnotatedRelationshipElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5791,15 +5970,16 @@ class _SetterForAnnotatedRelationshipElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -5807,7 +5987,7 @@ class _SetterForAnnotatedRelationshipElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5826,15 +6006,16 @@ class _SetterForAnnotatedRelationshipElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -5842,7 +6023,7 @@ class _SetterForAnnotatedRelationshipElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5874,15 +6055,16 @@ class _SetterForAnnotatedRelationshipElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -5890,7 +6072,7 @@ class _SetterForAnnotatedRelationshipElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5909,15 +6091,16 @@ class _SetterForAnnotatedRelationshipElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Qualifier
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = qualifier_from_jsonable(
                     jsonable_item
@@ -5925,7 +6108,7 @@ class _SetterForAnnotatedRelationshipElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -5944,15 +6127,16 @@ class _SetterForAnnotatedRelationshipElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -5960,7 +6144,7 @@ class _SetterForAnnotatedRelationshipElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -6005,15 +6189,16 @@ class _SetterForAnnotatedRelationshipElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.DataElement
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = data_element_from_jsonable(
                     jsonable_item
@@ -6021,7 +6206,7 @@ class _SetterForAnnotatedRelationshipElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -6049,6 +6234,11 @@ def annotated_relationship_element_from_jsonable(
         )
 
     setter = _SetterForAnnotatedRelationshipElement()
+
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
 
     for key, jsonable_value in jsonable.items():
         setter_method = (
@@ -6128,15 +6318,16 @@ class _SetterForEntity:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -6144,7 +6335,7 @@ class _SetterForEntity:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -6189,15 +6380,16 @@ class _SetterForEntity:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -6205,7 +6397,7 @@ class _SetterForEntity:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -6224,15 +6416,16 @@ class _SetterForEntity:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -6240,7 +6433,7 @@ class _SetterForEntity:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -6272,15 +6465,16 @@ class _SetterForEntity:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -6288,7 +6482,7 @@ class _SetterForEntity:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -6307,15 +6501,16 @@ class _SetterForEntity:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Qualifier
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = qualifier_from_jsonable(
                     jsonable_item
@@ -6323,7 +6518,7 @@ class _SetterForEntity:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -6342,15 +6537,16 @@ class _SetterForEntity:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -6358,7 +6554,7 @@ class _SetterForEntity:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -6377,15 +6573,16 @@ class _SetterForEntity:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.SubmodelElement
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = submodel_element_from_jsonable(
                     jsonable_item
@@ -6393,7 +6590,7 @@ class _SetterForEntity:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -6438,15 +6635,16 @@ class _SetterForEntity:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.SpecificAssetID
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = specific_asset_id_from_jsonable(
                     jsonable_item
@@ -6454,7 +6652,7 @@ class _SetterForEntity:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -6482,6 +6680,11 @@ def entity_from_jsonable(
         )
 
     setter = _SetterForEntity()
+
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
 
     for key, jsonable_value in jsonable.items():
         setter_method = (
@@ -6863,15 +7066,16 @@ class _SetterForBasicEventElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -6879,7 +7083,7 @@ class _SetterForBasicEventElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -6924,15 +7128,16 @@ class _SetterForBasicEventElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -6940,7 +7145,7 @@ class _SetterForBasicEventElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -6959,15 +7164,16 @@ class _SetterForBasicEventElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -6975,7 +7181,7 @@ class _SetterForBasicEventElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7007,15 +7213,16 @@ class _SetterForBasicEventElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -7023,7 +7230,7 @@ class _SetterForBasicEventElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7042,15 +7249,16 @@ class _SetterForBasicEventElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Qualifier
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = qualifier_from_jsonable(
                     jsonable_item
@@ -7058,7 +7266,7 @@ class _SetterForBasicEventElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7077,15 +7285,16 @@ class _SetterForBasicEventElement:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -7093,7 +7302,7 @@ class _SetterForBasicEventElement:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7226,6 +7435,11 @@ def basic_event_element_from_jsonable(
 
     setter = _SetterForBasicEventElement()
 
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
+
     for key, jsonable_value in jsonable.items():
         setter_method = (
             _SETTER_MAP_FOR_BASIC_EVENT_ELEMENT.get(key)
@@ -7313,15 +7527,16 @@ class _SetterForOperation:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -7329,7 +7544,7 @@ class _SetterForOperation:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7374,15 +7589,16 @@ class _SetterForOperation:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -7390,7 +7606,7 @@ class _SetterForOperation:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7409,15 +7625,16 @@ class _SetterForOperation:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -7425,7 +7642,7 @@ class _SetterForOperation:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7457,15 +7674,16 @@ class _SetterForOperation:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -7473,7 +7691,7 @@ class _SetterForOperation:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7492,15 +7710,16 @@ class _SetterForOperation:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Qualifier
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = qualifier_from_jsonable(
                     jsonable_item
@@ -7508,7 +7727,7 @@ class _SetterForOperation:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7527,15 +7746,16 @@ class _SetterForOperation:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -7543,7 +7763,7 @@ class _SetterForOperation:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7562,15 +7782,16 @@ class _SetterForOperation:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.OperationVariable
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = operation_variable_from_jsonable(
                     jsonable_item
@@ -7578,7 +7799,7 @@ class _SetterForOperation:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7597,15 +7818,16 @@ class _SetterForOperation:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.OperationVariable
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = operation_variable_from_jsonable(
                     jsonable_item
@@ -7613,7 +7835,7 @@ class _SetterForOperation:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7632,15 +7854,16 @@ class _SetterForOperation:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.OperationVariable
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = operation_variable_from_jsonable(
                     jsonable_item
@@ -7648,7 +7871,7 @@ class _SetterForOperation:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7676,6 +7899,11 @@ def operation_from_jsonable(
         )
 
     setter = _SetterForOperation()
+
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
 
     for key, jsonable_value in jsonable.items():
         setter_method = (
@@ -7814,15 +8042,16 @@ class _SetterForCapability:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -7830,7 +8059,7 @@ class _SetterForCapability:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7875,15 +8104,16 @@ class _SetterForCapability:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -7891,7 +8121,7 @@ class _SetterForCapability:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7910,15 +8140,16 @@ class _SetterForCapability:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -7926,7 +8157,7 @@ class _SetterForCapability:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7958,15 +8189,16 @@ class _SetterForCapability:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -7974,7 +8206,7 @@ class _SetterForCapability:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -7993,15 +8225,16 @@ class _SetterForCapability:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Qualifier
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = qualifier_from_jsonable(
                     jsonable_item
@@ -8009,7 +8242,7 @@ class _SetterForCapability:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -8028,15 +8261,16 @@ class _SetterForCapability:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -8044,7 +8278,7 @@ class _SetterForCapability:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -8072,6 +8306,11 @@ def capability_from_jsonable(
         )
 
     setter = _SetterForCapability()
+
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
 
     for key, jsonable_value in jsonable.items():
         setter_method = (
@@ -8134,15 +8373,16 @@ class _SetterForConceptDescription:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Extension
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = extension_from_jsonable(
                     jsonable_item
@@ -8150,7 +8390,7 @@ class _SetterForConceptDescription:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -8195,15 +8435,16 @@ class _SetterForConceptDescription:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringNameType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_name_type_from_jsonable(
                     jsonable_item
@@ -8211,7 +8452,7 @@ class _SetterForConceptDescription:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -8230,15 +8471,16 @@ class _SetterForConceptDescription:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringTextType
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_text_type_from_jsonable(
                     jsonable_item
@@ -8246,7 +8488,7 @@ class _SetterForConceptDescription:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -8291,15 +8533,16 @@ class _SetterForConceptDescription:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.EmbeddedDataSpecification
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = embedded_data_specification_from_jsonable(
                     jsonable_item
@@ -8307,7 +8550,7 @@ class _SetterForConceptDescription:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -8326,15 +8569,16 @@ class _SetterForConceptDescription:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Reference
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = reference_from_jsonable(
                     jsonable_item
@@ -8342,7 +8586,7 @@ class _SetterForConceptDescription:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -8370,6 +8614,11 @@ def concept_description_from_jsonable(
         )
 
     setter = _SetterForConceptDescription()
+
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
 
     for key, jsonable_value in jsonable.items():
         setter_method = (
@@ -8483,15 +8732,16 @@ class _SetterForReference:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Key
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = key_from_jsonable(
                     jsonable_item
@@ -8499,7 +8749,7 @@ class _SetterForReference:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -8954,15 +9204,16 @@ class _SetterForEnvironment:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.AssetAdministrationShell
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = asset_administration_shell_from_jsonable(
                     jsonable_item
@@ -8970,7 +9221,7 @@ class _SetterForEnvironment:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -8989,15 +9240,16 @@ class _SetterForEnvironment:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.Submodel
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = submodel_from_jsonable(
                     jsonable_item
@@ -9005,7 +9257,7 @@ class _SetterForEnvironment:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -9024,15 +9276,16 @@ class _SetterForEnvironment:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.ConceptDescription
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = concept_description_from_jsonable(
                     jsonable_item
@@ -9040,7 +9293,7 @@ class _SetterForEnvironment:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -9492,15 +9745,16 @@ class _SetterForValueList:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.ValueReferencePair
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = value_reference_pair_from_jsonable(
                     jsonable_item
@@ -9508,7 +9762,7 @@ class _SetterForValueList:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -9877,15 +10131,16 @@ class _SetterForDataSpecificationIEC61360:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringPreferredNameTypeIEC61360
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_preferred_name_type_iec_61360_from_jsonable(
                     jsonable_item
@@ -9893,7 +10148,7 @@ class _SetterForDataSpecificationIEC61360:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -9912,15 +10167,16 @@ class _SetterForDataSpecificationIEC61360:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringShortNameTypeIEC61360
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_short_name_type_iec_61360_from_jsonable(
                     jsonable_item
@@ -9928,7 +10184,7 @@ class _SetterForDataSpecificationIEC61360:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -10012,15 +10268,16 @@ class _SetterForDataSpecificationIEC61360:
 
         :param jsonable: input to be parsed
         """
-        if not isinstance(jsonable, collections.abc.Iterable):
+        array_like = _try_to_cast_to_array_like(jsonable)
+        if array_like is None:
             raise DeserializationException(
-                f"Expected an iterable, but got: {type(jsonable)}"
+                f"Expected something array-like, but got: {type(jsonable)}"
             )
 
         items: List[
             aas_types.LangStringDefinitionTypeIEC61360
         ] = []
-        for i, jsonable_item in enumerate(jsonable):
+        for i, jsonable_item in enumerate(array_like):
             try:
                 item = lang_string_definition_type_iec_61360_from_jsonable(
                     jsonable_item
@@ -10028,7 +10285,7 @@ class _SetterForDataSpecificationIEC61360:
             except DeserializationException as exception:
                 exception.path._prepend(
                     IndexSegment(
-                        jsonable,
+                        array_like,
                         i
                     )
                 )
@@ -10108,6 +10365,11 @@ def data_specification_iec_61360_from_jsonable(
         )
 
     setter = _SetterForDataSpecificationIEC61360()
+
+    if 'modelType' not in jsonable:
+        raise DeserializationException(
+            "Expected the property modelType, but found none"
+        )
 
     for key, jsonable_value in jsonable.items():
         setter_method = (
