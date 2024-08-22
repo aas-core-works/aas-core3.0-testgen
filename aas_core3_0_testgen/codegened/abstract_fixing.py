@@ -1856,10 +1856,9 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
             common.hash_path(context, "data_specification_content"),
         )
 
-        if that.data_specification is not None:
-            self.visit_with_context(
-                that.data_specification, common.hash_path(context, "data_specification")
-            )
+        self.visit_with_context(
+            that.data_specification, common.hash_path(context, "data_specification")
+        )
 
     def visit_level_type_with_context(
         self, that: aas_types.LevelType, context: common.CanHash

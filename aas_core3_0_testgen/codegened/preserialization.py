@@ -1431,8 +1431,7 @@ class _Preserializer(aas_types.AbstractTransformer[Instance]):
             that.data_specification_content
         )
 
-        if that.data_specification is not None:
-            properties["data_specification"] = self.transform(that.data_specification)
+        properties["data_specification"] = self.transform(that.data_specification)
 
         preserialized = Instance(
             properties=properties, class_name=Identifier("Embedded_data_specification")

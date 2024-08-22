@@ -12,6 +12,15 @@
             rdf:type aas:DataSpecificationIec61360 ;
             <https://admin-shell.io/aas/3/0/DataSpecificationIec61360/value> "something_13759f45"^^xs:string ;
         ] ;
+        <https://admin-shell.io/aas/3/0/EmbeddedDataSpecification/dataSpecification> [
+            rdf:type aas:Reference ;
+            <https://admin-shell.io/aas/3/0/Reference/type> <https://admin-shell.io/aas/3/0/ReferenceTypes/ExternalReference> ;
+            <https://admin-shell.io/aas/3/0/Reference/keys> [
+                rdf:type aas:Key ;
+                <https://admin-shell.io/aas/3/0/Key/type> <https://admin-shell.io/aas/3/0/KeyTypes/GlobalReference> ;
+                <https://admin-shell.io/aas/3/0/Key/value> "urn:some-company06:e9f47be2"^^xs:string ;
+            ] ;
+        ] ;
     ] ;
     <https://admin-shell.io/aas/3/0/AssetAdministrationShell/assetInformation> [
         rdf:type aas:AssetInformation ;
