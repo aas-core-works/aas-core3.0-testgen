@@ -23,6 +23,15 @@
                 ] ;
                 <https://admin-shell.io/aas/3/0/DataSpecificationIec61360/value> "something_bebf64f0"^^xs:string ;
             ] ;
+            <https://admin-shell.io/aas/3/0/EmbeddedDataSpecification/dataSpecification> [
+                rdf:type aas:Reference ;
+                <https://admin-shell.io/aas/3/0/Reference/type> <https://admin-shell.io/aas/3/0/ReferenceTypes/ExternalReference> ;
+                <https://admin-shell.io/aas/3/0/Reference/keys> [
+                    rdf:type aas:Key ;
+                    <https://admin-shell.io/aas/3/0/Key/type> <https://admin-shell.io/aas/3/0/KeyTypes/GlobalReference> ;
+                    <https://admin-shell.io/aas/3/0/Key/value> "urn:something14:18179b7a"^^xs:string ;
+                ] ;
+            ] ;
         ] ;
         <https://admin-shell.io/aas/3/0/AdministrativeInformation/version> "7"^^xs:string ;
         <https://admin-shell.io/aas/3/0/AdministrativeInformation/revision> "0"^^xs:string ;
