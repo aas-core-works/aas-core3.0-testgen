@@ -1852,12 +1852,12 @@ class AbstractHandyman(aas_types.AbstractVisitorWithContext[common.CanHash]):
         self._fix_embedded_data_specification(that, context)
 
         self.visit_with_context(
-            that.data_specification_content,
-            common.hash_path(context, "data_specification_content"),
+            that.data_specification, common.hash_path(context, "data_specification")
         )
 
         self.visit_with_context(
-            that.data_specification, common.hash_path(context, "data_specification")
+            that.data_specification_content,
+            common.hash_path(context, "data_specification_content"),
         )
 
     def visit_level_type_with_context(
