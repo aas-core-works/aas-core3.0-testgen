@@ -938,13 +938,13 @@ def minimal_embedded_data_specification(
         more meta-model constraints.
     """
     return aas_types.EmbeddedDataSpecification(
+        data_specification=(
+            minimal_reference(common.hash_path(path_hash, "data_specification"))
+        ),
         data_specification_content=(
             minimal_data_specification_content(
                 common.hash_path(path_hash, "data_specification_content")
             )
-        ),
-        data_specification=(
-            minimal_reference(common.hash_path(path_hash, "data_specification"))
         ),
     )
 
@@ -3035,13 +3035,13 @@ def maximal_embedded_data_specification(
         more meta-model constraints.
     """
     return aas_types.EmbeddedDataSpecification(
+        data_specification=(
+            minimal_reference(common.hash_path(path_hash, "data_specification"))
+        ),
         data_specification_content=(
             minimal_data_specification_content(
                 common.hash_path(path_hash, "data_specification_content")
             )
-        ),
-        data_specification=(
-            minimal_reference(common.hash_path(path_hash, "data_specification"))
         ),
     )
 
