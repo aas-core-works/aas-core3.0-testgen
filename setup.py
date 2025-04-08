@@ -20,7 +20,7 @@ setup(
     version="0.0.1",
     description="Generate test data based on the meta-model V3.0.",
     long_description=long_description,
-    url="https://github.com/aas-core-works/aas-core-codegen",
+    url="https://github.com/aas-core-works/aas-core3.0-testgen",
     author="Marko Ristin",
     author_email="marko@ristin.ch",
     classifiers=[
