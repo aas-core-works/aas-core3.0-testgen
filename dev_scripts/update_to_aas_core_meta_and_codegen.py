@@ -10,6 +10,7 @@ import argparse
 import os
 import pathlib
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -34,7 +35,7 @@ AAS_CORE_CODEGEN_DEPENDENCY_RE = re.compile(
 
 
 def _make_sure_no_changed_files(
-    repo_dir: pathlib.Path, expected_branch: str
+        repo_dir: pathlib.Path, expected_branch: str
 ) -> Optional[int]:
     """
     Make sure that no files are modified in the given repository.
@@ -62,7 +63,8 @@ def _make_sure_no_changed_files(
 
 
 def _update_setup_py(
-    our_repo: pathlib.Path, aas_core_meta_revision: str, aas_core_codegen_revision: str
+        our_repo: pathlib.Path, aas_core_meta_revision: str,
+        aas_core_codegen_revision: str
 ) -> None:
     """Update the aas-core-meta in setup.py."""
     setup_py = our_repo / "setup.py"
@@ -86,7 +88,7 @@ def _update_setup_py(
 
 
 def _uninstall_and_install_aas_core_meta(
-    our_repo: pathlib.Path, aas_core_meta_revision: str
+        our_repo: pathlib.Path, aas_core_meta_revision: str
 ) -> None:
     """Uninstall and install the latest aas-core-meta in the virtual environment."""
     subprocess.check_call(
@@ -106,7 +108,7 @@ def _uninstall_and_install_aas_core_meta(
 
 
 def _uninstall_and_install_aas_core_codegen(
-    our_repo: pathlib.Path, aas_core_codegen_revision: str
+        our_repo: pathlib.Path, aas_core_codegen_revision: str
 ) -> None:
     """Uninstall and install the latest aas-core-codegen in the virtual environment."""
     subprocess.check_call(
@@ -126,14 +128,14 @@ def _uninstall_and_install_aas_core_codegen(
 
 
 def _copy_python_sdk_and_schemas_from_aas_core_codegen(
-    aas_core_codegen_repo: pathlib.Path,
-    our_repo: pathlib.Path,
-    aas_core_codegen_revision: str,
+        aas_core_codegen_repo: pathlib.Path,
+        our_repo: pathlib.Path,
+        aas_core_codegen_revision: str,
 ) -> None:
     """Copy the generated Python SDK from aas-core-codegen's test data."""
     source_dir = (
-        aas_core_codegen_repo
-        / "test_data/python/test_main/aas_core_meta.v3/expected_output"
+            aas_core_codegen_repo
+            / "test_data/python/test_main/aas_core_meta.v3/expected_output"
     )
 
     target_dir = our_repo / "aas_core3"
@@ -169,8 +171,8 @@ The revision of aas-core-codegen was: {aas_core_codegen_revision}
 
 
 def _run_in_parallel(
-    calls: Sequence[Callable[[], subprocess.Popen[AnyStr]]],
-    on_status_update: Callable[[int], None],
+        calls: Sequence[Callable[[], subprocess.Popen[AnyStr]]],
+        on_status_update: Callable[[int], None],
 ) -> Optional[int]:
     """
     Run the given scripts in parallel.
@@ -299,9 +301,9 @@ def _run_tests_in_parallel(our_repo: pathlib.Path) -> Optional[int]:
         f"tests.{pth.stem}"
         for pth in (our_repo / "tests").glob("test_*.py")
         if (
-            pth.is_file()
-            and not pth.name.startswith("__")
-            and not pth.name.startswith(".")
+                pth.is_file()
+                and not pth.name.startswith("__")
+                and not pth.name.startswith(".")
         )
     ]
 
@@ -366,39 +368,25 @@ def _generate_test_data(our_repo: pathlib.Path) -> Optional[int]:
     ]
 
     # pylint: disable=consider-using-with
-    calls = [
-        lambda a_pth=script, cwd=our_repo: subprocess.Popen(
-            [
-                sys.executable,
-                str(a_pth),
-                "--model_path",
-                aas_core_meta.v3.__file__,
-                "--test_data_dir",
-                test_data_dir,
-            ],
-            cwd=str(cwd),
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            encoding="utf-8",
-        )
+    commands = [
+        [
+            sys.executable,
+            str(script),
+            "--model_path",
+            aas_core_meta.v3.__file__,
+            "--test_data_dir",
+            test_data_dir,
+        ]
         for script in scripts
     ]
     # pylint: enable=consider-using-with
 
-    scripts_joined = ",\n".join(str(script) for script in scripts)
-    print(f"Starting to run:\n{scripts_joined}")
     start = time.perf_counter()
 
-    exit_code = _run_in_parallel(
-        calls=calls,
-        on_status_update=(
-            lambda remaining: print(
-                f"There are {remaining} generation script(s) still running..."
-            )
-        ),
-    )
-    if exit_code is not None:
-        return exit_code
+    for command in commands:
+        command_escaped = " ".join(shlex.quote(part) for part in command)
+        print(f"Running: {command_escaped}")
+        subprocess.check_call(command, cwd=str(our_repo))
 
     duration = time.perf_counter() - start
     print(f"Generating the data took: {duration:.2f} seconds.")
@@ -407,7 +395,8 @@ def _generate_test_data(our_repo: pathlib.Path) -> Optional[int]:
 
 
 def _create_branch_commit_and_push(
-    our_repo: pathlib.Path, aas_core_meta_revision: str, aas_core_codegen_revision: str
+        our_repo: pathlib.Path, aas_core_meta_revision: str,
+        aas_core_codegen_revision: str
 ) -> None:
     """Create a feature branch, commit the changes and push it."""
     branch = (
