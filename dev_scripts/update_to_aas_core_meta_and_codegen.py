@@ -25,6 +25,11 @@ from typing import Optional, List, Callable, AnyStr, Sequence
 # exactly that meta-model version.
 import aas_core_meta.v3
 
+import aas_core_codegen.jsonschema.main
+import aas_core_codegen.run
+import aas_core_codegen.specific_implementations
+import aas_core_codegen.common
+
 AAS_CORE_META_DEPENDENCY_RE = re.compile(
     r"aas-core-meta@git\+https://github.com/aas-core-works/aas-core-meta@([a-fA-F0-9]+)#egg=aas-core-meta"
 )
@@ -35,7 +40,7 @@ AAS_CORE_CODEGEN_DEPENDENCY_RE = re.compile(
 
 
 def _make_sure_no_changed_files(
-        repo_dir: pathlib.Path, expected_branch: str
+    repo_dir: pathlib.Path, expected_branch: str
 ) -> Optional[int]:
     """
     Make sure that no files are modified in the given repository.
@@ -63,8 +68,7 @@ def _make_sure_no_changed_files(
 
 
 def _update_setup_py(
-        our_repo: pathlib.Path, aas_core_meta_revision: str,
-        aas_core_codegen_revision: str
+    our_repo: pathlib.Path, aas_core_meta_revision: str, aas_core_codegen_revision: str
 ) -> None:
     """Update the aas-core-meta in setup.py."""
     setup_py = our_repo / "setup.py"
@@ -88,7 +92,7 @@ def _update_setup_py(
 
 
 def _uninstall_and_install_aas_core_meta(
-        our_repo: pathlib.Path, aas_core_meta_revision: str
+    our_repo: pathlib.Path, aas_core_meta_revision: str
 ) -> None:
     """Uninstall and install the latest aas-core-meta in the virtual environment."""
     subprocess.check_call(
@@ -108,7 +112,7 @@ def _uninstall_and_install_aas_core_meta(
 
 
 def _uninstall_and_install_aas_core_codegen(
-        our_repo: pathlib.Path, aas_core_codegen_revision: str
+    our_repo: pathlib.Path, aas_core_codegen_revision: str
 ) -> None:
     """Uninstall and install the latest aas-core-codegen in the virtual environment."""
     subprocess.check_call(
@@ -127,15 +131,15 @@ def _uninstall_and_install_aas_core_codegen(
     )
 
 
-def _copy_python_sdk_and_schemas_from_aas_core_codegen(
-        aas_core_codegen_repo: pathlib.Path,
-        our_repo: pathlib.Path,
-        aas_core_codegen_revision: str,
+def _copy_python_sdk_and_xml_schema_from_aas_core_codegen(
+    aas_core_codegen_repo: pathlib.Path,
+    our_repo: pathlib.Path,
+    aas_core_codegen_revision: str,
 ) -> None:
     """Copy the generated Python SDK from aas-core-codegen's test data."""
     source_dir = (
-            aas_core_codegen_repo
-            / "test_data/python/test_main/aas_core_meta.v3/expected_output"
+        aas_core_codegen_repo
+        / "test_data/python/test_main/aas_core_meta.v3/expected_output"
     )
 
     target_dir = our_repo / "aas_core3"
@@ -159,20 +163,61 @@ The revision of aas-core-codegen was: {aas_core_codegen_revision}
 
     shutil.copy(
         aas_core_codegen_repo
-        / "test_data/jsonschema/test_main/aas_core_meta.v3/expected_output/schema.json",
-        our_repo / "test_data/schema.json",
-    )
-
-    shutil.copy(
-        aas_core_codegen_repo
         / "test_data/xsd/test_main/aas_core_meta.v3/expected_output/schema.xsd",
         our_repo / "test_data/schema.xsd",
     )
 
 
+def _generate_jsonschema_for_python(
+    our_repo: pathlib.Path,
+) -> None:
+    model_path = pathlib.Path(aas_core_meta.v3.__file__)
+    symbol_table_atok, error = aas_core_codegen.run.load_model(model_path=model_path)
+    assert error is None, f"Unexpected error loading {model_path}: {error}"
+    assert symbol_table_atok is not None
+
+    symbol_table, _ = symbol_table_atok
+
+    text, errors = aas_core_codegen.jsonschema.main.generate(
+        symbol_table=symbol_table,
+        spec_impls={
+            aas_core_codegen.specific_implementations.ImplementationKey(
+                "schema_base.json"
+            ): aas_core_codegen.common.Stripped(
+                """\
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "title": "AssetAdministrationShellEnvironment",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "#/definitions/Environment"
+    }
+  ]
+}"""
+            )
+        },
+        # NOTE (mristin):
+        # We rely that the aas-core-meta uses Python-conform regular expressions,
+        # which jsonschema library can readily use as well.
+        fix_pattern=lambda pattern: pattern,
+    )
+
+    if errors is not None:
+        errors_joined = "\n\n".join(error.message for error in errors)
+        raise AssertionError(
+            f"Unexpected errors when generating the Python-conform JSON schema:\n"
+            f"{errors_joined}"
+        )
+
+    assert text is not None
+
+    (our_repo / "test_data/schema.json").write_text(text, encoding="utf-8")
+
+
 def _run_in_parallel(
-        calls: Sequence[Callable[[], subprocess.Popen[AnyStr]]],
-        on_status_update: Callable[[int], None],
+    calls: Sequence[Callable[[], subprocess.Popen[AnyStr]]],
+    on_status_update: Callable[[int], None],
 ) -> Optional[int]:
     """
     Run the given scripts in parallel.
@@ -301,9 +346,9 @@ def _run_tests_in_parallel(our_repo: pathlib.Path) -> Optional[int]:
         f"tests.{pth.stem}"
         for pth in (our_repo / "tests").glob("test_*.py")
         if (
-                pth.is_file()
-                and not pth.name.startswith("__")
-                and not pth.name.startswith(".")
+            pth.is_file()
+            and not pth.name.startswith("__")
+            and not pth.name.startswith(".")
         )
     ]
 
@@ -367,23 +412,18 @@ def _generate_test_data(our_repo: pathlib.Path) -> Optional[int]:
         for name in ("generate_json.py", "generate_rdf.py", "generate_xml.py")
     ]
 
-    # pylint: disable=consider-using-with
-    commands = [
-        [
+    start = time.perf_counter()
+
+    for script in scripts:
+        command = [
             sys.executable,
             str(script),
             "--model_path",
             aas_core_meta.v3.__file__,
             "--test_data_dir",
-            test_data_dir,
+            str(test_data_dir),
         ]
-        for script in scripts
-    ]
-    # pylint: enable=consider-using-with
 
-    start = time.perf_counter()
-
-    for command in commands:
         command_escaped = " ".join(shlex.quote(part) for part in command)
         print(f"Running: {command_escaped}")
         subprocess.check_call(command, cwd=str(our_repo))
@@ -395,8 +435,7 @@ def _generate_test_data(our_repo: pathlib.Path) -> Optional[int]:
 
 
 def _create_branch_commit_and_push(
-        our_repo: pathlib.Path, aas_core_meta_revision: str,
-        aas_core_codegen_revision: str
+    our_repo: pathlib.Path, aas_core_meta_revision: str, aas_core_codegen_revision: str
 ) -> None:
     """Create a feature branch, commit the changes and push it."""
     branch = (
@@ -593,7 +632,9 @@ def main() -> int:
         our_repo=our_repo, aas_core_codegen_revision=aas_core_codegen_revision
     )
 
-    _copy_python_sdk_and_schemas_from_aas_core_codegen(
+    _generate_jsonschema_for_python(our_repo=our_repo)
+
+    _copy_python_sdk_and_xml_schema_from_aas_core_codegen(
         aas_core_codegen_repo=aas_core_codegen_repo,
         our_repo=our_repo,
         aas_core_codegen_revision=aas_core_codegen_revision,
