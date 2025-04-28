@@ -16,10 +16,7 @@ class TestUnicode(unittest.TestCase):
                 "^[\\x09\\x0A\\x0D\\x20-\\uD7FF\\uE000-\\uFFFD\\U00010000-\\U0010FFFF]*$"
             ),
         }
-        assert re.match(
-            schema["pattern"],
-            "\U000fe800"
-        )
+        assert re.match(schema["pattern"], "\U000fe800")
 
         jsonschema.validate(instance='"\U000fe800"', schema=schema)
 
