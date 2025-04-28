@@ -649,7 +649,8 @@
               "$ref": "#/definitions/DataTypeDefXsd"
             },
             "value": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[\\x09\\x0A\\x0D\\x20-\\uD7FF\\uE000-\\uFFFD\\U00010000-\\U0010FFFF]*$"
             },
             "refersTo": {
               "type": "array",
@@ -1024,7 +1025,8 @@
               "$ref": "#/definitions/DataTypeDefXsd"
             },
             "value": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[\\x09\\x0A\\x0D\\x20-\\uD7FF\\uE000-\\uFFFD\\U00010000-\\U0010FFFF]*$"
             },
             "valueId": {
               "$ref": "#/definitions/Reference"
@@ -1077,7 +1079,8 @@
               "$ref": "#/definitions/DataTypeDefXsd"
             },
             "value": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[\\x09\\x0A\\x0D\\x20-\\uD7FF\\uE000-\\uFFFD\\U00010000-\\U0010FFFF]*$"
             },
             "valueId": {
               "$ref": "#/definitions/Reference"
@@ -1109,10 +1112,12 @@
               "$ref": "#/definitions/DataTypeDefXsd"
             },
             "min": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[\\x09\\x0A\\x0D\\x20-\\uD7FF\\uE000-\\uFFFD\\U00010000-\\U0010FFFF]*$"
             },
             "max": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[\\x09\\x0A\\x0D\\x20-\\uD7FF\\uE000-\\uFFFD\\U00010000-\\U0010FFFF]*$"
             },
             "modelType": {
               "const": "Range"
