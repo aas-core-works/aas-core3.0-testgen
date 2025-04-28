@@ -37,7 +37,7 @@ setup(
         "icontract>=2.5.2,<3",
         "networkx==2.8",
         "typing-extensions==4.5.0",
-        "aas-core-codegen@git+https://github.com/aas-core-works/aas-core-codegen@4433d092#egg=aas-core-codegen",
+        "aas-core-codegen@git+https://github.com/aas-core-works/aas-core-codegen@c77b7dc6#egg=aas-core-codegen",
     ],
     # fmt: off
     extras_require={
