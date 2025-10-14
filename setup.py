@@ -45,7 +45,7 @@ setup(
             "black==22.3.0",
             "mypy==0.950",
             "pylint==2.13.8",
-            "pydocstyle>=2.1.1<3",
+            "pydocstyle>=2.1.1,<3",
             "coverage>=6,<7",
             "twine",
             "aas-core-meta@git+https://github.com/aas-core-works/aas-core-meta@f2fd738#egg=aas-core-meta",
