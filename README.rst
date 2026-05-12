@@ -1,3 +1,7 @@
+**This repository has been archived.
+We refactored all the generation logic for different AAS meta-model versions into a single repository which supersedes this one.
+The latest test data generation can be found at: https://github.com/aas-core-works/aas-core-testdatagen.**
+
 aas-core3.0-testgen
 =======================
 
